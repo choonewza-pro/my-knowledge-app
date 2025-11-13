@@ -14,6 +14,7 @@ const GitWorkflowBugfixPage = lazy(() => import('../pages/knowledge/GitWorkflowB
 const GitWorkflowHotfixPage = lazy(() => import('../pages/knowledge/GitWorkflowHotfixPage'));
 const GitHubActionsPage = lazy(() => import('../pages/knowledge/GitHubActionsPage'));
 const GitHubGuidePage = lazy(() => import('../pages/knowledge/GitHubGuidePage'));
+const ComponentShowcase = lazy(() => import('../pages/ComponentShowcase'));
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
   {
     path: '/knowledge/github-guide',
     element: <GitHubGuidePage />,
+  },
+  {
+    path: '/components',
+    element: <ComponentShowcase />,
   },
 ]);
 
