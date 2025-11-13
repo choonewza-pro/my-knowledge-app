@@ -95,8 +95,9 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center bg-[linear-gradient(180deg,#071229_0%,#071229_40%,rgba(11,21,35,0.75)_80%)] text-white overflow-hidden">
 
-        {/* Starfield SVG (subtle twinkling stars) */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden>
+        {/* Starfield SVG (subtle twinkling stars) - wrapped to prevent stars drifting outside hero */}
+      <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden" aria-hidden>
+        <svg className="w-full h-full block" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden>
         <defs>
           <radialGradient id="g1" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
@@ -115,12 +116,31 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         <circle cx="48%" cy="44%" r="1.1" fill="url(#g1)" opacity="0.055" className="animate-twinkle svg-transform parallax-layer" data-parallax="0.06" />
         <circle cx="34%" cy="62%" r="1.2" fill="url(#g1)" opacity="0.05" className="animate-twinkle-slower svg-transform parallax-layer" data-parallax="0.04" />
         <circle cx="82%" cy="72%" r="1.3" fill="url(#g1)" opacity="0.07" className="animate-twinkle svg-transform parallax-layer" data-parallax="0.04" />
-      </svg>
+        </svg>
+      </div>
 
       {/* Nebula overlay (soft translucent gradient shapes) */}
       <div className="absolute inset-0 mix-blend-screen opacity-40 pointer-events-none z-10">
         <div className="absolute -left-20 -top-24 w-96 h-96 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.22),transparent_30%)] blur-3xl animate-planet-float parallax-layer" data-parallax="0.04"></div>
         <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(244,114,182,0.14),transparent_30%)] blur-2xl animate-planet-float animate-planet-rotate parallax-layer" data-parallax="0.03"></div>
+      </div>
+
+      {/* Floating background fog (subtle drifting blobs; sits above nebula so it's visible) */}
+      <div className="absolute inset-0 pointer-events-none z-15" aria-hidden>
+        <style>{`
+          @keyframes fog-drift-1 { 0%{ transform: translate3d(-10%,0,0) } 50%{ transform: translate3d(8%,4%,0) } 100%{ transform: translate3d(-10%,0,0) } }
+          @keyframes fog-drift-2 { 0%{ transform: translate3d(6%, -6%,0) } 50%{ transform: translate3d(-6%, 8%,0) } 100%{ transform: translate3d(6%,-6%,0) } }
+          @keyframes fog-fade { 0%{ opacity:0 } 10%{ opacity:0.28 } 50%{ opacity:0.64 } 90%{ opacity:0.28 } 100%{ opacity:0 } }
+          .space-fog { position:absolute; border-radius:50%; filter: blur(12px); mix-blend-mode: screen; opacity:0.36; will-change: transform, opacity; }
+          .space-fog--large { width: 56rem; height: 36rem; background: radial-gradient(circle at 30% 40%, rgba(124,58,237,0.36), rgba(6,182,212,0.18) 45%, transparent 55%); box-shadow: 0 40px 120px rgba(124,58,237,0.06); }
+          .space-fog--mid { width: 44rem; height: 28rem; background: radial-gradient(circle at 60% 50%, rgba(244,114,182,0.30), rgba(99,102,241,0.12) 50%, transparent 62%); box-shadow: 0 24px 80px rgba(244,114,182,0.05); }
+          .space-fog--small { width: 28rem; height: 18rem; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18), rgba(59,130,246,0.10) 40%, transparent 60%); box-shadow: 0 12px 40px rgba(255,255,255,0.04); }
+          @media (prefers-reduced-motion: reduce) { .space-fog{ animation: none !important } }
+        `}</style>
+
+        <div className="space-fog space-fog--large parallax-layer" data-parallax="0.02" style={{ left: '-8%', top: '4%', animation: 'fog-drift-1 28s ease-in-out infinite, fog-fade 16s ease-in-out infinite' }} />
+        <div className="space-fog space-fog--mid parallax-layer" data-parallax="0.03" style={{ right: '-12%', top: '18%', animation: 'fog-drift-2 34s ease-in-out infinite, fog-fade 20s ease-in-out infinite' }} />
+        <div className="space-fog space-fog--small parallax-layer" data-parallax="0.025" style={{ left: '14%', bottom: '-2%', animation: 'fog-drift-1 24s ease-in-out infinite, fog-fade 18s ease-in-out infinite' }} />
       </div>
 
       {/* Big Sun (background, glowy) */}
