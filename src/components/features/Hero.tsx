@@ -14,8 +14,12 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
   const containerRef = useRef<HTMLElement | null>(null);
   useParallax(containerRef);
   const planetRef = useRef<HTMLDivElement | null>(null);
-  // Use viewport radius so the planet can wander across the full browser width
+  const planetRef2 = useRef<HTMLDivElement | null>(null);
+  const planetRef3 = useRef<HTMLDivElement | null>(null);
+  // Use viewport radius so the planets can wander across the full browser width
   useWander(planetRef, { radius: 'viewport', speed: 1.6 });
+  useWander(planetRef2, { radius: 'viewport', speed: 2.2 });
+  useWander(planetRef3, { radius: 'viewport', speed: 1.1 });
 
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center bg-[linear-gradient(180deg,#071229_0%,#071229_40%,rgba(11,21,35,0.75)_80%)] text-white overflow-hidden">
@@ -47,19 +51,49 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
 
       {/* Floating planet (now orbiting around the center of the hero) */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* centered planet wrapper that will be moved via left/top by useWander */}
-        <div className="planet-wander parallax-layer" ref={planetRef}>
-          <svg className="w-44 h-44 transform-gpu rotate-6 opacity-90 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <defs>
-                  <linearGradient id="planetGrad" x1="0" x2="1">
-                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.9" />
-                  </linearGradient>
-                </defs>
-                <circle cx="50" cy="50" r="40" fill="url(#planetGrad)" />
-                <g fillOpacity="0.08">
-                  <ellipse cx="55" cy="45" rx="28" ry="8" fill="#ffffff" />
-                </g>
+        {/* centered planet wrappers that will be moved via left/top by useWander */}
+        <div className="planet-wander" ref={planetRef}>
+          <svg className="w-44 h-44 transform-gpu rotate-6 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="planetGrad1" x1="0" x2="1">
+                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.9" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="40" fill="url(#planetGrad1)" />
+            <g fillOpacity="0.08">
+              <ellipse cx="55" cy="45" rx="28" ry="8" fill="#ffffff" />
+            </g>
+          </svg>
+        </div>
+
+        <div className="planet-wander" ref={planetRef2}>
+          <svg className="w-32 h-32 transform-gpu rotate-12 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="planetGrad2" x1="0" x2="1">
+                <stop offset="0%" stopColor="#ff7a18" stopOpacity="0.98" />
+                <stop offset="100%" stopColor="#ffb199" stopOpacity="0.95" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="38" fill="url(#planetGrad2)" />
+            <g fillOpacity="0.06">
+              <ellipse cx="58" cy="44" rx="20" ry="6" fill="#ffffff" />
+            </g>
+          </svg>
+        </div>
+
+        <div className="planet-wander" ref={planetRef3}>
+          <svg className="w-20 h-20 transform-gpu rotate-3 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="planetGrad3" x1="0" x2="1">
+                <stop offset="0%" stopColor="#34d399" stopOpacity="0.98" />
+                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.95" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="28" fill="url(#planetGrad3)" />
+            <g fillOpacity="0.06">
+              <ellipse cx="56" cy="46" rx="14" ry="4" fill="#ffffff" />
+            </g>
           </svg>
         </div>
       </div>
