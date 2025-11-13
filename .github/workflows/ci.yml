@@ -1,0 +1,40 @@
+name: Git Workshop Demo CI
+
+on:
+  push:
+    branches:
+      - "feature/**"
+      - "bugfix/**"
+      - "chare/**"
+      - "doc/**"
+      - main
+
+env:
+  SERVER_IP: '127.0.0.1'
+  SERVER_PORT: '8080'
+  REPO_NAME: ${{ github.repository }}
+
+jobs:
+  job-1:
+    runs-on: ubuntu-latest
+    env:
+      COMPANY_NAME: 'NTPLC'
+    environment: development
+    steps:
+      - run: echo "Hello ${{ github.actor }} from ${{ env.REPO_NAME }}"
+      - run: echo "This is Job 1 ${{ github.job }} running on ${{ runner.os }}"
+      - run: echo "Server IP is ${{ env.SERVER_IP }} and Port is ${{ env.SERVER_PORT }}"
+      - run: echo "Hello GitHub Actions from ${{ env.COMPANY_NAME }}"
+      - run: echo "${{ vars.APP_NAME }} is now deployed!"
+      - run: echo "${{ secrets.API_KEY }} is used for authentication."
+  
+  job-2:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - run: echo "${{ vars.APP_NAME }} is now deployed!"
+      - run: echo "${{ secrets.API_KEY }} is used for authentication."
+      - name: Build Production
+        run: echo "Building for production..."
+      - name: Run Tests
+        run: echo "Running tests..."
