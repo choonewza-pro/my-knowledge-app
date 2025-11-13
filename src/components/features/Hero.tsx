@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import useParallax from '../../hooks/useParallax';
 import useWander from '../../hooks/useWander';
 
@@ -13,19 +13,65 @@ interface HeroProps {
 export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
   const containerRef = useRef<HTMLElement | null>(null);
   useParallax(containerRef);
-  const planetRef = useRef<HTMLDivElement | null>(null);
-  const planetRef2 = useRef<HTMLDivElement | null>(null);
-  const planetRef3 = useRef<HTMLDivElement | null>(null);
-  // Use viewport radius so the planets can wander across the full browser width
-  useWander(planetRef, { radius: 'viewport', speed: 1.6 });
-  useWander(planetRef2, { radius: 'viewport', speed: 2.2 });
-  useWander(planetRef3, { radius: 'viewport', speed: 1.1 });
+  // Prepare refs for 8 planets
+  const refs = Array.from({ length: 8 }, () => useRef<HTMLDivElement | null>(null));
+
+  // Orbit radii factors (relative to viewport half-width/half-height)
+  // increase factors so orbits span more of the horizontal viewport
+  const orbitFactors = [0.08, 0.18, 0.30, 0.42, 0.56, 0.70, 0.84, 0.96];
+  // store radii as pairs {rx, ry} so horizontal spread can be larger than vertical
+  const [orbitRadii, setOrbitRadii] = useState<{ rx: number; ry: number }[]>([]);
+
+  useEffect(() => {
+    function compute() {
+      const halfW = window.innerWidth / 2;
+      const halfH = window.innerHeight / 2;
+      const radii = orbitFactors.map((f) => ({ rx: Math.round(halfW * f), ry: Math.round(halfH * f) }));
+      setOrbitRadii(radii);
+    }
+    compute();
+    window.addEventListener('resize', compute, { passive: true });
+    return () => window.removeEventListener('resize', compute);
+  }, []);
+
+  // Seed initial positions across each ring so planets don't all start at center
+  useEffect(() => {
+    if (!orbitRadii || orbitRadii.length === 0) return;
+    refs.forEach((rRef, i) => {
+      const el = rRef.current;
+      if (!el) return;
+      const rxy = orbitRadii[i] || { rx: 120, ry: 86 };
+      const rx = rxy.rx;
+      const ry = rxy.ry;
+      // random angle and larger jitter to spread horizontally
+      const angle = Math.random() * Math.PI * 2;
+      const jitterX = (Math.random() - 0.5) * (rx * 0.36);
+      const jitterY = (Math.random() - 0.5) * (ry * 0.22);
+      const x = Math.cos(angle) * rx + jitterX;
+      const y = Math.sin(angle) * ry + jitterY;
+      try {
+        const s = el.style;
+        s.left = `calc(50% + ${x.toFixed(1)}px)`;
+        s.top = `calc(50% + ${y.toFixed(1)}px)`;
+      } catch (e) {
+        // ignore
+      }
+    });
+  }, [orbitRadii]);
+
+  // Wire wander for each planet using viewport radius scaled by orbit factor
+  // speeds vary so motion feels organic.
+  const speeds = [1.0, 1.6, 1.2, 0.9, 1.4, 0.7, 1.8, 1.1];
+  refs.forEach((r, i) => {
+    // call hook inside render body is fine because refs array is stable for this render
+    useWander(r, { radius: 'viewport', speed: speeds[i], scale: orbitFactors[i] });
+  });
 
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center bg-[linear-gradient(180deg,#071229_0%,#071229_40%,rgba(11,21,35,0.75)_80%)] text-white overflow-hidden">
 
         {/* Starfield SVG (subtle twinkling stars) */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden>
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden>
         <defs>
           <radialGradient id="g1" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
@@ -44,60 +90,177 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
       </svg>
 
       {/* Nebula overlay (soft translucent gradient shapes) */}
-      <div className="absolute inset-0 mix-blend-screen opacity-40 pointer-events-none">
+      <div className="absolute inset-0 mix-blend-screen opacity-40 pointer-events-none z-10">
         <div className="absolute -left-20 -top-24 w-96 h-96 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.22),transparent_30%)] blur-3xl animate-planet-float parallax-layer" data-parallax="0.04"></div>
         <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(244,114,182,0.14),transparent_30%)] blur-2xl animate-planet-float animate-planet-rotate parallax-layer" data-parallax="0.03"></div>
       </div>
 
+      {/* Big Sun (background, glowy) */}
+      <div className="absolute -left-24 top-8 w-72 h-72 md:w-96 md:h-96 pointer-events-none z-0">
+        <svg className="w-full h-full transform-gpu animate-planet-float" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <defs>
+            <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#ffd54a" />
+              <stop offset="35%" stopColor="#ffc107" />
+              <stop offset="70%" stopColor="#ff9800" />
+              <stop offset="100%" stopColor="#ff6f00" stopOpacity="0.95" />
+            </radialGradient>
+            <filter id="sunGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <g filter="url(#sunGlow)">
+            <circle cx="100" cy="100" r="72" fill="url(#sunGrad)" />
+          </g>
+        </svg>
+      </div>
+
       {/* Floating planet (now orbiting around the center of the hero) */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* centered planet wrappers that will be moved via left/top by useWander */}
-        <div className="planet-wander" ref={planetRef}>
-          <svg className="w-44 h-44 transform-gpu rotate-6 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <div className="absolute inset-0 pointer-events-none z-20">
+        {/* Draw orbit rings */}
+        {orbitRadii.map((r, i) => (
+          <div
+            key={`ring-${i}`}
+            className="orbit-ring"
+            style={{ width: `${2 * r.rx}px`, height: `${2 * r.ry}px`, marginLeft: `-${r.rx}px`, marginTop: `-${r.ry}px` }}
+          />
+        ))}
+
+        {/* Planets (SVGs) — planets will be moved by useWander refs */}
+        {/* Planet 1 (Mercury-like) */}
+        <div className="planet-wander" ref={refs[0]}>
+          <svg className="w-16 h-16 transform-gpu rotate-6 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
-              <linearGradient id="planetGrad1" x1="0" x2="1">
-                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.95" />
-                <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.9" />
+              <linearGradient id="p1" x1="0" x2="1">
+                <stop offset="0%" stopColor="#d9d9d9" />
+                <stop offset="100%" stopColor="#9ca3af" />
               </linearGradient>
             </defs>
-            <circle cx="50" cy="50" r="40" fill="url(#planetGrad1)" />
-            <g fillOpacity="0.08">
-              <ellipse cx="55" cy="45" rx="28" ry="8" fill="#ffffff" />
-            </g>
+            <circle cx="50" cy="50" r="30" fill="url(#p1)" />
           </svg>
         </div>
 
-        <div className="planet-wander" ref={planetRef2}>
-          <svg className="w-32 h-32 transform-gpu rotate-12 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+        {/* Planet 2 (Venus-like) */}
+        <div className="planet-wander" ref={refs[1]}>
+          <svg className="w-20 h-20 transform-gpu rotate-10 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
-              <linearGradient id="planetGrad2" x1="0" x2="1">
-                <stop offset="0%" stopColor="#ff7a18" stopOpacity="0.98" />
-                <stop offset="100%" stopColor="#ffb199" stopOpacity="0.95" />
+              <linearGradient id="p2" x1="0" x2="1">
+                <stop offset="0%" stopColor="#ffb86b" />
+                <stop offset="100%" stopColor="#ff7a18" />
               </linearGradient>
             </defs>
-            <circle cx="50" cy="50" r="38" fill="url(#planetGrad2)" />
-            <g fillOpacity="0.06">
-              <ellipse cx="58" cy="44" rx="20" ry="6" fill="#ffffff" />
-            </g>
+            <circle cx="50" cy="50" r="36" fill="url(#p2)" />
           </svg>
         </div>
 
-        <div className="planet-wander" ref={planetRef3}>
+        {/* Planet 3 (Earth-like) */}
+        <div className="planet-wander" ref={refs[2]}>
           <svg className="w-20 h-20 transform-gpu rotate-3 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
-              <linearGradient id="planetGrad3" x1="0" x2="1">
-                <stop offset="0%" stopColor="#34d399" stopOpacity="0.98" />
-                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.95" />
+              <linearGradient id="p3" x1="0" x2="1">
+                <stop offset="0%" stopColor="#3b82f6" />
+                <stop offset="100%" stopColor="#10b981" />
               </linearGradient>
             </defs>
-            <circle cx="50" cy="50" r="28" fill="url(#planetGrad3)" />
-            <g fillOpacity="0.06">
-              <ellipse cx="56" cy="46" rx="14" ry="4" fill="#ffffff" />
+            <circle cx="50" cy="50" r="34" fill="url(#p3)" />
+          </svg>
+        </div>
+
+        {/* Planet 4 (Mars-like) */}
+        <div className="planet-wander" ref={refs[3]}>
+          <svg className="w-18 h-18 transform-gpu rotate-12 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="p4" x1="0" x2="1">
+                <stop offset="0%" stopColor="#f97316" />
+                <stop offset="100%" stopColor="#ef4444" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="30" fill="url(#p4)" />
+          </svg>
+        </div>
+
+        {/* Planet 5 (Jupiter-like) */}
+        <div className="planet-wander" ref={refs[4]}>
+          <svg className="w-28 h-28 transform-gpu rotate-6 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="p5" x1="0" x2="1">
+                <stop offset="0%" stopColor="#fbbf24" />
+                <stop offset="100%" stopColor="#f97316" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="44" fill="url(#p5)" />
+          </svg>
+        </div>
+
+        {/* Planet 6 (Saturn-like) with pronounced rings */}
+        <div className="planet-wander" ref={refs[5]}>
+          <svg className="w-36 h-36 transform-gpu rotate-3 opacity-100 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden overflow="visible" style={{overflow: 'visible'}}>
+            <defs>
+              <linearGradient id="p6" x1="0" x2="1">
+                <stop offset="0%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#fbbf24" />
+              </linearGradient>
+              <linearGradient id="ring6" x1="0" x2="1">
+                <stop offset="0%" stopColor="rgba(255,240,200,0.9)" />
+                <stop offset="40%" stopColor="rgba(200,160,110,0.95)" />
+                <stop offset="100%" stopColor="rgba(180,140,90,0.85)" />
+              </linearGradient>
+              <filter id="ringBlur" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="1.6" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            {/* Back part of ring (behind planet) */}
+            <g aria-hidden>
+              <ellipse cx="50" cy="50" rx="56" ry="16" fill="none" stroke="rgba(0,0,0,0.28)" strokeWidth="8" transform="rotate(-18 50 50)" strokeLinecap="round" strokeLinejoin="round" />
+              <ellipse cx="50" cy="50" rx="56" ry="16" fill="none" stroke="rgba(200,160,110,0.16)" strokeWidth="3" transform="rotate(-18 50 50)" strokeLinecap="round" strokeLinejoin="round" />
             </g>
+
+            {/* Planet body */}
+            <circle cx="50" cy="50" r="36" fill="url(#p6)" />
+
+            {/* Front part of ring (drawn over planet) */}
+            <g aria-hidden>
+              <ellipse cx="50" cy="50" rx="56" ry="16" fill="none" stroke="url(#ring6)" strokeWidth="4" transform="rotate(-18 50 50)" filter="url(#ringBlur)" strokeLinecap="round" strokeLinejoin="round" />
+              <ellipse cx="50" cy="50" rx="54" ry="15" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="2" transform="rotate(-18 50 50)" strokeLinecap="round" strokeLinejoin="round" />
+            </g>
+          </svg>
+        </div>
+
+        {/* Planet 7 (Uranus-like) */}
+        <div className="planet-wander" ref={refs[6]}>
+          <svg className="w-24 h-24 transform-gpu rotate-9 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="p7" x1="0" x2="1">
+                <stop offset="0%" stopColor="#a7f3d0" />
+                <stop offset="100%" stopColor="#60a5fa" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="38" fill="url(#p7)" />
+          </svg>
+        </div>
+
+        {/* Planet 8 (Neptune-like) */}
+        <div className="planet-wander" ref={refs[7]}>
+          <svg className="w-26 h-26 transform-gpu rotate-4 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <defs>
+              <linearGradient id="p8" x1="0" x2="1">
+                <stop offset="0%" stopColor="#3b82f6" />
+                <stop offset="100%" stopColor="#1e3a8a" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="42" fill="url(#p8)" />
           </svg>
         </div>
       </div>
-      <div className="relative z-10 hero-content text-center px-4">
+      <div className="relative z-30 hero-content text-center px-4">
         <div className="max-w-4xl mx-auto">
           {/* translucent panel to increase contrast while keeping translucency */}
           <div className="inline-block group animate-fade-up bg-white/8 backdrop-blur-md border border-white/6 rounded-3xl p-8 md:p-12 shadow-[0_10px_40px_rgba(2,6,23,0.6)] parallax-layer" data-parallax="-0.06">

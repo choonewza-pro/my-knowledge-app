@@ -95,6 +95,20 @@
     pointer-events: none;
   }
 
+  /* Orbit ring visual */
+  .orbit-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-sizing: content-box;
+    border: 1px solid rgba(255,255,255,0.06);
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.25));
+    mix-blend-mode: screen;
+  }
+
   /* Place the orbiting element at a radius from the center and keep it centered vertically/horizontally */
   .orbit-radius {
     position: absolute;
