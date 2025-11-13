@@ -67,6 +67,31 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
     useWander(r, { radius: 'viewport', speed: speeds[i], scale: orbitFactors[i] });
   });
 
+  // Small occasional wiggle for Planet 1 (Mercury-like)
+  useEffect(() => {
+    const elContainer = refs[0]?.current;
+    if (!elContainer) return;
+    let cancelled = false;
+    let timer: number | undefined;
+
+    function schedule() {
+      const delay = 2000 + Math.random() * 6000; // 2s - 8s
+      timer = window.setTimeout(() => {
+        if (cancelled) return;
+        const svg = elContainer!.querySelector('svg') as HTMLElement | null;
+        if (!svg) { schedule(); return; }
+        const dur = 700 + Math.random() * 800; // 0.7s - 1.5s
+        svg.style.setProperty('--d', `${Math.round(dur)}ms`);
+        svg.classList.add('mercury-wiggle');
+        window.setTimeout(() => svg.classList.remove('mercury-wiggle'), dur + 50);
+        schedule();
+      }, delay);
+    }
+
+    schedule();
+    return () => { cancelled = true; if (timer) clearTimeout(timer); };
+  }, [refs[0]]);
+
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center bg-[linear-gradient(180deg,#071229_0%,#071229_40%,rgba(11,21,35,0.75)_80%)] text-white overflow-hidden">
 
@@ -85,7 +110,10 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         <circle cx="70%" cy="25%" r="1.1" fill="url(#g1)" opacity="0.09" className="animate-twinkle-slower svg-transform parallax-layer" data-parallax="0.03" />
         <circle cx="90%" cy="8%" r="1.4" fill="url(#g1)" opacity="0.11" className="animate-twinkle svg-transform parallax-layer" data-parallax="0.05" />
         <circle cx="15%" cy="70%" r="1.0" fill="url(#g1)" opacity="0.08" className="animate-twinkle-slower svg-transform parallax-layer" data-parallax="0.02" />
-        <circle cx="50%" cy="60%" r="2.8" fill="url(#g1)" opacity="0.06" className="animate-twinkle-slower svg-transform parallax-layer" data-parallax="0.12" />
+        {/* spread the previously centered bright star: move it and add two nearby dim stars */}
+        <circle cx="42%" cy="54%" r="1.8" fill="url(#g1)" opacity="0.07" className="animate-twinkle-slower svg-transform parallax-layer" data-parallax="0.10" />
+        <circle cx="48%" cy="44%" r="1.1" fill="url(#g1)" opacity="0.055" className="animate-twinkle svg-transform parallax-layer" data-parallax="0.06" />
+        <circle cx="34%" cy="62%" r="1.2" fill="url(#g1)" opacity="0.05" className="animate-twinkle-slower svg-transform parallax-layer" data-parallax="0.04" />
         <circle cx="82%" cy="72%" r="1.3" fill="url(#g1)" opacity="0.07" className="animate-twinkle svg-transform parallax-layer" data-parallax="0.04" />
       </svg>
 
@@ -120,6 +148,23 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
       </div>
 
       {/* Floating planet (now orbiting around the center of the hero) */}
+      {/* Mercury wiggle CSS (small occasional motion) */}
+      <style>{`
+        @keyframes mercury-wiggle {
+          0% { transform: translate3d(0,0,0) rotate(0deg); }
+          25% { transform: translate3d(-6px,-3px,0) rotate(-3deg); }
+          60% { transform: translate3d(4px,2px,0) rotate(2deg); }
+          100% { transform: translate3d(0,0,0) rotate(0deg); }
+        }
+        .mercury-wiggle {
+          will-change: transform;
+          animation-name: mercury-wiggle;
+          animation-duration: var(--d, 900ms);
+          animation-timing-function: cubic-bezier(.2,.8,.2,1);
+          transform-origin: center center;
+        }
+      `}</style>
+
       <div className="absolute inset-0 pointer-events-none z-20">
         {/* Draw orbit rings */}
         {orbitRadii.map((r, i) => (
