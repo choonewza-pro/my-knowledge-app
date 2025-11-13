@@ -1,3 +1,3 @@
-export function GitHubActionsPage() {
+export default function GitHubActionsPage() {
   return <h1>GitHubActionsPage</h1>;
 }

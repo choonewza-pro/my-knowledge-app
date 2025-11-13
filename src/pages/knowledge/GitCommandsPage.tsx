@@ -1,3 +1,3 @@
-export function GitCommandsPage() {
+export default function GitCommandsPage() {
   return <h1>GitCommandsPage</h1>;
 }

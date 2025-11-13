@@ -1,3 +1,3 @@
-export function GitNamingGuidePage() {
+export default function GitNamingGuidePage() {
   return <h1>GitNamingGuidePage</h1>;
 }
