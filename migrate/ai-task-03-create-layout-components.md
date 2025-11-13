@@ -41,8 +41,8 @@ export interface NavItem {
 **ไฟล์:** `src/utils/constants.ts`
 
 ```tsx
-export const SITE_NAME = 'Git Workshop';
-export const SITE_DESCRIPTION = 'Workshop สำหรับการเรียนรู้การจัดการ Source Code ด้วย Git และ GitHub Actions';
+export const SITE_NAME = 'My Knowledge Base';
+export const SITE_DESCRIPTION = 'บันทึกและสรุปความรู้ในหัวข้อต่างๆ ทั้งการพัฒนาโปรแกรม การสร้างระบบ AI และความรู้ทั่วไป';
 
 export const ROUTES = {
   HOME: '/',

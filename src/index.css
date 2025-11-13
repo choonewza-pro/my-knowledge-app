@@ -2,20 +2,127 @@
 @plugin "daisyui";
 
 :root {
-  --color-primary: #6366f1;
+  --color-primary: #8b5cf6;
   --color-primary-content: #ffffff;
-  --color-secondary: #ec4899;
+  --color-secondary: #f472b6;
   --color-secondary-content: #ffffff;
-  --color-accent: #10b981;
+  --color-accent: #34d399;
   --color-accent-content: #ffffff;
-  --color-neutral: #374151;
-  --color-neutral-content: #f9fafb;
-  --color-base-100: #1f2937;
-  --color-base-200: #111827;
-  --color-base-300: #0f172a;
-  --color-base-content: #f9fafb;
-  --color-info: #3b82f6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  --color-neutral: #6b7280;
+  --color-neutral-content: #ffffff;
+  --color-base-100: #ffffff;
+  --color-base-200: #f9fafb;
+  --color-base-300: #f3f4f6;
+  --color-base-content: #111827;
+  --color-info: #60a5fa;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
 }
+
+/* Custom animations for Hero (spacey effects) */
+@layer utilities {
+  @keyframes star-twinkle {
+    0%, 100% { opacity: 0.06; transform: scale(1); }
+    50% { opacity: 0.28; transform: scale(1.18); }
+  }
+
+  @keyframes float-y {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+    100% { transform: translateY(0); }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-twinkle { animation: star-twinkle 6s ease-in-out infinite; }
+  .animate-twinkle-slower { animation: star-twinkle 8s ease-in-out infinite; }
+  .animate-planet-float { animation: float-y 5.5s ease-in-out infinite; }
+  .animate-planet-rotate { animation: rotate-slow 28s linear infinite; transform-origin: 50% 50%; }
+  .animate-fade-up { animation: fade-up 700ms cubic-bezier(.22,.9,.32,1) both; }
+
+  /* Ensure SVG elements transform correctly */
+  .svg-transform { transform-box: fill-box; transform-origin: center; }
+}
+
+  @keyframes orbit-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Orbit rotate that preserves a translate for centered positioning */
+  @keyframes orbit-rotate-center {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .orbit-container {
+    position: relative;
+    width: 0;
+    height: 0;
+    display: block;
+    animation: orbit-rotate 20s linear infinite;
+    will-change: transform;
+  }
+
+  /* Use this to center the orbit in the parent (e.g. the hero section) */
+  .orbit-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* orbit-container variant for centered rotation that preserves translate */
+  .orbit-rotate-center { animation: orbit-rotate-center 20s linear infinite; }
+
+  /* Planet wander base: start centered using left/top + translate to make JS offsets easier */
+  .planet-wander {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    will-change: left, top, transform;
+    pointer-events: none;
+  }
+
+  /* Place the orbiting element at a radius from the center and keep it centered vertically/horizontally */
+  .orbit-radius {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) translateX(var(--orbit-radius, 120px));
+    will-change: transform;
+  }
+
+  /* Smaller radius helper */
+  .orbit-radius--sm { --orbit-radius: 88px; }
+  .orbit-radius--md { --orbit-radius: 120px; }
+  .orbit-radius--lg { --orbit-radius: 160px; }
+
+  /* Parallax layers: we will mutate transform via JS, but provide smooth transitions and high-perf defaults */
+  .parallax-layer {
+    will-change: transform, opacity;
+    transition: transform 180ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-planet-float,
+    .animate-planet-rotate,
+    .animate-twinkle,
+    .animate-twinkle-slower,
+    .orbit-container {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
