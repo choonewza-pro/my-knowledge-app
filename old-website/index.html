@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Workshop สำหรับการเรียนรู้การจัดการ Source Code ด้วย Git และ GitHub Actions - เรียนรู้ Git Commands, Naming Conventions, Workflows และ DevOps" />
+        <meta name="author" content="" />
+        <title>Git Workshop - เรียนรู้การจัดการ Source Code อย่างมืออาชีพ</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            /* Modern gradient background */
+            .hero-gradient {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                position: relative;
+                overflow: hidden;
+            }
+            .hero-gradient::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                opacity: 0.3;
+            }
+            
+            /* Modern card styles */
+            .knowledge-card {
+                border: none;
+                border-radius: 16px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+                overflow: hidden;
+                background: #fff;
+            }
+            .knowledge-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            }
+            .knowledge-card .card-body {
+                padding: 2rem;
+            }
+            .knowledge-card .icon-box {
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+            
+            /* Feature badges */
+            .feature-badge {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+                font-weight: 600;
+                font-size: 0.875rem;
+                margin: 0.25rem;
+                box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+            }
+            
+            /* Section styling */
+            .section-title {
+                position: relative;
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+            }
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                border-radius: 2px;
+            }
+            
+            /* CTA Button */
+            .cta-button {
+                display: inline-block;
+                padding: 1rem 2.5rem;
+                border-radius: 50px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            }
+            .cta-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+                color: white;
+            }
+            
+            /* Stats counter */
+            .stat-box {
+                text-align: center;
+                padding: 2rem;
+            }
+            .stat-number {
+                font-size: 3rem;
+                font-weight: 700;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .stat-label {
+                font-size: 1rem;
+                color: #6c757d;
+                margin-top: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Hero Header -->
+        <header class="hero-gradient py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white position-relative">
+                    <h1 class="display-3 fw-bolder mb-3">Git & GitHub Workshop</h1>
+                    <p class="lead fw-normal mb-4" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto;">เรียนรู้การจัดการ Source Code อย่างมืออาชีพด้วย Git, GitHub และ GitHub Actions</p>
+                    <div class="mt-4">
+                        <a href="#knowledge" class="cta-button me-3">
+                            <i class="bi bi-book me-2"></i>เริ่มเรียนรู้เลย
+                        </a>
+                        <a href="knowledges/git-commands-reference.html" class="btn btn-outline-light btn-lg" style="border-radius: 50px;">
+                            <i class="bi bi-terminal me-2"></i>Git Commands
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Section -->
+        <section class="py-4 bg-light">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-3 col-6 stat-box">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Knowledge Topics</div>
+                    </div>
+                    <div class="col-md-3 col-6 stat-box">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Workflows</div>
+                    </div>
+                    <div class="col-md-3 col-6 stat-box">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">Git Commands</div>
+                    </div>
+                    <div class="col-md-3 col-6 stat-box">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Practical Examples</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Knowledge Section -->
+        <section class="py-5" id="knowledge">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder section-title d-inline-block">ความรู้ที่คุณจะได้เรียน</h2>
+                    <p class="lead text-muted mt-3">ครอบคลุมทุกสิ่งที่จำเป็นสำหรับการทำงานกับ Git อย่างมืออาชีพ</p>
+                </div>
+
+                <!-- Knowledge Cards Grid -->
+                <div class="row g-4 mb-5">
+                    <!-- Git Commands Reference -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-terminal-fill"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">Git Commands Reference</h5>
+                                <p class="card-text text-muted mb-4">รวมคำสั่ง Git ที่ใช้บ่อยและจำเป็น พร้อมตัวอย่างการใช้งานจริง ครอบคลุมตั้งแต่พื้นฐานจนถึงขั้นสูง</p>
+                                <a href="knowledges/git-commands-reference.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Git Naming Guide -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-tags-fill"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">Git Naming Conventions</h5>
+                                <p class="card-text text-muted mb-4">แนวทางการตั้งชื่อ Branch, Commit Message และ Tag ที่ถูกต้องตามมาตรฐานสากล เพื่อความเป็นมืออาชีพ</p>
+                                <a href="knowledges/git-naming-guide.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Naming Summary Tables -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-table"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">Naming Summary Tables</h5>
+                                <p class="card-text text-muted mb-4">ตารางสรุปการตั้งชื่อแบบ Quick Reference ที่สามารถนำไปใช้งานได้ทันที พร้อมตัวอย่างที่ชัดเจน</p>
+                                <a href="knowledges/git-naming-summary-tables.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add New Feature Workflow -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-plus-circle-fill"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">Add Feature Workflow</h5>
+                                <p class="card-text text-muted mb-4">ขั้นตอนการเพิ่มฟีเจอร์ใหม่อย่างถูกต้อง ตั้งแต่การสร้าง Branch จนถึง Merge เข้า Production</p>
+                                <a href="knowledges/git-workflow-add-feature.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bugfix Workflow -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-bug-fill"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">Bugfix Workflow</h5>
+                                <p class="card-text text-muted mb-4">กระบวนการแก้ไข Bug อย่างเป็นระบบ ทั้งใน Development และ Production Environment</p>
+                                <a href="knowledges/git-workflow-bugfix.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotfix Workflow -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-lightning-fill"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">Hotfix Workflow</h5>
+                                <p class="card-text text-muted mb-4">การแก้ไข Bug เร่งด่วนใน Production พร้อมขั้นตอนที่รวดเร็วและปลอดภัย</p>
+                                <a href="knowledges/git-workflow-hotfix.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Guide -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-github"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">GitHub Guide</h5>
+                                <p class="card-text text-muted mb-4">คู่มือการใช้งาน GitHub เบื้องต้น การทำงานร่วมกันผ่าน Pull Request และ Code Review</p>
+                                <a href="knowledges/github-guide.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Actions -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card knowledge-card h-100">
+                            <div class="card-body">
+                                <div class="icon-box">
+                                    <i class="bi bi-gear-wide-connected"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-3">GitHub Actions Guide</h5>
+                                <p class="card-text text-muted mb-4">สร้างและใช้งาน CI/CD Pipeline ด้วย GitHub Actions เพื่อ Automate การทำงานของคุณ</p>
+                                <a href="knowledges/github-actions-guide.html" class="btn btn-sm btn-outline-primary" style="border-radius: 50px;">
+                                    เรียนรู้เพิ่มเติม <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder section-title d-inline-block">ทำไมต้องเรียนรู้กับเรา?</h2>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="p-4">
+                            <h3 class="fw-bold mb-4">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                เนื้อหาครอบคลุมและเป็นระบบ
+                            </h3>
+                            <p class="text-muted mb-4">เรียนรู้ตั้งแต่พื้นฐานจนถึงขั้นสูง ด้วยเนื้อหาที่จัดเรียงอย่างเป็นระบบ เหมาะสำหรับทั้งผู้เริ่มต้นและมืออาชีพ</p>
+                            
+                            <h3 class="fw-bold mb-4">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                ตัวอย่างจริงจากการทำงาน
+                            </h3>
+                            <p class="text-muted mb-4">ทุกหัวข้อมาพร้อมตัวอย่างการใช้งานจริง ที่สามารถนำไปปรับใช้ในโปรเจคของคุณได้ทันที</p>
+                            
+                            <h3 class="fw-bold mb-4">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Best Practices & Standards
+                            </h3>
+                            <p class="text-muted">เรียนรู้แนวทางปฏิบัติที่ดีที่สุดตามมาตรฐานสากล ช่วยให้คุณทำงานอย่างมืออาชีพและมีประสิทธิภาพ</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <span class="feature-badge"><i class="bi bi-code-slash me-1"></i> Practical Examples</span>
+                                <span class="feature-badge"><i class="bi bi-book me-1"></i> Step-by-Step Guide</span>
+                            </div>
+                            <div class="mb-3">
+                                <span class="feature-badge"><i class="bi bi-rocket me-1"></i> Real-world Workflows</span>
+                                <span class="feature-badge"><i class="bi bi-shield-check me-1"></i> Best Practices</span>
+                            </div>
+                            <div class="mb-3">
+                                <span class="feature-badge"><i class="bi bi-graph-up me-1"></i> Professional Standards</span>
+                                <span class="feature-badge"><i class="bi bi-people me-1"></i> Team Collaboration</span>
+                            </div>
+                            <div>
+                                <span class="feature-badge"><i class="bi bi-lightning me-1"></i> CI/CD Automation</span>
+                                <span class="feature-badge"><i class="bi bi-tools me-1"></i> DevOps Ready</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who is this for Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder section-title d-inline-block">เหมาะสำหรับใคร?</h2>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-person-workspace" style="font-size: 3rem; color: #667eea;"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">นักพัฒนาซอฟต์แวร์</h5>
+                            <p class="text-muted">ที่ต้องการเพิ่มทักษะการจัดการ Source Code และทำงานร่วมกับทีมอย่างมีประสิทธิภาพ</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-people-fill" style="font-size: 3rem; color: #667eea;"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">ทีมพัฒนา</h5>
+                            <p class="text-muted">ที่ต้องการปรับปรุงกระบวนการทำงานร่วมกัน และสร้างมาตรฐานการทำงานที่ดีขึ้น</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: #667eea;"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">ผู้สนใจ DevOps</h5>
+                            <p class="text-muted">ที่ต้องการเรียนรู้การสร้าง CI/CD Pipeline และนำ DevOps มาใช้ในการทำงาน</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5 hero-gradient">
+            <div class="container">
+                <div class="text-center text-white">
+                    <h2 class="fw-bold mb-3">พร้อมที่จะเริ่มต้นแล้วหรือยัง?</h2>
+                    <p class="lead mb-4">เริ่มต้นเรียนรู้การจัดการ Source Code อย่างมืออาชีพวันนี้</p>
+                    <a href="knowledges/git-commands-reference.html" class="btn btn-light btn-lg me-3" style="border-radius: 50px;">
+                        <i class="bi bi-book me-2"></i>เริ่มเรียนเลย
+                    </a>
+                    <a href="about.html" class="btn btn-outline-light btn-lg" style="border-radius: 50px;">
+                        <i class="bi bi-info-circle me-2"></i>เรียนรู้เพิ่มเติม
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <h5 class="text-white mb-3">Git Workshop</h5>
+                        <p class="text-white-50">Workshop สำหรับการเรียนรู้การจัดการ Source Code ด้วย Git และ GitHub Actions อย่างมืออาชีพ</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Quick Links</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="index.html" class="text-white-50 text-decoration-none">หน้าแรก</a></li>
+                            <li><a href="about.html" class="text-white-50 text-decoration-none">เกี่ยวกับ</a></li>
+                            <li><a href="contact.html" class="text-white-50 text-decoration-none">ติดต่อ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Resources</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="knowledges/git-commands-reference.html" class="text-white-50 text-decoration-none">Git Commands</a></li>
+                            <li><a href="knowledges/github-guide.html" class="text-white-50 text-decoration-none">GitHub Guide</a></li>
+                            <li><a href="knowledges/github-actions-guide.html" class="text-white-50 text-decoration-none">GitHub Actions</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                <p class="m-0 text-center text-white-50">Copyright &copy; Git Workshop 2025 | Created with <i class="bi bi-heart-fill text-danger"></i></p>
+            </div>
+        </footer>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/include-nav.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

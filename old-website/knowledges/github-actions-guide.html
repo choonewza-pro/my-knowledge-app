@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="คู่มือ GitHub Actions - ระบบ CI/CD อัตโนมัติ" />
+        <meta name="author" content="" />
+        <title>คู่มือ GitHub Actions - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .section-box {
+                margin-bottom: 3rem;
+                padding: 2rem;
+                background-color: #f8f9fa;
+                border-radius: 0.5rem;
+                border-left: 5px solid #0d6efd;
+            }
+            .section-title {
+                color: #0d6efd;
+                font-weight: bold;
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            .subsection-title {
+                color: #0d6efd;
+                font-weight: bold;
+                font-size: 1.3rem;
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+            }
+            .command-box {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+            .info-box {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .warning-box {
+                background-color: #fff3cd;
+                border: 1px solid #ffc107;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .success-box {
+                background-color: #d4edda;
+                border: 1px solid #28a745;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .note-box {
+                background-color: #e7f3ff;
+                border: 1px solid #004085;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .step-box {
+                background-color: white;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin: 1.5rem 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .step-box h5 {
+                color: #0d6efd;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+            .flow-diagram {
+                background-color: #f8f9fa;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                font-family: monospace;
+                white-space: pre;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            .checkmark-list {
+                list-style: none;
+                padding-left: 0;
+            }
+            .checkmark-list li:before {
+                content: "✅ ";
+                margin-right: 0.5rem;
+            }
+            .component-card {
+                background-color: white;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin: 1rem 0;
+                border: 2px solid #0d6efd;
+            }
+            .component-card h4 {
+                color: #0d6efd;
+                margin-bottom: 1rem;
+            }
+            .benefit-card {
+                background-color: #d4edda;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                margin: 0.5rem 0;
+                border-left: 4px solid #28a745;
+            }
+            .action-card {
+                background-color: white;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin: 1rem 0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                border-left: 4px solid #6c757d;
+            }
+            .action-card h5 {
+                color: #495057;
+                font-weight: bold;
+            }
+            .dos-donts {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                margin: 1rem 0;
+            }
+            @media (max-width: 768px) {
+                .dos-donts {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .do-box {
+                background-color: #d4edda;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                border: 2px solid #28a745;
+            }
+            .dont-box {
+                background-color: #f8d7da;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                border: 2px solid #dc3545;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-primary py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">คู่มือ GitHub Actions</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">ระบบ CI/CD — ผู้ช่วยอัตโนมัติสำหรับ Build, Test และ Deploy</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5">
+                    <div class="col-lg-12">
+                        
+                        <!-- Section 1: GitHub Actions คืออะไร -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-gear-fill"></i> 1. GitHub Actions คืออะไร
+                            </h2>
+
+                            <h3 class="subsection-title">🎯 คำอธิบายแบบเข้าใจง่าย</h3>
+                            <div class="info-box">
+                                <p class="mb-0">GitHub Actions เปรียบเสมือน <strong>"ผู้ช่วยอัตโนมัติ"</strong> ที่คอยทำงานซ้ำ ๆ แทนเรา เช่น:</p>
+                                <ul class="checkmark-list mb-0">
+                                    <li>🧪 <strong>Test โค้ด</strong> ทุกครั้งที่มี push ใหม่</li>
+                                    <li>📦 <strong>Build แอปพลิเคชัน</strong> อัตโนมัติ</li>
+                                    <li>🚀 <strong>Deploy ขึ้น server</strong> เมื่อ merge code</li>
+                                    <li>🔔 <strong>แจ้งเตือน</strong> ผ่าน Slack/Discord เมื่อมี error</li>
+                                </ul>
+                            </div>
+
+                            <h3 class="subsection-title">📖 คำจำกัดความ</h3>
+                            <div class="note-box">
+                                <p class="mb-0">GitHub Actions คือแพลตฟอร์ม <strong>CI/CD</strong> (Continuous Integration/Continuous Deployment) ที่ช่วยให้การ build, test และ deploy เกิดขึ้นอัตโนมัติเมื่อเกิด event เช่น push, pull request หรือ schedule</p>
+                            </div>
+
+                            <h3 class="subsection-title">🌟 ประโยชน์ของ GitHub Actions</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="benefit-card">
+                                        <strong>✅ ทำงานซ้ำ ๆ อัตโนมัติ</strong>
+                                        <p class="mb-0">ไม่ต้องรัน test หรือ deploy ด้วยมือ</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="benefit-card">
+                                        <strong>✅ ลด human error</strong>
+                                        <p class="mb-0">คำสั่งทำงานเหมือนเดิมทุกครั้ง</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="benefit-card">
+                                        <strong>✅ ฟรี</strong>
+                                        <p class="mb-0">สำหรับ public repository (2,000 นาที/เดือน สำหรับ private)</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="benefit-card">
+                                        <strong>✅ ใช้ง่าย</strong>
+                                        <p class="mb-0">เขียนด้วย YAML ไฟล์เดียว</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="benefit-card">
+                                        <strong>✅ มี Actions สำเร็จรูป</strong>
+                                        <p class="mb-0">จาก GitHub Marketplace</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: องค์ประกอบของ GitHub Actions -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-puzzle-fill"></i> 2. องค์ประกอบของ GitHub Actions
+                            </h2>
+
+                            <h3 class="subsection-title">🧩 ภาพรวมโครงสร้าง</h3>
+                            <div class="flow-diagram">Workflow (งาน)
+  ├── Event (เหตุการณ์ที่กระตุ้น)
+  ├── Jobs (ชุดงาน)
+  │   ├── Runner (เครื่องที่รันงาน)
+  │   └── Steps (ขั้นตอนย่อย)
+  │       ├── Action (ใช้ Action สำเร็จรูป)
+  │       └── Run (รันคำสั่ง shell)</div>
+
+                            <div class="component-card">
+                                <h4>2.1 Workflows (ไฟล์สูตรทำงาน)</h4>
+                                <p><strong>คืออะไร:</strong> Workflow คือ "สูตรการทำงานอัตโนมัติ" ที่เขียนในไฟล์ <code>.yml</code></p>
+                                <p><strong>ที่เก็บ:</strong> <code>.github/workflows/</code> (เช่น <code>.github/workflows/ci.yml</code>)</p>
+                                <div class="info-box">
+                                    <strong>เปรียบเทียบ:</strong> เหมือนสูตรทำอาหาร ที่บอกว่า "เมื่อไหร่" ต้อง "ทำอะไร" บ้าง
+                                </div>
+                                <div class="command-box">
+                                    <pre><code>name: CI Workflow          # ชื่อ workflow
+on: [push]                 # ทำงานเมื่อมี push
+jobs:                      # งานที่ต้องทำ
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="component-card">
+                                <h4>2.2 Events (เหตุการณ์ทริกเกอร์)</h4>
+                                <p><strong>คืออะไร:</strong> Event คือ "เหตุการณ์" ที่กระตุ้นให้ Workflow ทำงาน</p>
+                                <p><strong>Events ที่ใช้บ่อย:</strong></p>
+                                <ul>
+                                    <li><code>push</code> - เมื่อมีการ push code</li>
+                                    <li><code>pull_request</code> - เมื่อสร้าง/อัพเดท PR</li>
+                                    <li><code>schedule</code> - ตามเวลาที่กำหนด (เช่น ทุกวันเวลา 9:00)</li>
+                                    <li><code>workflow_dispatch</code> - รันด้วยมือผ่าน GitHub UI</li>
+                                    <li><code>release</code> - เมื่อสร้าง release ใหม่</li>
+                                </ul>
+                                <div class="info-box">
+                                    <strong>เปรียบเทียบ:</strong> เหมือนการตั้งปลุก - กำหนดว่า "เมื่อไหร่" ให้ทำงาน
+                                </div>
+                                <div class="command-box">
+                                    <pre><code>on:
+  push:
+    branches: [main, develop]      # ทำงานเมื่อ push ไป main หรือ develop
+  pull_request:
+    branches: [main]               # ทำงานเมื่อมี PR ไป main
+  schedule:
+    - cron: '0 9 * * *'            # ทุกวันเวลา 9:00 น.</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="component-card">
+                                <h4>2.3 Jobs (งานหลัก)</h4>
+                                <p><strong>คืออะไร:</strong> Job คือ "ชุดงาน" ที่ประกอบด้วยหลาย steps ทำงานบนเครื่องเดียวกัน</p>
+                                <p><strong>ลักษณะการทำงาน:</strong></p>
+                                <ul>
+                                    <li>หลาย jobs ทำงาน <strong>parallel</strong> (พร้อมกัน) ตามค่าเริ่มต้น</li>
+                                    <li>สามารถกำหนดให้ job หนึ่ง รอ job อื่นเสร็จก่อน (<code>needs</code>)</li>
+                                </ul>
+                                <div class="info-box">
+                                    <strong>เปรียบเทียบ:</strong> เหมือนทีมงาน - แต่ละคนทำงานคนละส่วน
+                                </div>
+                                <div class="command-box">
+                                    <pre><code>jobs:
+  build:                          # Job 1: Build
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run build
+  
+  test:                           # Job 2: Test
+    runs-on: ubuntu-latest
+    needs: build                  # รอ build เสร็จก่อน
+    steps:
+      - run: npm test
+  
+  deploy:                         # Job 3: Deploy
+    runs-on: ubuntu-latest
+    needs: [build, test]          # รอ build และ test เสร็จ
+    steps:
+      - run: npm run deploy</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="component-card">
+                                <h4>2.4 Steps (ขั้นตอนย่อย)</h4>
+                                <p><strong>คืออะไร:</strong> Step คือ "ขั้นตอนย่อย ๆ" ภายใน job ที่ทำงานตามลำดับ</p>
+                                <p><strong>ประเภท Steps:</strong></p>
+                                <ol>
+                                    <li><strong>uses</strong> - เรียกใช้ Action สำเร็จรูป</li>
+                                    <li><strong>run</strong> - รันคำสั่ง shell</li>
+                                </ol>
+                                <div class="info-box">
+                                    <strong>เปรียบเทียบ:</strong> เหมือนสูตรทำอาหาร - ทำทีละขั้นตอน ตามลำดับ
+                                </div>
+                                <div class="command-box">
+                                    <pre><code>steps:
+  # Step 1: ดาวน์โหลด code จาก repo
+  - uses: actions/checkout@v4
+  
+  # Step 2: ติดตั้ง Node.js
+  - uses: actions/setup-node@v4
+    with:
+      node-version: 20
+  
+  # Step 3: ติดตั้ง dependencies
+  - run: npm install
+  
+  # Step 4: รัน tests
+  - run: npm test
+  
+  # Step 5: Build production
+  - run: npm run build</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="component-card">
+                                <h4>2.5 Runners (เครื่องรัน)</h4>
+                                <p><strong>คืออะไร:</strong> Runner คือ "เครื่องคอมพิวเตอร์" ที่รัน workflow</p>
+                                <p><strong>ประเภท Runners:</strong></p>
+                                
+                                <h5>1. GitHub-hosted (GitHub จัดให้):</h5>
+                                <ul>
+                                    <li><code>ubuntu-latest</code> (Linux) - แนะนำ เร็ว ถูก</li>
+                                    <li><code>windows-latest</code> (Windows) - สำหรับ .NET, PowerShell</li>
+                                    <li><code>macos-latest</code> (macOS) - สำหรับ iOS, Swift</li>
+                                </ul>
+
+                                <h5>2. Self-hosted (ติดตั้งเอง):</h5>
+                                <ul>
+                                    <li>รันบนเครื่อง server ของเราเอง</li>
+                                    <li>ควบคุมได้มากกว่า แต่ต้องดูแลเอง</li>
+                                </ul>
+
+                                <div class="command-box">
+                                    <pre><code>jobs:
+  build:
+    runs-on: ubuntu-latest        # ใช้ Ubuntu
+  
+  build-windows:
+    runs-on: windows-latest       # ใช้ Windows
+  
+  build-mac:
+    runs-on: macos-latest         # ใช้ macOS</code></pre>
+                                </div>
+
+                                <div class="warning-box">
+                                    <strong>ค่าใช้จ่าย (สำหรับ private repo):</strong>
+                                    <ul class="mb-0">
+                                        <li>Linux: 1 นาที = 1 นาที</li>
+                                        <li>Windows: 1 นาที = 2 นาที</li>
+                                        <li>macOS: 1 นาที = 10 นาที</li>
+                                    </ul>
+                                </div>
+
+                                <div class="success-box">
+                                    💡 <strong>คำแนะนำ:</strong> ใช้ <code>ubuntu-latest</code> เพื่อประหยัดเวลา
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Contexts & Variables -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-code-square"></i> 3. Contexts & Variables (ตัวแปรและข้อมูล)
+                            </h2>
+
+                            <h3 class="subsection-title">📦 Contexts คืออะไร</h3>
+                            <div class="info-box">
+                                <p class="mb-0">Contexts คือ "ข้อมูลที่ GitHub Actions เตรียมไว้ให้" ที่เราสามารถเรียกใช้ใน workflow ได้</p>
+                            </div>
+
+                            <h3 class="subsection-title">🔑 ตัวแปรที่ใช้บ่อย</h3>
+
+                            <div class="step-box">
+                                <h5>1. github (ข้อมูลเกี่ยวกับ repository/event)</h5>
+                                <div class="command-box">
+                                    <pre><code>${{ github.repository }}        # ชื่อ repo (เช่น owner/repo-name)
+${{ github.ref }}               # branch/tag ปัจจุบัน (refs/heads/main)
+${{ github.sha }}               # commit SHA
+${{ github.actor }}             # คนที่ trigger workflow
+${{ github.event_name }}        # event ที่ trigger (push, pull_request)</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>2. runner (ข้อมูลเกี่ยวกับเครื่องที่รัน)</h5>
+                                <div class="command-box">
+                                    <pre><code>${{ runner.os }}                # ระบบปฏิบัติการ (Linux, Windows, macOS)
+${{ runner.temp }}              # ตำแหน่ง temp directory
+${{ runner.tool_cache }}        # ตำแหน่ง tool cache</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>3. secrets (ข้อมูลลับ)</h5>
+                                <div class="command-box">
+                                    <pre><code>${{ secrets.MY_SECRET }}        # ค่าที่เก็บใน GitHub Secrets
+${{ secrets.API_KEY }}          # API key
+${{ secrets.DEPLOY_TOKEN }}     # Deploy token</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>4. env (ตัวแปร environment)</h5>
+                                <div class="command-box">
+                                    <pre><code>env:
+  NODE_ENV: production
+  API_URL: https://api.example.com
+
+steps:
+  - run: echo ${{ env.NODE_ENV }}    # ใช้งาน env variable</code></pre>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">💡 ตัวอย่างการใช้งานจริง</h3>
+
+                            <div class="step-box">
+                                <h5>ตัวอย่างที่ 1: ใช้ชื่อ branch</h5>
+                                <div class="command-box">
+                                    <pre><code>- name: แสดงชื่อ branch
+  run: echo "Branch: ${{ github.ref_name }}"</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ตัวอย่างที่ 2: Run เฉพาะ branch หลัก</h5>
+                                <div class="command-box">
+                                    <pre><code>- name: Deploy to production
+  if: github.ref == 'refs/heads/main'
+  run: npm run deploy</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ตัวอย่างที่ 3: ใช้ secrets</h5>
+                                <div class="command-box">
+                                    <pre><code>- name: Deploy with token
+  run: |
+    echo "Token: ${{ secrets.DEPLOY_TOKEN }}"
+  env:
+    API_KEY: ${{ secrets.API_KEY }}</code></pre>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">🔐 การตั้งค่า Secrets</h3>
+
+                            <div class="step-box">
+                                <h5>วิธีเพิ่ม Secret:</h5>
+                                <ol>
+                                    <li>ไปที่ GitHub Repository → <strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong></li>
+                                    <li>คลิก <strong>New repository secret</strong></li>
+                                    <li>ใส่ Name (เช่น <code>DEPLOY_TOKEN</code>) และ Value</li>
+                                    <li>คลิก <strong>Add secret</strong></li>
+                                </ol>
+
+                                <div class="command-box">
+                                    <pre><code>steps:
+  - name: Deploy
+    run: ./deploy.sh
+    env:
+      DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+      API_KEY: ${{ secrets.API_KEY }}</code></pre>
+                                </div>
+
+                                <div class="warning-box">
+                                    ⚠️ <strong>ข้อควรระวัง:</strong> Secrets จะไม่แสดงใน logs (ปลอดภัย)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: ตัวอย่าง Workflow -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-file-code-fill"></i> 4. ตัวอย่าง Workflow แบบละเอียด
+                            </h2>
+
+                            <div class="step-box">
+                                <h3 class="subsection-title">4.1 Node.js CI (Test อัตโนมัติ)</h3>
+                                <p><strong>เป้าหมาย:</strong> รัน test ทุกครั้งที่มี push หรือ pull request ไปยัง main branch</p>
+                                <p><strong>ไฟล์:</strong> <code>.github/workflows/ci.yml</code></p>
+                                
+                                <div class="command-box">
+                                    <pre><code>name: CI                          # ชื่อ workflow (แสดงใน GitHub Actions tab)
+
+on:                               # เมื่อไหร่ให้ทำงาน
+  push:
+    branches: [main]              # เมื่อ push ไป main
+  pull_request:
+    branches: [main]              # เมื่อมี PR ไป main
+
+jobs:                             # งานที่ต้องทำ
+  build:                          # ชื่อ job
+    runs-on: ubuntu-latest        # รันบน Ubuntu
+
+    steps:                        # ขั้นตอนการทำงาน
+      # Step 1: ดาวน์โหลด code จาก repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: ติดตั้ง Node.js version 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'            # cache npm dependencies เพื่อความเร็ว
+
+      # Step 3: ติดตั้ง dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: รัน linter (ตรวจสอบโค้ด)
+      - name: Run linter
+        run: npm run lint
+
+      # Step 5: รัน tests
+      - name: Run tests
+        run: npm test
+
+      # Step 6: Build production
+      - name: Build
+        run: npm run build</code></pre>
+                                </div>
+
+                                <div class="success-box">
+                                    <strong>ผลลัพธ์:</strong>
+                                    <ul class="mb-0">
+                                        <li>✅ Test ผ่าน → แสดง green checkmark</li>
+                                        <li>❌ Test fail → แสดง red X และแจ้งเตือน</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h3 class="subsection-title">4.2 Deploy to Production (SSH)</h3>
+                                <p><strong>เป้าหมาย:</strong> Deploy code ขึ้น production server ผ่าน SSH เมื่อ push ไปที่ main</p>
+                                <p><strong>ไฟล์:</strong> <code>.github/workflows/deploy.yml</code></p>
+                                
+                                <div class="command-box">
+                                    <pre><code>name: Deploy to Production
+
+on:
+  push:
+    branches: [main]              # Deploy เมื่อ push ไป main เท่านั้น
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: ดาวน์โหลด code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup SSH key
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # Step 3: Deploy via SSH
+      - name: Deploy to server
+        run: |
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /var/www/myapp
+            git pull origin main
+            npm install --production
+            npm run build
+            pm2 restart myapp
+          EOF
+
+      # Step 4: Health check
+      - name: Verify deployment
+        run: |
+          sleep 5
+          curl -f https://myapp.com/health || exit 1</code></pre>
+                                </div>
+
+                                <div class="warning-box">
+                                    <strong>Secrets ที่ต้องตั้ง:</strong>
+                                    <ul class="mb-0">
+                                        <li><code>SSH_PRIVATE_KEY</code> - SSH private key</li>
+                                        <li><code>SERVER_IP</code> - IP address ของ server</li>
+                                        <li><code>SERVER_USER</code> - Username สำหรับ SSH</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h3 class="subsection-title">4.3 Deploy to GitHub Pages (Static Site)</h3>
+                                <p><strong>เป้าหมาย:</strong> Deploy static website ขึ้น GitHub Pages อัตโนมัติ</p>
+                                <p><strong>ไฟล์:</strong> <code>.github/workflows/pages.yml</code></p>
+                                
+                                <div class="command-box">
+                                    <pre><code>name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'          # โฟลเดอร์ที่ build เสร็จ
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h3 class="subsection-title">4.4 Schedule Workflow (Cron Job)</h3>
+                                <p><strong>เป้าหมาย:</strong> รัน backup database ทุกวันเวลา 2:00 น.</p>
+                                <p><strong>ไฟล์:</strong> <code>.github/workflows/backup.yml</code></p>
+                                
+                                <div class="command-box">
+                                    <pre><code>name: Daily Database Backup
+
+on:
+  schedule:
+    - cron: '0 2 * * *'           # ทุกวัน เวลา 02:00 UTC
+  workflow_dispatch:              # อนุญาตให้รันด้วยมือได้
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Backup database
+        run: |
+          echo "Running backup at $(date)"
+          # mysqldump commands here
+          
+      - name: Upload to S3
+        run: |
+          aws s3 cp backup.sql s3://my-backups/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}</code></pre>
+                                </div>
+
+                                <div class="info-box">
+                                    <strong>Cron Syntax:</strong>
+                                    <pre class="mb-0">* * * * *
+│ │ │ │ │
+│ │ │ │ └─── Day of week (0-6, Sunday=0)
+│ │ │ └───── Month (1-12)
+│ │ └─────── Day of month (1-31)
+│ └───────── Hour (0-23)
+└─────────── Minute (0-59)</pre>
+                                </div>
+
+                                <div class="note-box">
+                                    <strong>ตัวอย่าง Cron:</strong>
+                                    <ul class="mb-0">
+                                        <li><code>0 2 * * *</code> - ทุกวันเวลา 02:00</li>
+                                        <li><code>0 0 * * 0</code> - ทุกวันอาทิตย์เวลา 00:00</li>
+                                        <li><code>*/15 * * * *</code> - ทุก 15 นาที</li>
+                                        <li><code>0 9-17 * * 1-5</code> - ทุกชั่วโมง 9-17 น. วันจันทร์-ศุกร์</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: GitHub Marketplace -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-shop"></i> 5. GitHub Marketplace (แหล่งรวม Actions สำเร็จรูป)
+                            </h2>
+
+                            <h3 class="subsection-title">🛒 GitHub Marketplace คืออะไร</h3>
+                            <div class="info-box">
+                                <p>Marketplace คือ "ร้านค้า Actions สำเร็จรูป" ที่ใครก็ตามสามารถสร้างและแชร์ Actions ได้</p>
+                                <p class="mb-0"><strong>เว็บไซต์:</strong> <a href="https://github.com/marketplace?type=actions" target="_blank">https://github.com/marketplace?type=actions</a></p>
+                            </div>
+
+                            <h3 class="subsection-title">⭐ Actions ยอดนิยมที่ควรรู้จัก</h3>
+
+                            <div class="action-card">
+                                <h5>1. actions/checkout</h5>
+                                <p><strong>ทำอะไร:</strong> ดาวน์โหลด code จาก repository</p>
+                                <div class="command-box">
+                                    <pre><code>- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0              # ดาวน์โหลด history ทั้งหมด</code></pre>
+                                </div>
+                                <p><strong>เมื่อไหร่ใช้:</strong> ใช้เกือบทุก workflow (ข้อแรกเสมอ)</p>
+                            </div>
+
+                            <div class="action-card">
+                                <h5>2. actions/setup-node</h5>
+                                <p><strong>ทำอะไร:</strong> ติดตั้ง Node.js และ npm</p>
+                                <div class="command-box">
+                                    <pre><code>- uses: actions/setup-node@v4
+  with:
+    node-version: '20'          # หรือ 18, 16
+    cache: 'npm'                # cache dependencies</code></pre>
+                                </div>
+                                <p><strong>ทำไมต้องใช้:</strong> เพื่อให้รัน npm commands ได้</p>
+                            </div>
+
+                            <div class="action-card">
+                                <h5>3. actions/setup-python</h5>
+                                <p><strong>ทำอะไร:</strong> ติดตั้ง Python</p>
+                                <div class="command-box">
+                                    <pre><code>- uses: actions/setup-python@v5
+  with:
+    python-version: '3.11'
+    cache: 'pip'</code></pre>
+                                </div>
+                                <p><strong>เหมาะกับ:</strong> โปรเจค Python, Django, Flask</p>
+                            </div>
+
+                            <div class="action-card">
+                                <h5>4. docker/build-push-action</h5>
+                                <p><strong>ทำอะไร:</strong> Build Docker image และ push ขึ้น registry</p>
+                                <div class="command-box">
+                                    <pre><code>- uses: docker/build-push-action@v5
+  with:
+    context: .
+    push: true
+    tags: myapp:latest</code></pre>
+                                </div>
+                                <p><strong>เหมาะกับ:</strong> โปรเจคที่ใช้ Docker</p>
+                            </div>
+
+                            <div class="action-card">
+                                <h5>5. actions/upload-artifact & download-artifact</h5>
+                                <p><strong>ทำอะไร:</strong> แชร์ไฟล์ระหว่าง jobs</p>
+                                <div class="command-box">
+                                    <pre><code># Upload artifact
+- uses: actions/upload-artifact@v4
+  with:
+    name: build-output
+    path: dist/
+
+# Download artifact (ใน job อื่น)
+- uses: actions/download-artifact@v4
+  with:
+    name: build-output</code></pre>
+                                </div>
+                                <p><strong>เมื่อไหร่ใช้:</strong> เมื่อต้องส่ง build output จาก job หนึ่งไป job อื่น</p>
+                            </div>
+
+                            <div class="action-card">
+                                <h5>6. peaceiris/actions-gh-pages</h5>
+                                <p><strong>ทำอะไร:</strong> Deploy static site ขึ้น GitHub Pages</p>
+                                <div class="command-box">
+                                    <pre><code>- uses: peaceiris/actions-gh-pages@v3
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    publish_dir: ./dist</code></pre>
+                                </div>
+                                <p><strong>เหมาะกับ:</strong> Documentation, Portfolio, Static websites</p>
+                            </div>
+
+                            <h3 class="subsection-title">💡 Best Practices เมื่อใช้ Actions</h3>
+
+                            <div class="dos-donts">
+                                <div class="do-box">
+                                    <h5>✅ ควรทำ</h5>
+                                    <div class="command-box">
+                                        <pre><code># ดี
+- uses: actions/checkout@v4</code></pre>
+                                    </div>
+                                    <p class="mb-0">ระบุ version ให้ชัดเจน</p>
+                                </div>
+                                <div class="dont-box">
+                                    <h5>❌ ไม่ควรทำ</h5>
+                                    <div class="command-box">
+                                        <pre><code># ไม่ดี
+- uses: actions/checkout@main</code></pre>
+                                    </div>
+                                    <p class="mb-0">version เปลี่ยนได้ ไม่ stable</p>
+                                </div>
+                            </div>
+
+                            <div class="success-box">
+                                <ul class="checkmark-list mb-0">
+                                    <li>อ่าน README ก่อนใช้</li>
+                                    <li>ตรวจสอบ permissions</li>
+                                    <li>ทดสอบก่อนใช้งานจริง</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Section 6: Best Practices -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-lightbulb-fill"></i> 6. เคล็ดลับและ Best Practices
+                            </h2>
+
+                            <div class="dos-donts">
+                                <div class="do-box">
+                                    <h5>✅ ควรทำ (Do's)</h5>
+                                    <ul>
+                                        <li><strong>ใช้ cache เพื่อความเร็ว</strong></li>
+                                        <li><strong>ใช้ matrix strategy</strong> สำหรับหลาย version</li>
+                                        <li><strong>ตั้งชื่อ steps ให้ชัดเจน</strong></li>
+                                        <li><strong>ใช้ secrets</strong> สำหรับข้อมูลลับ</li>
+                                        <li><strong>ตั้ง timeout</strong> เผื่อ workflow ค้าง</li>
+                                    </ul>
+                                    <div class="command-box">
+                                        <pre><code>- uses: actions/cache@v4
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+jobs:
+  build:
+    timeout-minutes: 10</code></pre>
+                                    </div>
+                                </div>
+
+                                <div class="dont-box">
+                                    <h5>❌ ไม่ควรทำ (Don'ts)</h5>
+                                    <ul>
+                                        <li><strong>อย่าใส่ secrets ในโค้ด</strong></li>
+                                        <li><strong>อย่า hardcode values</strong></li>
+                                        <li><strong>อย่ารัน workflow บ่อยเกินไป</strong></li>
+                                    </ul>
+                                    <div class="command-box">
+                                        <pre><code># ❌ อย่าทำ
+- run: echo "API_KEY=abc123"
+
+# ✅ ใช้แบบนี้แทน
+- run: echo "API_KEY=${{ secrets.API_KEY }}"
+
+# ใช้ paths filter
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'package.json'</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 7: Debugging -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-bug-fill"></i> 7. Debugging GitHub Actions
+                            </h2>
+
+                            <h3 class="subsection-title">🐛 วิธีแก้ปัญหาเมื่อ Workflow ล้มเหลว</h3>
+
+                            <div class="step-box">
+                                <h5>1. ดู Logs ใน GitHub Actions Tab</h5>
+                                <ul>
+                                    <li>คลิกที่ failed workflow</li>
+                                    <li>ดู step ไหนที่ fail</li>
+                                    <li>อ่าน error message</li>
+                                </ul>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>2. เปิด Debug Logging</h5>
+                                <div class="command-box">
+                                    <pre><code>- name: Debug step
+  run: |
+    echo "Node version: $(node -v)"
+    echo "Working directory: $(pwd)"
+    ls -la</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>3. ใช้ act เพื่อรัน locally</h5>
+                                <div class="command-box">
+                                    <pre><code># ติดตั้ง act
+brew install act        # macOS
+choco install act       # Windows
+
+# รัน workflow locally
+act push</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>4. ใช้ tmate สำหรับ SSH debug</h5>
+                                <div class="command-box">
+                                    <pre><code>- name: Setup tmate session
+  uses: mxschmitt/action-tmate@v3</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 8: สรุป -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-bookmark-check-fill"></i> 8. สรุป
+                            </h2>
+
+                            <h3 class="subsection-title">📝 สิ่งที่เราได้เรียนรู้</h3>
+                            <div class="success-box">
+                                <ul class="checkmark-list">
+                                    <li><strong>GitHub Actions = ผู้ช่วยอัตโนมัติ</strong> ที่ช่วย build, test, deploy</li>
+                                    <li><strong>Workflow</strong> = สูตรการทำงาน (YAML file)</li>
+                                    <li><strong>Event</strong> = เหตุการณ์ที่กระตุ้น (push, PR, schedule)</li>
+                                    <li><strong>Job</strong> = ชุดงาน (สามารถทำงานพร้อมกันได้)</li>
+                                    <li><strong>Step</strong> = ขั้นตอนย่อย (ทำงานตามลำดับ)</li>
+                                    <li><strong>Runner</strong> = เครื่องที่รัน (ubuntu, windows, macos)</li>
+                                    <li><strong>Marketplace</strong> = ร้านรวม Actions สำเร็จรูป</li>
+                                </ul>
+                            </div>
+
+                            <h3 class="subsection-title">🎯 Next Steps</h3>
+                            <div class="note-box">
+                                <ol>
+                                    <li>สร้าง workflow แรกของคุณ (เริ่มจาก CI ง่าย ๆ)</li>
+                                    <li>ทดลองใช้ Actions จาก Marketplace</li>
+                                    <li>เพิ่ม deploy workflow</li>
+                                    <li>ตั้ง secrets สำหรับ production</li>
+                                </ol>
+                            </div>
+
+                            <h3 class="subsection-title">📚 แหล่งเรียนรู้เพิ่มเติม</h3>
+                            <div class="info-box">
+                                <ul class="mb-0">
+                                    <li><a href="https://docs.github.com/en/actions" target="_blank">GitHub Actions Docs</a></li>
+                                    <li><a href="https://github.com/marketplace?type=actions" target="_blank">GitHub Actions Marketplace</a></li>
+                                    <li><a href="https://github.com/sdras/awesome-actions" target="_blank">Awesome Actions List</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2024</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+        <!-- Include navigation -->
+        <script src="../js/include-nav.js"></script>
+    </body>
+</html>

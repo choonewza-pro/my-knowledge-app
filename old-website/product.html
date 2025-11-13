@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Workshop Packages - แพ็คเกจการเรียนรู้ Git และ GitHub Actions ที่หลากหลาย" />
+        <meta name="author" content="" />
+        <title>แพ็คเกจ Workshop - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            /* Modern gradient background */
+            .hero-gradient {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                position: relative;
+                overflow: hidden;
+            }
+            .hero-gradient::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                opacity: 0.3;
+            }
+            
+            /* Package cards */
+            .package-card {
+                border: none;
+                border-radius: 20px;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+                background: #fff;
+                height: 100%;
+                position: relative;
+            }
+            .package-card:hover {
+                transform: translateY(-12px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            }
+            .package-card .card-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 2rem;
+                position: relative;
+            }
+            .package-card.featured .card-header {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            }
+            .package-card .package-icon {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.5rem;
+                margin: 0 auto 1rem;
+                backdrop-filter: blur(10px);
+            }
+            .package-card .package-price {
+                font-size: 3rem;
+                font-weight: 700;
+                margin: 1rem 0;
+            }
+            .package-card .price-period {
+                font-size: 1rem;
+                opacity: 0.9;
+            }
+            .package-card .card-body {
+                padding: 2rem;
+            }
+            .package-card .feature-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .package-card .feature-list li {
+                padding: 0.75rem 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .package-card .feature-list li:last-child {
+                border-bottom: none;
+            }
+            .package-card .feature-list li i {
+                color: #667eea;
+                margin-right: 0.5rem;
+            }
+            
+            /* Badge styles */
+            .badge-popular {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                font-weight: 700;
+                font-size: 0.875rem;
+                box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+                z-index: 10;
+            }
+            .badge-new {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+                color: #155724;
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                font-weight: 700;
+                font-size: 0.875rem;
+                box-shadow: 0 4px 12px rgba(132, 250, 176, 0.4);
+                z-index: 10;
+            }
+            
+            /* CTA Button */
+            .btn-package {
+                border-radius: 50px;
+                padding: 0.75rem 2rem;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                width: 100%;
+            }
+            .btn-package-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                color: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
+            .btn-package-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+                color: white;
+            }
+            .btn-package-outline {
+                border: 2px solid #667eea;
+                color: #667eea;
+                background: transparent;
+            }
+            .btn-package-outline:hover {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-color: transparent;
+            }
+            
+            /* Filter buttons */
+            .filter-btn {
+                border: 2px solid #e9ecef;
+                border-radius: 50px;
+                padding: 0.5rem 1.5rem;
+                margin: 0.25rem;
+                background: white;
+                color: #6c757d;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            .filter-btn:hover, .filter-btn.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-color: transparent;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Hero Header -->
+        <header class="hero-gradient py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white position-relative">
+                    <h1 class="display-3 fw-bolder mb-3">แพ็คเกจ Workshop</h1>
+                    <p class="lead mb-0" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto;">
+                        เลือกแพ็คเกจการเรียนรู้ที่เหมาะสมกับความต้องการของคุณ
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filter Section -->
+        <section class="py-4 bg-light">
+            <div class="container">
+                <div class="text-center">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="bi bi-grid-3x3-gap me-1"></i>ทั้งหมด
+                    </button>
+                    <button class="filter-btn" data-filter="beginner">
+                        <i class="bi bi-mortarboard me-1"></i>ระดับเริ่มต้น
+                    </button>
+                    <button class="filter-btn" data-filter="intermediate">
+                        <i class="bi bi-graph-up me-1"></i>ระดับกลาง
+                    </button>
+                    <button class="filter-btn" data-filter="advanced">
+                        <i class="bi bi-rocket me-1"></i>ระดับสูง
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Packages Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-4">
+                <div class="row g-4">
+                    <!-- Package 1: Starter -->
+                    <div class="col-lg-3 col-md-6 package-item" data-category="beginner">
+                        <div class="package-card">
+                            <div class="badge-new">
+                                <i class="bi bi-star-fill me-1"></i>ใหม่
+                            </div>
+                            <div class="card-header text-center">
+                                <div class="package-icon">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                                <h4 class="fw-bold mb-0">Starter</h4>
+                                <div class="package-price">ฟรี</div>
+                                <div class="price-period">เริ่มต้นใช้งาน</div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="feature-list">
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <strong>Git Commands Reference</strong>
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        เข้าถึงเอกสารพื้นฐาน
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        ตัวอย่างโค้ดเบื้องต้น
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Community Support
+                                    </li>
+                                    <li class="text-muted">
+                                        <i class="bi bi-x-circle"></i>
+                                        Video Tutorials
+                                    </li>
+                                    <li class="text-muted">
+                                        <i class="bi bi-x-circle"></i>
+                                        1-on-1 Mentoring
+                                    </li>
+                                </ul>
+                                <div class="mt-4">
+                                    <a href="knowledges/git-commands-reference.html" class="btn btn-package-outline">
+                                        <i class="bi bi-book me-2"></i>เริ่มเรียนฟรี
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Package 2: Professional -->
+                    <div class="col-lg-3 col-md-6 package-item" data-category="intermediate">
+                        <div class="package-card featured">
+                            <div class="badge-popular">
+                                <i class="bi bi-fire me-1"></i>ยอดนิยม
+                            </div>
+                            <div class="card-header text-center">
+                                <div class="package-icon">
+                                    <i class="bi bi-award"></i>
+                                </div>
+                                <h4 class="fw-bold mb-0">Professional</h4>
+                                <div class="package-price">฿2,990</div>
+                                <div class="price-period">ต่อคน / Workshop</div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="feature-list">
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <strong>ทุกอย่างใน Starter</strong>
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Git Workflows แบบครบถ้วน
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        GitHub Actions CI/CD
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Video Tutorials (10+ ชั่วโมง)
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Hands-on Projects
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Certificate of Completion
+                                    </li>
+                                </ul>
+                                <div class="mt-4">
+                                    <a href="#" class="btn btn-package-primary">
+                                        <i class="bi bi-cart-plus me-2"></i>เลือกแพ็คเกจนี้
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Package 3: Team -->
+                    <div class="col-lg-3 col-md-6 package-item" data-category="intermediate">
+                        <div class="package-card">
+                            <div class="card-header text-center">
+                                <div class="package-icon">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <h4 class="fw-bold mb-0">Team</h4>
+                                <div class="package-price">฿9,990</div>
+                                <div class="price-period">สำหรับทีม 5-10 คน</div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="feature-list">
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <strong>ทุกอย่างใน Professional</strong>
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Workshop สำหรับทีม
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Customized Training
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Team Collaboration Tools
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Priority Support
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Progress Tracking Dashboard
+                                    </li>
+                                </ul>
+                                <div class="mt-4">
+                                    <a href="contact.html" class="btn btn-package-outline">
+                                        <i class="bi bi-chat-dots me-2"></i>ติดต่อเรา
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Package 4: Enterprise -->
+                    <div class="col-lg-3 col-md-6 package-item" data-category="advanced">
+                        <div class="package-card">
+                            <div class="card-header text-center">
+                                <div class="package-icon">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                                <h4 class="fw-bold mb-0">Enterprise</h4>
+                                <div class="package-price">Custom</div>
+                                <div class="price-period">องค์กรขนาดใหญ่</div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="feature-list">
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <strong>ทุกอย่างใน Team</strong>
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Unlimited Team Members
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        On-site Training
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Dedicated Account Manager
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Custom DevOps Solutions
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        24/7 Premium Support
+                                    </li>
+                                </ul>
+                                <div class="mt-4">
+                                    <a href="contact.html" class="btn btn-package-outline">
+                                        <i class="bi bi-telephone me-2"></i>ปรึกษาผู้เชี่ยวชาญ
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-3">เปรียบเทียบแพ็คเกจ</h2>
+                    <p class="lead text-muted">เลือกแพ็คเกจที่เหมาะสมกับความต้องการของคุณ</p>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" style="background: white; border-radius: 16px; overflow: hidden;">
+                        <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                            <tr>
+                                <th scope="col" class="p-4">ฟีเจอร์</th>
+                                <th scope="col" class="text-center p-4">Starter</th>
+                                <th scope="col" class="text-center p-4">Professional</th>
+                                <th scope="col" class="text-center p-4">Team</th>
+                                <th scope="col" class="text-center p-4">Enterprise</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3"><strong>Git Commands Reference</strong></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><strong>Video Tutorials</strong></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><strong>GitHub Actions CI/CD</strong></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><strong>Certificate</strong></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><strong>Team Training</strong></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><strong>Custom Solutions</strong></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><strong>24/7 Support</strong></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-x-circle text-muted fs-5"></i></td>
+                                <td class="text-center"><i class="bi bi-check-circle-fill text-success fs-5"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5 hero-gradient">
+            <div class="container text-center">
+                <div class="text-white position-relative">
+                    <h2 class="fw-bold mb-3">ยังไม่แน่ใจว่าจะเลือกแพ็คเกจไหน?</h2>
+                    <p class="lead mb-4">ติดต่อเราเพื่อขอคำปรึกษาฟรี หรือเริ่มต้นด้วยแพ็คเกจฟรีก่อน</p>
+                    <a href="contact.html" class="btn btn-light btn-lg me-3" style="border-radius: 50px;">
+                        <i class="bi bi-chat-dots me-2"></i>ปรึกษาผู้เชี่ยวชาญ
+                    </a>
+                    <a href="knowledges/git-commands-reference.html" class="btn btn-outline-light btn-lg" style="border-radius: 50px;">
+                        <i class="bi bi-book me-2"></i>เริ่มเรียนฟรี
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <h5 class="text-white mb-3">Git Workshop</h5>
+                        <p class="text-white-50">Workshop สำหรับการเรียนรู้การจัดการ Source Code ด้วย Git และ GitHub Actions อย่างมืออาชีพ</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Quick Links</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="index.html" class="text-white-50 text-decoration-none">หน้าแรก</a></li>
+                            <li><a href="about.html" class="text-white-50 text-decoration-none">เกี่ยวกับ</a></li>
+                            <li><a href="contact.html" class="text-white-50 text-decoration-none">ติดต่อ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Resources</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="knowledges/git-commands-reference.html" class="text-white-50 text-decoration-none">Git Commands</a></li>
+                            <li><a href="knowledges/github-guide.html" class="text-white-50 text-decoration-none">GitHub Guide</a></li>
+                            <li><a href="knowledges/github-actions-guide.html" class="text-white-50 text-decoration-none">GitHub Actions</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                <p class="m-0 text-center text-white-50">Copyright &copy; Git Workshop 2025 | Created with <i class="bi bi-heart-fill text-danger"></i></p>
+            </div>
+        </footer>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/include-nav.js"></script>
+        <script src="js/scripts.js"></script>
+        
+        <!-- Filter functionality -->
+        <script>
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    const items = document.querySelectorAll('.package-item');
+                    
+                    items.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

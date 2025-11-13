@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Git Workflow: Hotfix - การแก้ไข Critical Bug บน Production แบบด่วน" />
+        <meta name="author" content="" />
+        <title>Git Workflow: Hotfix (Production Bugfix) - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .workflow-step {
+                margin-bottom: 3rem;
+                padding: 2rem;
+                background-color: #f8f9fa;
+                border-radius: 0.5rem;
+                border-left: 5px solid #dc3545;
+            }
+            .step-number {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                background-color: #dc3545;
+                color: white;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 40px;
+                font-weight: bold;
+                margin-right: 1rem;
+            }
+            .step-title {
+                color: #dc3545;
+                font-weight: bold;
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            .command-box {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+            .expected-result {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .note-box {
+                background-color: #fff3cd;
+                border: 1px solid #ffc107;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .warning-box {
+                background-color: #f8d7da;
+                border: 1px solid #f5c2c7;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .critical-box {
+                background-color: #dc3545;
+                color: white;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+            .best-practice {
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .comparison-table {
+                background-color: #fff;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                margin: 2rem 0;
+            }
+            .summary-box {
+                background-color: #e2e3e5;
+                border: 2px solid #6c757d;
+                border-radius: 0.5rem;
+                padding: 2rem;
+                margin: 2rem 0;
+            }
+            .scenario-box {
+                background-color: #ffe5e5;
+                border-left: 4px solid #dc3545;
+                padding: 1.5rem;
+                margin: 1rem 0;
+                border-radius: 0.25rem;
+            }
+            .timeline-box {
+                background-color: #e7f3ff;
+                border-left: 4px solid #0d6efd;
+                padding: 1.5rem;
+                margin: 1rem 0;
+                border-radius: 0.25rem;
+            }
+            pre {
+                background-color: transparent;
+                padding: 0;
+                margin: 0;
+            }
+            code {
+                color: #e83e8c;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-danger py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Git Workflow: Hotfix</h1>
+                    <p class="lead fw-normal mb-0">การแก้ไข Critical Bug บน Production แบบด่วน</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        
+                        <!-- Introduction -->
+                        <div class="mb-5">
+                            <h2 class="mb-4">สถานะเริ่มต้น</h2>
+                            <ul class="lead">
+                                <li><strong>Branches:</strong> <code>main</code>, <code>production</code></li>
+                                <li><strong>Production Release:</strong> <code>v1.1.1</code></li>
+                                <li><strong>ปัญหา:</strong> พบ critical bug ใน production ที่ต้องแก้ไขทันที</li>
+                                <li><strong>เป้าหมาย:</strong> แก้ไข bug และ deploy ขึ้น production โดยเร็ว → Release <code>v1.1.2</code></li>
+                            </ul>
+
+                            <div class="critical-box mt-4">
+                                <h3><i class="bi bi-exclamation-triangle-fill"></i> เมื่อไหร่ควรใช้ Hotfix?</h3>
+                                <p class="mb-2"><strong>ใช้ Hotfix เมื่อพบ:</strong></p>
+                                <ul class="mb-0">
+                                    <li>🔴 Critical bug ใน production ที่ส่งผลกระทบต่อผู้ใช้</li>
+                                    <li>🔴 Security vulnerability ที่ต้องแก้ไขด่วน</li>
+                                    <li>🔴 Data loss หรือ system crash</li>
+                                    <li>🔴 Payment gateway ไม่ทำงาน</li>
+                                    <li>🔴 ฟีเจอร์หลักใช้งานไม่ได้</li>
+                                </ul>
+                            </div>
+
+                            <div class="best-practice mt-3">
+                                <h5>✅ ไม่ใช้ Hotfix เมื่อ:</h5>
+                                <ul class="mb-0">
+                                    <li>Bug เล็กน้อยที่ไม่กระทบการใช้งานหลัก → ใช้ Bugfix ปกติ</li>
+                                    <li>Feature request ใหม่</li>
+                                    <li>Performance improvement ที่ไม่เร่งด่วน</li>
+                                    <li>UI/UX tweaks</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 1 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">1</span>
+                                Pull Production Branch
+                            </h3>
+                            <p>ดึง code ล่าสุดจาก production branch ที่กำลังใช้งานจริง</p>
+                            
+                            <div class="command-box">
+                                <pre><code># Pull production branch จาก remote
+git pull origin production
+
+# ตรวจสอบว่ามี production branch
+git branch -a
+
+# Checkout ไปที่ production branch
+git checkout production
+
+# ตรวจสอบ production version ปัจจุบัน
+git log --oneline -5
+git tag -l | tail -5</code></pre>
+                            </div>
+
+                            <div class="expected-result">
+                                <strong>📋 ผลลัพธ์ที่คาดหวัง:</strong>
+                                <pre class="mb-0"><code>Switched to branch 'production'
+Your branch is up to date with 'origin/production'.
+
+Latest tag: v1.1.1</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 หมายเหตุ:</strong> Production branch คือ branch ที่ deploy ไปยัง production server
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">2</span>
+                                สร้าง Hotfix Branch จาก Production
+                            </h3>
+                            <p>สร้าง hotfix branch จาก production branch (ไม่ใช่จาก main)</p>
+                            
+                            <div class="command-box">
+                                <pre><code># สร้าง hotfix branch จาก production
+git checkout -b hotfix/fix-payment-error
+
+# ตรวจสอบว่าสร้าง branch สำเร็จ
+git branch
+# * hotfix/fix-payment-error
+#   production
+#   main</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <h5>✅ รูปแบบการตั้งชื่อ Hotfix Branch:</h5>
+                                <ul class="mb-0">
+                                    <li><code>hotfix/fix-payment-error</code></li>
+                                    <li><code>hotfix/security-patch</code></li>
+                                    <li><code>hotfix/fix-crash-on-login</code></li>
+                                    <li><code>hotfix/critical-data-loss</code></li>
+                                    <li><code>hotfix/fix-database-timeout</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">3</span>
+                                แก้ไข Bug และทดสอบ
+                            </h3>
+                            <p>แก้ไขโค้ดให้ทำงานถูกต้อง - เน้นความรวดเร็วแต่ไม่ลดคุณภาพ</p>
+                            
+                            <div class="command-box">
+                                <pre><code># แก้ไขไฟล์ที่มีปัญหา
+# เช่น payment.js, checkout.php
+
+# ทดสอบให้แน่ใจว่าแก้ไขถูกต้อง
+# - Run unit tests
+# - Test manually
+# - Check error logs
+
+# ตรวจสอบการเปลี่ยนแปลง
+git status
+git diff</code></pre>
+                            </div>
+
+                            <div class="warning-box">
+                                <strong>⚠️ Best Practices สำหรับ Hotfix:</strong>
+                                <ul class="mb-0">
+                                    <li>แก้ไขเฉพาะสิ่งที่จำเป็น - <strong>ไม่เพิ่ม feature ใหม่</strong></li>
+                                    <li>ทำการทดสอบอย่างรวดเร็วแต่ละเอียด</li>
+                                    <li>Focus test เฉพาะส่วนที่แก้ไข</li>
+                                    <li>Document สาเหตุและวิธีแก้</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">4</span>
+                                Commit การแก้ไข
+                            </h3>
+                            
+                            <div class="command-box">
+                                <pre><code># Add ไฟล์ที่แก้ไข
+git add payment.js
+git add checkout.php
+
+# หรือเพิ่มทุกไฟล์
+git add .
+
+# Commit พร้อม message ที่ชัดเจน
+git commit -m "hotfix: แก้ไข payment gateway timeout error
+
+- เพิ่ม retry mechanism สำหรับ payment API
+- ปรับ timeout จาก 5s เป็น 15s
+- เพิ่ม error logging สำหรับ debug
+
+Fixes #123"</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 Commit Message Format สำหรับ Hotfix:</strong>
+                                <pre class="mb-0"><code>hotfix: &lt;สรุปปัญหาที่แก้&gt;
+
+- รายละเอียดการแก้ไข 1
+- รายละเอียดการแก้ไข 2
+- รายละเอียดการแก้ไข 3
+
+Fixes #&lt;issue-number&gt;</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">5</span>
+                                Merge Hotfix เข้า Production
+                            </h3>
+                            <p>Merge hotfix branch เข้า production เพื่อเตรียม deploy</p>
+                            
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนกลับไปที่ production branch
+git checkout production
+
+# Merge hotfix เข้า production
+git merge --no-ff hotfix/fix-payment-error
+
+# กรณีมี conflict ให้แก้ไข
+# git add .
+# git commit -m "hotfix: resolve merge conflict"
+
+# ตรวจสอบว่า merge สำเร็จ
+git log --oneline -5</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 หมายเหตุ:</strong> ใช้ <code>--no-ff</code> เพื่อสร้าง merge commit เก็บประวัติการ merge
+                            </div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">6</span>
+                                สร้าง Production Release Tag
+                            </h3>
+                            <p>สร้าง tag version ใหม่ โดยเพิ่มตัวเลขสุดท้าย (Patch version)</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ดู tag ปัจจุบัน
+git tag -l
+# v1.0.0
+# v1.1.0
+# v1.1.1  ← current
+
+# สร้าง tag version ใหม่ (v1.1.1 → v1.1.2)
+git tag -a v1.1.2 -m "Release v1.1.2: แก้ไข payment gateway timeout
+
+- Fix payment API timeout issue
+- Add retry mechanism
+- Improve error logging
+
+Fixes #123"
+
+# Push production branch และ tag ขึ้น remote
+git push origin production
+git push origin v1.1.2
+
+# หรือ push tags ทั้งหมด
+git push --tags</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <h5>✅ Semantic Versioning สำหรับ Hotfix:</h5>
+                                <ul class="mb-0">
+                                    <li><code>v1.1.1</code> → <code>v1.1.2</code> (Patch: แก้ไข bug)</li>
+                                    <li><code>v1.1.2</code> → <code>v1.1.3</code> (Patch: แก้ไข bug อีกครั้ง)</li>
+                                    <li>เพิ่มเฉพาะตัวเลขสุดท้าย (Patch number)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 7 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">7</span>
+                                Deploy Production Release
+                            </h3>
+                            <p>Deploy production version ใหม่ขึ้น production server</p>
+                            
+                            <div class="command-box">
+                                <pre><code># Checkout ไปที่ production tag
+git checkout v1.1.2
+
+# Verify ว่าโค้ดถูกต้อง
+git log --oneline -5
+
+# Deploy ตามขั้นตอนของทีม
+# - Build production artifacts
+# - Run production tests
+# - Deploy to production server
+# - Verify deployment
+
+# ตัวอย่างคำสั่ง deploy (ขึ้นกับ infrastructure)
+npm run build
+npm run deploy:production</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 Deployment Checklist:</strong>
+                                <ul class="mb-0">
+                                    <li>☐ Build production artifacts สำเร็จ</li>
+                                    <li>☐ Tests ผ่านหมด</li>
+                                    <li>☐ Deploy ขึ้น production</li>
+                                    <li>☐ Health check ผ่าน</li>
+                                    <li>☐ Monitor logs ไม่มี error</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 8 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">8</span>
+                                Merge Production เข้า Main
+                            </h3>
+                            <p>Merge production กลับเข้า main เพื่อให้ bug fix sync กลับมาที่ development</p>
+                            
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนไปที่ main branch
+git checkout main
+
+# Pull ล่าสุดจาก remote
+git pull origin main
+
+# Merge production เข้า main
+git merge --no-ff production
+
+# กรณีมี conflict ให้แก้ไข
+# 1. เปิดไฟล์ที่ conflict
+# 2. แก้ไข conflict markers
+# 3. git add &lt;ไฟล์ที่แก้แล้ว&gt;
+# 4. git commit -m "chore: merge production v1.1.2 into main"
+
+# Push main branch ขึ้น remote
+git push origin main</code></pre>
+                            </div>
+
+                            <div class="warning-box">
+                                <strong>⚠️ สำคัญ:</strong> การ merge production → main ป้องกันไม่ให้ bug เดิมกลับมาปรากฏใน development ในอนาคต
+                            </div>
+                        </div>
+
+                        <!-- Step 9 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">9</span>
+                                Verify Production และ Monitor
+                            </h3>
+                            <p>ตรวจสอบว่า production ทำงานปกติหลัง deploy</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ตรวจสอบ application logs
+tail -f /var/log/app.log
+
+# ตรวจสอบ health check
+curl https://api.example.com/health
+
+# Monitor metrics
+# - Open monitoring dashboard
+# - Check error rates
+# - Check response times</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 Monitoring Checklist:</strong>
+                                <ul class="mb-0">
+                                    <li>☐ Error rate ลดลงหรือไม่?</li>
+                                    <li>☐ Payment success rate เพิ่มขึ้นหรือไม่?</li>
+                                    <li>☐ ไม่มี error ใหม่เกิดขึ้น</li>
+                                    <li>☐ Performance metrics ปกติ</li>
+                                    <li>☐ User feedback ดีขึ้น</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 10 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">10</span>
+                                Clean Up Hotfix Branch
+                            </h3>
+                            <p>ลบ hotfix branch ที่ใช้งานเสร็จแล้ว</p>
+                            
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนกลับไปที่ main
+git checkout main
+
+# ลบ local hotfix branch
+git branch -d hotfix/fix-payment-error
+
+# ลบ remote hotfix branch (ถ้า push ไว้)
+git push origin --delete hotfix/fix-payment-error
+
+# ตรวจสอบ branches ที่เหลือ
+git branch -a</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="summary-box">
+                            <h2 class="mb-4">📝 สรุป Hotfix Workflow</h2>
+                            <div class="command-box">
+                                <pre><code># 1. Pull production branch
+git pull origin production
+git checkout production
+
+# 2. สร้าง hotfix branch จาก production
+git checkout -b hotfix/fix-payment-error
+
+# 3. แก้ไข bug และทดสอบ
+# ... edit files ...
+# ... test thoroughly ...
+
+# 4. Commit การแก้ไข
+git add .
+git commit -m "hotfix: แก้ไข payment gateway timeout"
+
+# 5. Merge hotfix เข้า production
+git checkout production
+git merge --no-ff hotfix/fix-payment-error
+
+# 6. สร้าง production release tag
+git tag -a v1.1.2 -m "Release v1.1.2: fix payment timeout"
+git push origin production
+git push origin v1.1.2
+
+# 7. Deploy production release
+git checkout v1.1.2
+# ... deploy process ...
+
+# 8. Merge production เข้า main
+git checkout main
+git pull origin main
+git merge --no-ff production
+git push origin main
+
+# 9. Verify production
+# ... monitor logs, metrics ...
+
+# 10. Clean up hotfix branch
+git checkout main
+git branch -d hotfix/fix-payment-error</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">⏱️ Timeline สำหรับ Hotfix</h2>
+                            <div class="timeline-box">
+                                <h5>ระยะเวลาโดยประมาณ: 30 นาที - 2 ชั่วโมง</h5>
+                                <ul class="mb-0">
+                                    <li><strong>0-15 นาที:</strong> ระบุปัญหา และเริ่มแก้ไข</li>
+                                    <li><strong>15-45 นาที:</strong> แก้ไข bug และทดสอบ</li>
+                                    <li><strong>45-60 นาที:</strong> Merge, tag และ deploy</li>
+                                    <li><strong>60-120 นาที:</strong> Monitor และ verify</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Comparison -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">📊 Hotfix vs Regular Bugfix</h2>
+                            <div class="table-responsive comparison-table">
+                                <table class="table table-bordered mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Aspect</th>
+                                            <th>Hotfix (Production)</th>
+                                            <th>Bugfix (ปกติ)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Urgency</strong></td>
+                                            <td>🔴 Critical - ภายใน 1-2 ชั่วโมง</td>
+                                            <td>⚠️ Normal - รอ release ถัดไป</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Branch Source</strong></td>
+                                            <td><code>production</code></td>
+                                            <td><code>main</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Target Branch</strong></td>
+                                            <td><code>production</code> → <code>main</code></td>
+                                            <td><code>main</code> only</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Release</strong></td>
+                                            <td>ทันที (v1.1.1 → v1.1.2)</td>
+                                            <td>รอ release ถัดไป</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Testing</strong></td>
+                                            <td>Focus test เฉพาะส่วนที่แก้</td>
+                                            <td>Full testing</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Review</strong></td>
+                                            <td>Fast-track review</td>
+                                            <td>Standard review</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Deploy</strong></td>
+                                            <td>ทันทีหลัง merge</td>
+                                            <td>ตาม schedule ปกติ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Scenarios -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">💼 ตัวอย่าง Hotfix Scenarios</h2>
+                            
+                            <div class="scenario-box">
+                                <h5><strong>Scenario 1:</strong> Payment Gateway Failure</h5>
+                                <div class="command-box">
+                                    <pre><code>git pull origin production && git checkout production
+git checkout -b hotfix/fix-payment-timeout
+
+# แก้ไข payment timeout
+git add payment.js
+git commit -m "hotfix: fix payment gateway timeout"
+
+git checkout production
+git merge --no-ff hotfix/fix-payment-timeout
+git tag -a v1.1.2 -m "Release v1.1.2: fix payment"
+git push origin production v1.1.2
+
+# Deploy immediately
+git checkout v1.1.2
+
+# Merge กลับ main
+git checkout main
+git merge --no-ff production
+git push origin main</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="scenario-box">
+                                <h5><strong>Scenario 2:</strong> Security Vulnerability</h5>
+                                <div class="command-box">
+                                    <pre><code>git pull origin production && git checkout production
+git checkout -b hotfix/security-patch
+
+# Apply security patch
+git add .
+git commit -m "hotfix: fix SQL injection vulnerability (CVE-2025-XXXX)"
+
+git checkout production
+git merge --no-ff hotfix/security-patch
+git tag -a v1.1.2 -m "Release v1.1.2: security patch"
+git push origin production v1.1.2
+
+# Urgent deploy
+git checkout v1.1.2
+
+git checkout main
+git merge --no-ff production
+git push origin main</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="scenario-box">
+                                <h5><strong>Scenario 3:</strong> Database Connection Error</h5>
+                                <div class="command-box">
+                                    <pre><code>git pull origin production && git checkout production
+git checkout -b hotfix/fix-db-connection
+
+# แก้ไข database connection pool
+git add config/database.js
+git commit -m "hotfix: fix database connection pool exhaustion"
+
+git checkout production
+git merge --no-ff hotfix/fix-db-connection
+git tag -a v1.1.2 -m "Release v1.1.2: fix db connection"
+git push origin production v1.1.2
+
+git checkout v1.1.2
+git checkout main
+git merge --no-ff production
+git push origin main</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">💡 Best Practices สำหรับ Hotfix</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ ความเร็ว vs คุณภาพ</h5>
+                                        <p class="mb-0">รวดเร็วแต่ไม่ลด quality</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ แก้เฉพาะที่จำเป็น</h5>
+                                        <p class="mb-0">อย่าเพิ่ม feature หรือ refactor</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Test ให้ครบ</h5>
+                                        <p class="mb-0">แม้เร่งรีบก็ต้อง test</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Monitor Closely</h5>
+                                        <p class="mb-0">ดู production อย่างใกล้ชิด</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Rollback Ready</h5>
+                                        <p class="mb-0">เตรียมแผน rollback ไว้เสมอ</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Sync กลับ Main</h5>
+                                        <p class="mb-0">Merge production กลับ main ทุกครั้ง</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rollback Plan -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">🔄 Rollback Plan (ถ้า Hotfix มีปัญหา)</h2>
+                            <div class="warning-box">
+                                <h5>การ Rollback กลับไปยัง Version เก่า:</h5>
+                                <div class="command-box">
+                                    <pre><code># 1. ตรวจสอบ production tag ก่อนหน้า
+git tag -l
+# v1.1.0
+# v1.1.1  ← stable version
+# v1.1.2  ← มีปัญหา
+
+# 2. Checkout ไปที่ version เก่าที่ stable
+git checkout v1.1.1
+
+# 3. Deploy version เก่ากลับขึ้น production
+# ... rollback deployment ...
+
+# 4. หรือสร้าง revert commit
+git checkout production
+git revert HEAD
+git tag -a v1.1.3 -m "Rollback v1.1.2"
+git push origin production v1.1.3</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checklist -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">✓ Hotfix Checklist</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="note-box">
+                                        <h5>ก่อน Deploy:</h5>
+                                        <ul class="mb-0">
+                                            <li>☐ ระบุ root cause ของ bug</li>
+                                            <li>☐ แก้ไขตรงจุด ไม่เพิ่มของใหม่</li>
+                                            <li>☐ ทดสอบใน staging environment</li>
+                                            <li>☐ ผ่าน tests</li>
+                                            <li>☐ Code review โดยอย่างน้อย 1 คน</li>
+                                            <li>☐ เตรียม rollback plan</li>
+                                            <li>☐ แจ้งทีมและ stakeholders</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice">
+                                        <h5>หลัง Deploy:</h5>
+                                        <ul class="mb-0">
+                                            <li>☐ Verify production ทำงานปกติ</li>
+                                            <li>☐ Monitor logs และ metrics</li>
+                                            <li>☐ ตรวจสอบ user feedback</li>
+                                            <li>☐ อัพเดท documentation</li>
+                                            <li>☐ Merge production กลับ main</li>
+                                            <li>☐ Clean up hotfix branch</li>
+                                            <li>☐ สร้าง incident report</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/include-nav.js"></script>
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="คู่มือมาตรฐานการตั้งชื่อใน Git สำหรับ Branch, Tags, Commits และอื่นๆ" />
+        <meta name="author" content="" />
+        <title>Git Naming & Commit Standards Guide - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .naming-section {
+                margin-bottom: 3rem;
+                padding-bottom: 2rem;
+                border-bottom: 1px solid #dee2e6;
+            }
+            .naming-section:last-child {
+                border-bottom: none;
+            }
+            .section-title {
+                color: #0d6efd;
+                font-weight: bold;
+                margin-bottom: 1.5rem;
+            }
+            .naming-format {
+                background-color: #f8f9fa;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                border-left: 4px solid #0d6efd;
+                margin: 1.5rem 0;
+            }
+            .example-box {
+                background-color: #e7f3ff;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                border-left: 4px solid #0dcaf0;
+                margin: 1.5rem 0;
+            }
+            .type-list {
+                background-color: #fff3cd;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin: 1.5rem 0;
+            }
+            .tip-box {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
+            pre {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                overflow-x: auto;
+            }
+            code {
+                color: #e83e8c;
+                background-color: #f8f9fa;
+                padding: 0.2rem 0.4rem;
+                border-radius: 0.25rem;
+            }
+            pre code {
+                color: #f8f8f2;
+                background-color: transparent;
+                padding: 0;
+            }
+            .badge-custom {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.8rem;
+                margin: 0.2rem;
+            }
+            table {
+                margin: 1.5rem 0;
+            }
+            .table-hover tbody tr:hover {
+                background-color: #f8f9fa;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-primary py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Git Naming & Commit Standards Guide</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">คู่มือมาตรฐานการตั้งชื่อใน Git สำหรับ Branch, Tags, Commits และอื่นๆ</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        
+                        <!-- Introduction -->
+                        <div class="mb-5">
+                            <p class="lead">การตั้งชื่อที่ดีและมีมาตรฐานจะช่วยให้ทีมทำงานร่วมกันได้อย่างมีประสิทธิภาพ และสามารถติดตามการเปลี่ยนแปลงของโค้ดได้ง่ายขึ้น คู่มือนี้จะแนะนำมาตรฐานการตั้งชื่อที่นิยมใช้ในอุตสาหกรรม</p>
+                        </div>
+
+                        <!-- 1. Branch Naming -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-diagram-3 me-2"></i>1. การตั้งชื่อ Branch
+                            </h2>
+                            
+                            <h4 class="mt-4">โครงสร้างมาตรฐาน</h4>
+                            <div class="naming-format">
+<pre><code>&lt;type&gt;/&lt;scope&gt;-&lt;short-description&gt;</code></pre>
+                            </div>
+
+                            <div class="type-list">
+                                <h5><strong>type ที่นิยมใช้:</strong></h5>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><code>feat</code> – ฟีเจอร์ใหม่</li>
+                                            <li><code>fix</code> – แก้บั๊ก</li>
+                                            <li><code>refactor</code> – ปรับโครงสร้างโค้ด</li>
+                                            <li><code>chore</code> – งานจิปาถะ</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><code>hotfix</code> – แก้ด่วน</li>
+                                            <li><code>test</code> – เพิ่ม/แก้ test</li>
+                                            <li><code>docs</code> – เอกสาร</li>
+                                            <li><code>perf</code> – ปรับประสิทธิภาพ</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="mt-3 mb-0">
+                                    <strong>scope</strong>: เช่น auth, api, dashboard<br>
+                                    <strong>short-description</strong>: สั้น กระชับ ใช้ dash (-) คั่น
+                                </p>
+                            </div>
+
+                            <div class="example-box">
+                                <h5><i class="bi bi-lightbulb me-2"></i>ตัวอย่าง Branch Names</h5>
+                                <ul class="mb-0">
+                                    <li><code>feat/auth-add-login-otp</code></li>
+                                    <li><code>fix/api-timezone-bug</code></li>
+                                    <li><code>refactor/core-service-layer</code></li>
+                                    <li><code>hotfix/payment-gateway-error</code></li>
+                                    <li><code>docs/update-readme</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 2. Tag Naming -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-tag me-2"></i>2. การตั้งชื่อ Tags
+                            </h2>
+                            
+                            <p>ใช้ <strong>Semantic Versioning</strong> สำหรับการกำหนด version</p>
+                            
+                            <div class="naming-format">
+<pre><code>v&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code></pre>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h5>Standard Versions</h5>
+                                    <div class="example-box">
+                                        <ul class="mb-0">
+                                            <li><code>v1.0.0</code> – เวอร์ชันแรก</li>
+                                            <li><code>v1.1.0</code> – เพิ่มฟีเจอร์ใหม่</li>
+                                            <li><code>v1.1.1</code> – แก้บั๊ก</li>
+                                            <li><code>v2.0.0</code> – เปลี่ยนแปลงใหญ่</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Pre-release Versions</h5>
+                                    <div class="example-box">
+                                        <ul class="mb-0">
+                                            <li><code>v2.0.0-alpha.1</code> – Alpha release</li>
+                                            <li><code>v2.0.0-beta.1</code> – Beta release</li>
+                                            <li><code>v2.0.0-rc.1</code> – Release Candidate</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tip-box mt-4">
+                                <h6><i class="bi bi-info-circle me-2"></i>เมื่อไหร่ควรเพิ่มแต่ละตัวเลข?</h6>
+                                <ul class="mb-0">
+                                    <li><strong>major</strong>: เปลี่ยนแปลง API ที่ทำให้ incompatible</li>
+                                    <li><strong>minor</strong>: เพิ่มฟีเจอร์ใหม่แบบ backward-compatible</li>
+                                    <li><strong>patch</strong>: แก้บั๊กแบบ backward-compatible</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 3. Commit Messages -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-journal-text me-2"></i>3. Commit Message (Conventional Commits)
+                            </h2>
+                            
+                            <h4 class="mt-4">โครงสร้างพื้นฐาน</h4>
+                            <div class="naming-format">
+<pre><code>&lt;type&gt;(scope): short summary
+
+body (optional)
+
+footer (optional)</code></pre>
+                            </div>
+
+                            <h4 class="mt-4">รายละเอียด type ที่นิยมใช้</h4>
+                            
+                            <div class="accordion mt-3" id="commitTypesAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#feat">
+                                            <strong>feat</strong> <span class="badge bg-success ms-2">ฟีเจอร์</span>
+                                        </button>
+                                    </h2>
+                                    <div id="feat" class="accordion-collapse collapse show" data-bs-parent="#commitTypesAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>เพิ่มฟีเจอร์ใหม่</strong></p>
+                                            <p>ใช้เมื่อเพิ่มความสามารถใหม่ เช่น API ใหม่, UI ใหม่, ฟังก์ชันใหม่</p>
+                                            <div class="example-box">
+                                                <h6>ตัวอย่าง:</h6>
+<pre><code>feat(auth): add otp verification
+
+Add OTP verification to login process.
+Supports SMS and Email delivery.
+Closes #221</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fix">
+                                            <strong>fix</strong> <span class="badge bg-danger ms-2">แก้บั๊ก</span>
+                                        </button>
+                                    </h2>
+                                    <div id="fix" class="accordion-collapse collapse" data-bs-parent="#commitTypesAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>แก้บั๊ก</strong></p>
+                                            <p>เมื่อโค้ดทำงานผิดพลาดและแก้ไขให้ถูกต้อง</p>
+                                            <div class="example-box">
+                                                <h6>ตัวอย่าง:</h6>
+<pre><code>fix(api): correct timezone conversion issue
+
+Fixed incorrect timezone handling in date fields.
+Now properly converts to UTC before saving.
+Fixes #342</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#refactor">
+                                            <strong>refactor</strong> <span class="badge bg-info ms-2">ปรับโครงสร้าง</span>
+                                        </button>
+                                    </h2>
+                                    <div id="refactor" class="accordion-collapse collapse" data-bs-parent="#commitTypesAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>ปรับโครงสร้างโค้ด</strong></p>
+                                            <p>เปลี่ยนโครงสร้างโดยไม่เปลี่ยน behavior ของโปรแกรม</p>
+                                            <div class="example-box">
+                                                <h6>ตัวอย่าง:</h6>
+<pre><code>refactor(core): simplify user service layer
+
+Extract common validation logic into separate methods.
+No functional changes.</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#chore">
+                                            <strong>chore</strong> <span class="badge bg-secondary ms-2">งานทั่วไป</span>
+                                        </button>
+                                    </h2>
+                                    <div id="chore" class="accordion-collapse collapse" data-bs-parent="#commitTypesAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>งานระบบทั่วไป</strong></p>
+                                            <p>Update dependency, config, script ที่ไม่เกี่ยวกับโค้ด</p>
+                                            <div class="example-box">
+                                                <h6>ตัวอย่าง:</h6>
+<pre><code>chore: update dependencies to latest versions
+
+Updated all npm packages to their latest stable versions.</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#docs">
+                                            <strong>docs</strong> <span class="badge bg-primary ms-2">เอกสาร</span>
+                                        </button>
+                                    </h2>
+                                    <div id="docs" class="accordion-collapse collapse" data-bs-parent="#commitTypesAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>เอกสาร</strong></p>
+                                            <p>README, API documentation, comments</p>
+                                            <div class="example-box">
+                                                <h6>ตัวอย่าง:</h6>
+<pre><code>docs: add API authentication guide
+
+Added detailed guide on how to use JWT authentication.</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#other">
+                                            <strong>อื่นๆ</strong> <span class="badge bg-warning text-dark ms-2">เพิ่มเติม</span>
+                                        </button>
+                                    </h2>
+                                    <div id="other" class="accordion-collapse collapse" data-bs-parent="#commitTypesAccordion">
+                                        <div class="accordion-body">
+                                            <ul>
+                                                <li><strong>style</strong> – ปรับรูปแบบโค้ด (formatting, spacing, lint)</li>
+                                                <li><strong>test</strong> – เพิ่มหรือแก้ test (unit test, integration test)</li>
+                                                <li><strong>perf</strong> – ปรับประสิทธิภาพ (ลด latency, ลด memory)</li>
+                                                <li><strong>build</strong> – แก้ระบบ build (Dockerfile, webpack, vite)</li>
+                                                <li><strong>ci</strong> – แก้ workflow CI/CD (GitHub Actions, Jenkins)</li>
+                                                <li><strong>revert</strong> – ย้อนการเปลี่ยนแปลง (revert commit)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Pull Request -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-git me-2"></i>4. การตั้งชื่อ Pull Request (PR)
+                            </h2>
+                            
+                            <div class="naming-format">
+<pre><code>[type]: summary of change</code></pre>
+                            </div>
+
+                            <div class="example-box">
+                                <h5><i class="bi bi-lightbulb me-2"></i>ตัวอย่าง PR Titles</h5>
+                                <ul class="mb-0">
+                                    <li><code>[feat]: implement dashboard filters</code></li>
+                                    <li><code>[fix]: resolve worker memory leak</code></li>
+                                    <li><code>[refactor]: restructure authentication module</code></li>
+                                    <li><code>[docs]: update installation guide</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 5. Release Branch -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-box-seam me-2"></i>5. การตั้งชื่อ Release Branch
+                            </h2>
+                            
+                            <div class="example-box">
+                                <h5>รูปแบบที่นิยม:</h5>
+                                <ul class="mb-0">
+                                    <li><code>release/2025.03</code> – ตามปี.เดือน</li>
+                                    <li><code>release/v1.4.0</code> – ตาม version</li>
+                                    <li><code>release/sprint-32</code> – ตาม sprint</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 6. Environment Branch -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-server me-2"></i>6. การตั้งชื่อ Environment Branch
+                            </h2>
+                            
+                            <div class="example-box">
+                                <h5>Branch สำหรับ environments ต่างๆ:</h5>
+                                <ul class="mb-0">
+                                    <li><code>dev</code> – Development environment</li>
+                                    <li><code>staging</code> – Staging environment</li>
+                                    <li><code>uat</code> – User Acceptance Testing</li>
+                                    <li><code>production</code> – Production environment</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 7. Quick Reference Table -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-table me-2"></i>7. สรุปการเลือก type แบบเร่งด่วน
+                            </h2>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>สิ่งที่ทำ</th>
+                                            <th>type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>เพิ่มฟีเจอร์ใหม่</td>
+                                            <td><code>feat</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>แก้บั๊ก</td>
+                                            <td><code>fix</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ปรับโครงสร้าง</td>
+                                            <td><code>refactor</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>เอกสาร</td>
+                                            <td><code>docs</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>จัด format</td>
+                                            <td><code>style</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>test</td>
+                                            <td><code>test</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ปรับ performance</td>
+                                            <td><code>perf</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>config/dependency</td>
+                                            <td><code>chore</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>build system</td>
+                                            <td><code>build</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CI/CD</td>
+                                            <td><code>ci</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ย้อน commit</td>
+                                            <td><code>revert</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 8. Tools -->
+                        <div class="naming-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-tools me-2"></i>8. แนะนำเครื่องมือเสริม
+                            </h2>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-check2-circle me-2"></i>commitlint</h5>
+                                            <p class="card-text">บังคับมาตรฐาน commit message ตามรูปแบบที่กำหนด</p>
+                                            <a href="https://commitlint.js.org/" target="_blank" class="btn btn-sm btn-outline-primary">เรียนรู้เพิ่มเติม</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-check2-circle me-2"></i>husky</h5>
+                                            <p class="card-text">จัดการ Git hooks เพื่อตรวจสอบโค้ดก่อน commit</p>
+                                            <a href="https://typicode.github.io/husky/" target="_blank" class="btn btn-sm btn-outline-primary">เรียนรู้เพิ่มเติม</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-check2-circle me-2"></i>lint-staged</h5>
+                                            <p class="card-text">Format โค้ดก่อน commit เฉพาะไฟล์ที่เปลี่ยนแปลง</p>
+                                            <a href="https://github.com/okonet/lint-staged" target="_blank" class="btn btn-sm btn-outline-primary">เรียนรู้เพิ่มเติม</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-check2-circle me-2"></i>semantic-release</h5>
+                                            <p class="card-text">ทำ release อัตโนมัติตาม commit messages</p>
+                                            <a href="https://semantic-release.gitbook.io/" target="_blank" class="btn btn-sm btn-outline-primary">เรียนรู้เพิ่มเติม</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices -->
+                        <div class="tip-box">
+                            <h4><i class="bi bi-star me-2"></i>Best Practices</h4>
+                            <ul>
+                                <li>ใช้ภาษาอังกฤษในการตั้งชื่อและเขียน message</li>
+                                <li>เขียน commit message ที่สื่อความหมายชัดเจน</li>
+                                <li>แยก commit ตามหน้าที่ ไม่รวมหลายอย่างในครั้งเดียว</li>
+                                <li>ใช้ present tense เช่น "add" ไม่ใช่ "added"</li>
+                                <li>เขียน summary ไม่เกิน 50 ตัวอักษร</li>
+                                <li>เขียน body เพื่ออธิบายรายละเอียด (ถ้าจำเป็น)</li>
+                                <li>อ้างอิง issue หรือ ticket number ใน footer</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+        <!-- Include navigation -->
+        <script src="../js/include-nav.js"></script>
+    </body>
+</html>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="ตารางสรุปมาตรฐานการตั้งชื่อใน Git สำหรับอ้างอิงแบบรวดเร็ว" />
+        <meta name="author" content="" />
+        <title>Git Naming Summary Tables - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .summary-section {
+                margin-bottom: 3rem;
+            }
+            .section-title {
+                color: #0d6efd;
+                font-weight: bold;
+                margin-bottom: 1.5rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 3px solid #0d6efd;
+            }
+            
+            /* Responsive Table Wrapper */
+            .table-wrapper {
+                margin: 1.5rem 0;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 0.5rem;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            
+            /* Enhanced Table Styling */
+            .custom-table {
+                width: 100%;
+                margin-bottom: 0;
+                border-collapse: separate;
+                border-spacing: 0;
+                background-color: #fff;
+            }
+            
+            .custom-table thead th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+                letter-spacing: 0.5px;
+                padding: 1rem;
+                border: none;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+            
+            .custom-table tbody td {
+                padding: 0.9rem 1rem;
+                border-bottom: 1px solid #e9ecef;
+                vertical-align: middle;
+            }
+            
+            .custom-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+            
+            .custom-table tbody tr:hover {
+                background-color: #f8f9fe;
+                transition: background-color 0.2s ease;
+            }
+            
+            /* Code in tables */
+            .custom-table code {
+                background-color: #f1f3f5;
+                color: #e83e8c;
+                padding: 0.2rem 0.5rem;
+                border-radius: 0.25rem;
+                font-size: 0.9em;
+                font-family: 'Courier New', monospace;
+                white-space: nowrap;
+            }
+            
+            /* Type badges */
+            .type-badge {
+                display: inline-block;
+                padding: 0.3rem 0.7rem;
+                border-radius: 0.3rem;
+                font-weight: 600;
+                font-size: 0.85rem;
+                font-family: 'Courier New', monospace;
+                text-align: center;
+                min-width: 80px;
+            }
+            
+            .type-feat { background-color: #d4edda; color: #155724; }
+            .type-fix { background-color: #f8d7da; color: #721c24; }
+            .type-refactor { background-color: #d1ecf1; color: #0c5460; }
+            .type-chore { background-color: #e2e3e5; color: #383d41; }
+            .type-docs { background-color: #cce5ff; color: #004085; }
+            .type-style { background-color: #fff3cd; color: #856404; }
+            .type-test { background-color: #d6d8db; color: #1b1e21; }
+            .type-perf { background-color: #f5c6cb; color: #721c24; }
+            .type-build { background-color: #c3e6cb; color: #155724; }
+            .type-ci { background-color: #b8daff; color: #004085; }
+            .type-hotfix { background-color: #ff6b6b; color: #fff; }
+            .type-revert { background-color: #6c757d; color: #fff; }
+            
+            /* Card-based layout for mobile */
+            @media (max-width: 768px) {
+                .custom-table thead {
+                    display: none;
+                }
+                
+                .custom-table tbody tr {
+                    display: block;
+                    margin-bottom: 1.5rem;
+                    border: 1px solid #dee2e6;
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                .custom-table tbody td {
+                    display: block;
+                    text-align: left;
+                    padding: 0.8rem 1rem;
+                    border-bottom: 1px solid #f1f3f5;
+                    position: relative;
+                    padding-left: 45%;
+                }
+                
+                .custom-table tbody td:last-child {
+                    border-bottom: none;
+                }
+                
+                .custom-table tbody td:before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 1rem;
+                    width: 40%;
+                    font-weight: 700;
+                    color: #495057;
+                    white-space: nowrap;
+                }
+                
+                .table-wrapper {
+                    overflow-x: visible;
+                }
+                
+                .type-badge {
+                    display: block;
+                    width: 100%;
+                    text-align: left;
+                }
+            }
+            
+            /* Quick Reference Card */
+            .quick-ref-card {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 2rem;
+                border-radius: 0.5rem;
+                margin: 2rem 0;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            
+            .quick-ref-card h3 {
+                color: white;
+                margin-bottom: 1.5rem;
+            }
+            
+            .quick-ref-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            
+            .quick-ref-item {
+                background: rgba(255,255,255,0.15);
+                padding: 1rem;
+                border-radius: 0.3rem;
+                backdrop-filter: blur(10px);
+            }
+            
+            .quick-ref-item strong {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-size: 1.1rem;
+            }
+            
+            .quick-ref-item code {
+                background: rgba(0,0,0,0.2);
+                color: #fff;
+                padding: 0.3rem 0.6rem;
+                border-radius: 0.25rem;
+                display: inline-block;
+                margin-top: 0.3rem;
+            }
+            
+            /* Info box */
+            .info-box {
+                background-color: #e7f3ff;
+                border-left: 4px solid #0dcaf0;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin: 2rem 0;
+            }
+            
+            .info-box h5 {
+                color: #0c5460;
+                margin-bottom: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-primary py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Git Naming Summary Tables</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">ตารางสรุปมาตรฐานการตั้งชื่อใน Git สำหรับอ้างอิงแบบรวดเร็ว</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-11 mx-auto">
+                        
+                        <!-- Quick Reference Card -->
+                        <div class="quick-ref-card">
+                            <h3><i class="bi bi-lightning-charge me-2"></i>Quick Reference - เลือก type ได้ใน 5 วินาที</h3>
+                            <div class="quick-ref-grid">
+                                <div class="quick-ref-item">
+                                    <strong>เพิ่มฟีเจอร์?</strong>
+                                    <code>feat</code>
+                                </div>
+                                <div class="quick-ref-item">
+                                    <strong>แก้บั๊ก?</strong>
+                                    <code>fix</code>
+                                </div>
+                                <div class="quick-ref-item">
+                                    <strong>ปรับโครงสร้าง?</strong>
+                                    <code>refactor</code>
+                                </div>
+                                <div class="quick-ref-item">
+                                    <strong>แก้ด่วน Production?</strong>
+                                    <code>hotfix</code>
+                                </div>
+                                <div class="quick-ref-item">
+                                    <strong>เอกสาร?</strong>
+                                    <code>docs</code>
+                                </div>
+                                <div class="quick-ref-item">
+                                    <strong>Config/Dependencies?</strong>
+                                    <code>chore</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1. Type Reference Table -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-card-checklist me-2"></i>1. ตารางอ้างอิง type ทั้งหมด
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 15%;">Type</th>
+                                            <th style="width: 35%;">ใช้เมื่อ</th>
+                                            <th style="width: 50%;">ตัวอย่าง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-feat">feat</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">เพิ่มฟีเจอร์ใหม่</td>
+                                            <td data-label="ตัวอย่าง"><code>feat/auth-add-login</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-fix">fix</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">แก้บั๊ก</td>
+                                            <td data-label="ตัวอย่าง"><code>fix/api-timezone</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-refactor">refactor</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">ปรับโครงสร้างโค้ด</td>
+                                            <td data-label="ตัวอย่าง"><code>refactor/user-service</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-chore">chore</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">งานระบบ config/dependency</td>
+                                            <td data-label="ตัวอย่าง"><code>chore/update-eslint</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-docs">docs</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">เอกสาร</td>
+                                            <td data-label="ตัวอย่าง"><code>docs/api-spec</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-style">style</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">formatting ไม่มีผลโค้ด</td>
+                                            <td data-label="ตัวอย่าง"><code>style/format-code</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-test">test</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">เพิ่ม/แก้ test</td>
+                                            <td data-label="ตัวอย่าง"><code>test/login-service</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-perf">perf</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">ปรับประสิทธิภาพ</td>
+                                            <td data-label="ตัวอย่าง"><code>perf/cache-optimization</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-build">build</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">ระบบ build เช่น Docker</td>
+                                            <td data-label="ตัวอย่าง"><code>build/optimize-dockerfile</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-ci">ci</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">workflow CI/CD</td>
+                                            <td data-label="ตัวอย่าง"><code>ci/update-github-actions</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-hotfix">hotfix</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">แก้ด่วน production</td>
+                                            <td data-label="ตัวอย่าง"><code>hotfix/payment-error</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Type">
+                                                <span class="type-badge type-revert">revert</span>
+                                            </td>
+                                            <td data-label="ใช้เมื่อ">ย้อน commit ก่อนหน้า</td>
+                                            <td data-label="ตัวอย่าง"><code>revert/incorrect-change</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 2. Branch Naming -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-diagram-3 me-2"></i>2. Branch Naming
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 25%;">องค์ประกอบ</th>
+                                            <th style="width: 35%;">รูปแบบ</th>
+                                            <th style="width: 40%;">ตัวอย่าง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="องค์ประกอบ">โครงสร้าง</td>
+                                            <td data-label="รูปแบบ"><code>&lt;type&gt;/&lt;scope&gt;-&lt;description&gt;</code></td>
+                                            <td data-label="ตัวอย่าง"><code>feat/auth-add-otp</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="องค์ประกอบ">scope</td>
+                                            <td data-label="รูปแบบ">module/service</td>
+                                            <td data-label="ตัวอย่าง"><code>auth</code>, <code>dashboard</code>, <code>api</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="องค์ประกอบ">description</td>
+                                            <td data-label="รูปแบบ">ย่อ ใช้ dash (-)</td>
+                                            <td data-label="ตัวอย่าง"><code>add-otp</code>, <code>fix-timezone</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="info-box">
+                                <h5><i class="bi bi-info-circle me-2"></i>ตัวอย่าง Branch Names ที่ดี</h5>
+                                <ul class="mb-0">
+                                    <li><code>feat/payment-stripe-integration</code></li>
+                                    <li><code>fix/user-profile-validation</code></li>
+                                    <li><code>refactor/database-connection-pool</code></li>
+                                    <li><code>docs/update-api-documentation</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 3. Tags (SemVer) -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-tag me-2"></i>3. Tags (Semantic Versioning)
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 25%;">ประเภท</th>
+                                            <th style="width: 35%;">รูปแบบ</th>
+                                            <th style="width: 40%;">ตัวอย่าง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="ประเภท">Release</td>
+                                            <td data-label="รูปแบบ"><code>v&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code></td>
+                                            <td data-label="ตัวอย่าง"><code>v1.4.2</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="ประเภท">Pre-release (Alpha)</td>
+                                            <td data-label="รูปแบบ"><code>v&lt;version&gt;-alpha.x</code></td>
+                                            <td data-label="ตัวอย่าง"><code>v2.0.0-alpha.1</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="ประเภท">Pre-release (Beta)</td>
+                                            <td data-label="รูปแบบ"><code>v&lt;version&gt;-beta.x</code></td>
+                                            <td data-label="ตัวอย่าง"><code>v2.0.0-beta.3</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="ประเภท">Release Candidate</td>
+                                            <td data-label="รูปแบบ"><code>v&lt;version&gt;-rc.x</code></td>
+                                            <td data-label="ตัวอย่าง"><code>v2.0.0-rc.1</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="info-box">
+                                <h5><i class="bi bi-info-circle me-2"></i>เมื่อไหร่ควรเพิ่มแต่ละตัวเลข?</h5>
+                                <ul class="mb-0">
+                                    <li><strong>major</strong> (x.0.0): Breaking changes - เปลี่ยนแปลง API ที่ทำให้ incompatible</li>
+                                    <li><strong>minor</strong> (0.x.0): New features - เพิ่มฟีเจอร์ใหม่แบบ backward-compatible</li>
+                                    <li><strong>patch</strong> (0.0.x): Bug fixes - แก้บั๊กแบบ backward-compatible</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 4. Commit Message -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-journal-text me-2"></i>4. Commit Message
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20%;">ส่วน</th>
+                                            <th style="width: 40%;">อธิบาย</th>
+                                            <th style="width: 40%;">ตัวอย่าง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="ส่วน">โครงสร้าง</td>
+                                            <td data-label="อธิบาย"><code>&lt;type&gt;(scope): summary</code></td>
+                                            <td data-label="ตัวอย่าง"><code>feat(auth): add otp</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="ส่วน">body</td>
+                                            <td data-label="อธิบาย">รายละเอียดเพิ่มเติม (optional)</td>
+                                            <td data-label="ตัวอย่าง">อธิบายการเปลี่ยนแปลงโดยละเอียด</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="ส่วน">footer</td>
+                                            <td data-label="อธิบาย">issue mapping (optional)</td>
+                                            <td data-label="ตัวอย่าง"><code>Closes #221</code>, <code>Fixes #342</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="info-box">
+                                <h5><i class="bi bi-lightbulb me-2"></i>ตัวอย่าง Commit Message ที่สมบูรณ์</h5>
+<pre style="background-color: #2d2d2d; color: #f8f8f2; padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem;"><code>feat(auth): add OTP verification for login
+
+Implement OTP verification system using SMS and Email.
+Users can now choose their preferred delivery method.
+Added rate limiting to prevent abuse.
+
+Closes #221
+Related to #198</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- 5. Pull Request -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-git me-2"></i>5. Pull Request
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50%;">รูปแบบ</th>
+                                            <th style="width: 50%;">ตัวอย่าง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="รูปแบบ"><code>[type]: summary</code></td>
+                                            <td data-label="ตัวอย่าง"><code>[feat]: add otp verification</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="รูปแบบ"><code>[type]: summary</code></td>
+                                            <td data-label="ตัวอย่าง"><code>[fix]: resolve memory leak in worker</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="รูปแบบ"><code>[type]: summary</code></td>
+                                            <td data-label="ตัวอย่าง"><code>[refactor]: restructure auth module</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 6. Release Branch -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-box-seam me-2"></i>6. Release Branch
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50%;">รูปแบบ</th>
+                                            <th style="width: 50%;">ตัวอย่าง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="รูปแบบ"><code>release/&lt;version&gt;</code></td>
+                                            <td data-label="ตัวอย่าง"><code>release/v1.4.0</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="รูปแบบ"><code>release/&lt;period&gt;</code></td>
+                                            <td data-label="ตัวอย่าง"><code>release/2025.03</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="รูปแบบ"><code>release/&lt;sprint&gt;</code></td>
+                                            <td data-label="ตัวอย่าง"><code>release/sprint-32</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 7. Environment Branch -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-server me-2"></i>7. Environment Branch
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50%;">Environment</th>
+                                            <th style="width: 50%;">ชื่อ Branch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="Environment">Development</td>
+                                            <td data-label="ชื่อ Branch"><code>dev</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Environment">Staging</td>
+                                            <td data-label="ชื่อ Branch"><code>staging</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Environment">User Acceptance Testing</td>
+                                            <td data-label="ชื่อ Branch"><code>uat</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Environment">Production</td>
+                                            <td data-label="ชื่อ Branch"><code>production</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 8. Quick Decision Table -->
+                        <div class="summary-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-lightning-charge me-2"></i>8. ตารางเลือก type แบบเร็ว
+                            </h2>
+                            
+                            <div class="table-wrapper">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50%;">สิ่งที่ทำ</th>
+                                            <th style="width: 50%;">type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">เพิ่มฟีเจอร์</td>
+                                            <td data-label="type"><span class="type-badge type-feat">feat</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">แก้บั๊ก</td>
+                                            <td data-label="type"><span class="type-badge type-fix">fix</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">ปรับโครงสร้าง</td>
+                                            <td data-label="type"><span class="type-badge type-refactor">refactor</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">เอกสาร</td>
+                                            <td data-label="type"><span class="type-badge type-docs">docs</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">จัด format</td>
+                                            <td data-label="type"><span class="type-badge type-style">style</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">เพิ่ม/แก้ test</td>
+                                            <td data-label="type"><span class="type-badge type-test">test</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">ปรับ performance</td>
+                                            <td data-label="type"><span class="type-badge type-perf">perf</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">config/dependency</td>
+                                            <td data-label="type"><span class="type-badge type-chore">chore</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">build system</td>
+                                            <td data-label="type"><span class="type-badge type-build">build</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">CI/CD</td>
+                                            <td data-label="type"><span class="type-badge type-ci">ci</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">แก้ด่วน Production</td>
+                                            <td data-label="type"><span class="type-badge type-hotfix">hotfix</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-label="สิ่งที่ทำ">ย้อน commit</td>
+                                            <td data-label="type"><span class="type-badge type-revert">revert</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Final Tips -->
+                        <div class="info-box" style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left-color: #667eea;">
+                            <h4><i class="bi bi-star me-2"></i>Tips สำหรับการใช้งาน</h4>
+                            <ul class="mb-0">
+                                <li>📱 บนมือถือ: ตารางจะแสดงเป็นรูปแบบการ์ดเพื่อให้อ่านง่าย</li>
+                                <li>🔖 Bookmark หน้านี้ไว้เพื่ออ้างอิงแบบรวดเร็ว</li>
+                                <li>✅ ใช้ Quick Reference Card ด้านบนเพื่อตัดสินใจเร็วขึ้น</li>
+                                <li>📋 Badge สี่เหลี่ยมจะบอกประเภทของ type แต่ละตัว</li>
+                                <li>💡 สามารถเลื่อนตารางแนวนอนได้ถ้ามีข้อมูลมาก</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+        <!-- Include navigation -->
+        <script src="../js/include-nav.js"></script>
+    </body>
+</html>

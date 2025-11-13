@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="คู่มือ GitHub - ความรู้พื้นฐานและกระบวนการทำงาน" />
+        <meta name="author" content="" />
+        <title>คู่มือ GitHub - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .section-box {
+                margin-bottom: 3rem;
+                padding: 2rem;
+                background-color: #f8f9fa;
+                border-radius: 0.5rem;
+                border-left: 5px solid #0d6efd;
+            }
+            .section-title {
+                color: #0d6efd;
+                font-weight: bold;
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            .subsection-title {
+                color: #0d6efd;
+                font-weight: bold;
+                font-size: 1.3rem;
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+            }
+            .command-box {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+            .info-box {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .note-box {
+                background-color: #fff3cd;
+                border: 1px solid #ffc107;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .success-box {
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .warning-box {
+                background-color: #f8d7da;
+                border: 1px solid #f5c2c7;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .feature-card {
+                background-color: #fff;
+                border: 1px solid #dee2e6;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+                transition: transform 0.2s;
+            }
+            .feature-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            .comparison-table {
+                background-color: #fff;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                margin: 2rem 0;
+            }
+            .flow-diagram {
+                background-color: #e7f3ff;
+                border: 2px solid #0d6efd;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                margin: 2rem 0;
+                font-family: 'Courier New', monospace;
+            }
+            .step-box {
+                background-color: #fff;
+                border-left: 4px solid #198754;
+                padding: 1.5rem;
+                margin: 1rem 0;
+                border-radius: 0.25rem;
+            }
+            .role-card {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            .devops-card {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            pre {
+                background-color: transparent;
+                padding: 0;
+                margin: 0;
+            }
+            code {
+                color: #e83e8c;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+            ul.checkmark-list {
+                list-style: none;
+                padding-left: 0;
+            }
+            ul.checkmark-list li:before {
+                content: "✅ ";
+                margin-right: 0.5rem;
+            }
+            ul.cross-list {
+                list-style: none;
+                padding-left: 0;
+            }
+            ul.cross-list li:before {
+                content: "❌ ";
+                margin-right: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-primary py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">คู่มือ GitHub</h1>
+                    <p class="lead fw-normal mb-0">ความรู้พื้นฐานและกระบวนการทำงาน</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        
+                        <!-- Section 1: GitHub คืออะไร -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-github"></i> 1. GitHub คืออะไร
+                            </h2>
+
+                            <h3 class="subsection-title">ความหมาย</h3>
+                            <p>GitHub คือแพลตฟอร์มจัดเก็บซอร์สโค้ดบนคลาวด์ (Cloud) ที่ใช้ Git ในการจัดการเวอร์ชัน โดยเพิ่มความสามารถด้านการทำงานร่วมกันระหว่างนักพัฒนา</p>
+
+                            <h3 class="subsection-title">เปรียบเทียบ Git vs GitHub</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-git"></i> <strong>Git</strong></h5>
+                                        <p>เครื่องมือจัดการเวอร์ชันที่ติดตั้งบนเครื่องคอมพิวเตอร์ (Local)</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-github"></i> <strong>GitHub</strong></h5>
+                                        <p>บริการออนไลน์ที่เก็บ Git repositories พร้อมเครื่องมือเสริม</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">ฟีเจอร์หลักของ GitHub</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-folder"></i> Repositories</h5>
+                                        <p class="mb-0">พื้นที่เก็บโค้ด สามารถเป็น Public (เปิดให้ทุกคนดู) หรือ Private (เฉพาะทีม)</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-git"></i> Pull Requests (PR)</h5>
+                                        <p class="mb-0">ขอให้ทีมตรวจสอบโค้ดก่อน merge เข้า branch หลัก</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-bug"></i> Issues</h5>
+                                        <p class="mb-0">ระบบติดตามงาน/บั๊ก เหมือนโน้ตแจ้งปัญหา</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-play-circle"></i> Actions</h5>
+                                        <p class="mb-0">ระบบ CI/CD อัตโนมัติ (เช่น auto test, auto deploy)</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-kanban"></i> Projects</h5>
+                                        <p class="mb-0">จัดการงานแบบ Kanban board</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <h5><i class="bi bi-box-seam"></i> Releases</h5>
+                                        <p class="mb-0">สร้างเวอร์ชันสำหรับปล่อยให้ผู้ใช้ดาวน์โหลด</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">ประโยชน์ของการใช้ GitHub</h3>
+                            <div class="success-box">
+                                <ul class="checkmark-list mb-0">
+                                    <li>เก็บโค้ดปลอดภัย มี backup บนคลาวด์</li>
+                                    <li>ทำงานร่วมกับทีมได้ง่าย</li>
+                                    <li>ตรวจสอบประวัติการแก้ไขทุก commit</li>
+                                    <li>Code Review ผ่านระบบ Pull Request</li>
+                                    <li>สามารถ rollback กลับไปเวอร์ชันเก่าได้</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: การจัดการ Remote Repository -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-cloud"></i> 2. การจัดการ Remote Repository
+                            </h2>
+
+                            <h3 class="subsection-title">Remote คืออะไร</h3>
+                            <div class="info-box">
+                                <p><strong>Remote</strong> คือ repository ที่อยู่บนเซิร์ฟเวอร์ (เช่น GitHub) ไม่ใช่บนเครื่องเรา<br>
+                                ปกติจะตั้งชื่อว่า <code>origin</code> (ชื่อมาตรฐาน)</p>
+                            </div>
+
+                            <h3 class="subsection-title">คำสั่งพื้นฐาน</h3>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-1-circle-fill"></i> Clone (ดาวน์โหลด repo จาก GitHub มาเครื่องเรา)</h5>
+                                <div class="command-box">
+                                    <pre><code>git clone https://github.com/username/repo-name.git</code></pre>
+                                </div>
+                                <p><strong>ใช้เมื่อ:</strong> เริ่มทำงานโปรเจกต์ครั้งแรก หรือ ต้องการโค้ดของคนอื่น</p>
+                            </div>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-2-circle-fill"></i> ตรวจสอบ Remote ที่เชื่อมต่ออยู่</h5>
+                                <div class="command-box">
+                                    <pre><code>git remote -v</code></pre>
+                                </div>
+                                <div class="info-box">
+                                    <strong>ผลลัพธ์ตัวอย่าง:</strong>
+                                    <pre class="mb-0"><code>origin  https://github.com/username/repo.git (fetch)
+origin  https://github.com/username/repo.git (push)</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-3-circle-fill"></i> เพิ่ม Remote ใหม่</h5>
+                                <div class="command-box">
+                                    <pre><code>git remote add origin https://github.com/username/repo.git</code></pre>
+                                </div>
+                                <p><strong>ใช้เมื่อ:</strong> สร้าง repo ใหม่บนเครื่อง แล้วต้องการเชื่อมกับ GitHub</p>
+                            </div>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-4-circle-fill"></i> Fetch (ดึงข้อมูลอัปเดตจาก GitHub แต่ยังไม่ merge)</h5>
+                                <div class="command-box">
+                                    <pre><code>git fetch origin</code></pre>
+                                </div>
+                                <p><strong>ใช้เมื่อ:</strong> ต้องการเช็คว่า GitHub มีอะไรใหม่ แต่ยังไม่พร้อม merge เข้าโค้ดเรา</p>
+                            </div>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-5-circle-fill"></i> Pull (ดึงข้อมูลจาก GitHub และ merge ทันที)</h5>
+                                <div class="command-box">
+                                    <pre><code>git pull origin main</code></pre>
+                                </div>
+                                <p><strong>ใช้เมื่อ:</strong> ต้องการดึงโค้ดล่าสุดจาก GitHub มารวมกับโค้ดในเครื่อง</p>
+                                <div class="warning-box">
+                                    <strong>⚠️ หมายเหตุ:</strong> Pull = Fetch + Merge รวมกัน
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-6-circle-fill"></i> Push (ส่งโค้ดจากเครื่องเราขึ้น GitHub)</h5>
+                                <div class="command-box">
+                                    <pre><code>git push -u origin main</code></pre>
+                                </div>
+                                <p><strong>ใช้เมื่อ:</strong> ทำงานเสร็จแล้ว ต้องการส่งโค้ดขึ้น GitHub</p>
+                                <p><strong>คำอธิบาย <code>-u</code>:</strong> ตั้งค่าให้ครั้งต่อไปใช้แค่ <code>git push</code> ได้เลย</p>
+                            </div>
+
+                            <div class="step-box">
+                                <h5><i class="bi bi-7-circle-fill"></i> ลบ Remote</h5>
+                                <div class="command-box">
+                                    <pre><code>git remote remove origin</code></pre>
+                                </div>
+                                <p><strong>ใช้เมื่อ:</strong> ต้องการยกเลิกการเชื่อมต่อกับ remote repository</p>
+                            </div>
+
+                            <h3 class="subsection-title">🎯 สรุปการทำงาน Local ↔ Remote</h3>
+                            <div class="flow-diagram">
+                                <pre>Local Repository          GitHub (Remote)
+     |                          |
+     |------- git push -------→ |
+     |                          |
+     | ←------ git pull --------|
+     |                          |
+     | ←------ git fetch -------|
+     | (ยังไม่ merge)             |</pre>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Workflow การทำงานคนเดียว -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-person"></i> 3. Workflow การทำงานคนเดียว
+                            </h2>
+
+                            <h3 class="subsection-title">กระบวนการพัฒนาฟีเจอร์ใหม่</h3>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 1: เตรียม Repository</h5>
+                                <div class="command-box">
+                                    <pre><code># สร้าง repo ใหม่บน GitHub แล้ว clone มา
+git clone https://github.com/username/my-project.git
+cd my-project
+
+# หรือเชื่อม repo ที่มีอยู่แล้วกับ GitHub
+git remote add origin https://github.com/username/my-project.git
+git push -u origin main</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 2: สร้าง Feature Branch</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout -b feature/user-login</code></pre>
+                                </div>
+                                <p><strong>เหตุผล:</strong> แยกงานใหม่ออกจาก main เพื่อไม่ให้กระทบโค้ดหลัก</p>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 3: เขียนโค้ดและ Commit</h5>
+                                <div class="command-box">
+                                    <pre><code># เขียนโค้ด...
+git add .
+git commit -m "เพิ่มระบบ login ด้วย JWT"
+
+# เขียนโค้ดต่อ...
+git add .
+git commit -m "เพิ่มการตรวจสอบ email validation"</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 4: Push Branch ขึ้น GitHub</h5>
+                                <div class="command-box">
+                                    <pre><code>git push -u origin feature/user-login</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 5: สร้าง Pull Request (PR)</h5>
+                                <ol>
+                                    <li>เข้า GitHub → เลือก repo</li>
+                                    <li>คลิก "Compare & pull request"</li>
+                                    <li>เขียนรายละเอียดว่าทำอะไรบ้าง</li>
+                                    <li>กด "Create pull request"</li>
+                                </ol>
+                                <div class="success-box">
+                                    <strong>ประโยชน์:</strong> ตรวจสอบ code ก่อน merge, มีประวัติการทำงานชัดเจน
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 6: Merge เข้า Main</h5>
+                                <div class="command-box">
+                                    <pre><code># บน GitHub: กด Merge pull request
+# หรือบน Terminal:
+git checkout main
+git merge feature/user-login
+git push origin main</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 7: Deploy ไป Production</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout production
+git merge main
+git push origin production</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 8: สร้าง Tag และ Release</h5>
+                                <div class="command-box">
+                                    <pre><code>git tag -a v1.0.0 -m "Release version 1.0.0 - เพิ่มระบบ login"
+git push origin v1.0.0</code></pre>
+                                </div>
+                                <p><strong>บน GitHub:</strong> ไปที่ Releases → Draft a new release → เลือก tag v1.0.0 → Publish</p>
+                            </div>
+
+                            <h3 class="subsection-title">กระบวนการแก้ Bug (Hotfix)</h3>
+
+                            <div class="warning-box">
+                                <h5>เมื่อพบ Bug บน Production</h5>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 1: สร้าง Hotfix Branch จาก production</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout production
+git pull origin production
+git checkout -b hotfix/fix-login-error</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 2: แก้ไข Bug</h5>
+                                <div class="command-box">
+                                    <pre><code># แก้โค้ด...
+git add .
+git commit -m "แก้ไข bug การ login ไม่ได้เมื่อใช้ email ตัวพิมพ์ใหญ่"</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 3: Push และสร้าง PR ไป production</h5>
+                                <div class="command-box">
+                                    <pre><code>git push -u origin hotfix/fix-login-error
+# สร้าง PR บน GitHub เพื่อ merge เข้า production</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 4: Merge เข้า Production และ Deploy</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout production
+git merge hotfix/fix-login-error
+git push origin production</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 5: Sync กลับไป Main (สำคัญ!)</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout main
+git merge production
+git push origin main</code></pre>
+                                </div>
+                                <div class="note-box">
+                                    <strong>เหตุผล:</strong> ให้ main มีโค้ดล่าสุดเหมือน production
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>ขั้นตอนที่ 6: สร้าง Tag เวอร์ชันใหม่</h5>
+                                <div class="command-box">
+                                    <pre><code>git tag -a v1.0.1 -m "Hotfix: แก้ bug login"
+git push origin v1.0.1</code></pre>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">📊 ภาพรวม Branch Flow (คนเดียว)</h3>
+                            <div class="flow-diagram">
+                                <pre>main ─────────●────────●──────────●───→
+              │        │          │
+              │        │      (merge back)
+              │        │          │
+feature ──────●────●───┘          │
+                                  │
+production ───────────────●───────●───→
+                          │
+hotfix ───────────────────●──────→
+                      (แก้ bug)</pre>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Workflow การทำงานเป็นทีม -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-people"></i> 4. Workflow การทำงานเป็นทีม
+                            </h2>
+
+                            <h3 class="subsection-title">บทบาทในทีม</h3>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="role-card">
+                                        <h5><i class="bi bi-person-badge"></i> Team Lead / Project Manager</h5>
+                                        <ul class="mb-0">
+                                            <li>สร้าง repository บน GitHub</li>
+                                            <li>ตั้งค่า branch protection rules</li>
+                                            <li>ติดตั้ง CI/CD (GitHub Actions)</li>
+                                            <li>อนุมัติ Pull Requests</li>
+                                            <li>Deploy ไป production</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="role-card">
+                                        <h5><i class="bi bi-code-slash"></i> Developer / Team Member</h5>
+                                        <ul class="mb-0">
+                                            <li>Clone repository มาทำงาน</li>
+                                            <li>สร้าง feature branch</li>
+                                            <li>เขียนโค้ดและ push</li>
+                                            <li>สร้าง Pull Request</li>
+                                            <li>แก้ไขตาม code review</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">ขั้นตอนการทำงานทีม</h3>
+
+                            <div class="step-box">
+                                <h5>1️⃣ Team Lead: เตรียม Repository</h5>
+                                <div class="command-box">
+                                    <pre><code># สร้าง repo บน GitHub ชื่อ "team-project"
+# ตั้งค่า branch protection:
+# - ห้าม push ตรงไป main
+# - ต้อง PR และได้รับ approval ก่อน merge
+# - ต้อง pass CI tests
+
+# สร้างไฟล์ .github/workflows/ci.yml สำหรับ CI/CD</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>2️⃣ สมาชิกทีม: Clone และเริ่มทำงาน</h5>
+                                <div class="command-box">
+                                    <pre><code>git clone https://github.com/teamname/team-project.git
+cd team-project
+git checkout -b feature/add-payment-system</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>3️⃣ สมาชิกทีม: เขียนโค้ด + Commit + Push</h5>
+                                <div class="command-box">
+                                    <pre><code># เขียนโค้ด...
+git add .
+git commit -m "เพิ่มระบบชำระเงินผ่าน Stripe"
+
+git push -u origin feature/add-payment-system</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>4️⃣ สมาชิกทีม: สร้าง Pull Request</h5>
+                                <p><strong>บน GitHub:</strong></p>
+                                <ol>
+                                    <li>ไปที่ repository</li>
+                                    <li>กด "Compare & pull request"</li>
+                                    <li>เขียน Description</li>
+                                    <li>กำหนด Reviewers (Team Lead หรือเพื่อนร่วมทีม)</li>
+                                    <li>กด "Create pull request"</li>
+                                </ol>
+                                <div class="info-box">
+                                    <strong>ตัวอย่าง Description:</strong>
+                                    <pre class="mb-0"><code>## สิ่งที่เปลี่ยนแปลง
+- เพิ่ม payment API integration
+- เพิ่มหน้า checkout
+
+## ทดสอบแล้ว
+- ✅ ทดสอบ payment ด้วย test card
+- ✅ ทดสอบ error handling</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>5️⃣ Team Lead: Code Review</h5>
+                                <p><strong>ตรวจสอบใน PR:</strong></p>
+                                <ul class="checkmark-list">
+                                    <li>โค้ดอ่านง่าย ตาม coding standards ไหม</li>
+                                    <li>มี test cases ครบไหม</li>
+                                    <li>CI tests ผ่านหมดไหม (เช่น unit tests, linting)</li>
+                                    <li>มี security issues ไหม</li>
+                                </ul>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>6️⃣ สมาชิกทีม: แก้ไขตาม Review</h5>
+                                <div class="command-box">
+                                    <pre><code># แก้โค้ดตามที่แนะนำ
+git add .
+git commit -m "เพิ่ม error handling สำหรับ payment failed"
+git push origin feature/add-payment-system</code></pre>
+                                </div>
+                                <div class="success-box">
+                                    <strong>PR จะอัปเดตอัตโนมัติ!</strong>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>7️⃣ Team Lead: Approve และ Merge</h5>
+                                <p><strong>บน GitHub PR:</strong></p>
+                                <ol>
+                                    <li>กด "Approve"</li>
+                                    <li>กด "Merge pull request"</li>
+                                    <li>เลือก "Squash and merge" (รวม commits เป็น 1)</li>
+                                    <li>กด "Confirm merge"</li>
+                                </ol>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>8️⃣ ทีมทั้งหมด: Pull โค้ดล่าสุด</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout main
+git pull origin main</code></pre>
+                                </div>
+                                <div class="warning-box">
+                                    <strong>ทำทุกครั้งก่อนสร้าง branch ใหม่!</strong>
+                                </div>
+                            </div>
+
+                            <div class="step-box">
+                                <h5>9️⃣ Team Lead: Deploy ไป Production</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout production
+git merge main
+git push origin production
+
+# สร้าง release tag
+git tag -a v2.0.0 -m "Release v2.0.0 - เพิ่มระบบชำระเงิน"
+git push origin v2.0.0</code></pre>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">🔄 Daily Workflow สมาชิกทีม</h3>
+
+                            <div class="info-box">
+                                <h5>ทุกเช้าก่อนเริ่มงาน:</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout main
+git pull origin main
+git checkout -b feature/new-task-name</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="info-box">
+                                <h5>เมื่อทำงานเสร็จในแต่ละวัน:</h5>
+                                <div class="command-box">
+                                    <pre><code>git add .
+git commit -m "feat: เพิ่ม feature XYZ"
+git push origin feature/new-task-name</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="info-box">
+                                <h5>เมื่องานเสร็จสมบูรณ์:</h5>
+                                <ul>
+                                    <li>สร้าง Pull Request บน GitHub</li>
+                                    <li>รอ code review</li>
+                                    <li>แก้ไขตาม feedback</li>
+                                    <li>รอ merge จาก Team Lead</li>
+                                </ul>
+                            </div>
+
+                            <h3 class="subsection-title">💡 Best Practices สำหรับทีม</h3>
+
+                            <div class="success-box">
+                                <h5>การตั้งชื่อ Branch</h5>
+                                <pre class="mb-0"><code>feature/add-user-profile
+bugfix/fix-login-redirect  
+hotfix/critical-security-patch
+refactor/update-api-structure</code></pre>
+                            </div>
+
+                            <div class="success-box">
+                                <h5>การเขียน Commit Message</h5>
+                                <pre class="mb-0"><code>feat: เพิ่มระบบ notification
+fix: แก้ bug การคำนวณราคาผิด
+docs: อัปเดต README
+test: เพิ่ม unit tests สำหรับ payment
+refactor: ปรับโครงสร้าง database schema</code></pre>
+                            </div>
+
+                            <div class="success-box">
+                                <h5>การสื่อสารในทีม</h5>
+                                <ul class="mb-0">
+                                    <li>💬 Comment ใน PR อธิบายโค้ดที่ซับซ้อน</li>
+                                    <li>📝 เขียน description ใน PR ให้ชัดเจน</li>
+                                    <li>🔗 Link ไปยัง Issue ที่เกี่ยวข้อง (เช่น "Closes #123")</li>
+                                    <li>⏰ Review PR ภายใน 24 ชั่วโมง</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: DevOps Basics -->
+                        <div class="section-box">
+                            <h2 class="section-title">
+                                <i class="bi bi-gear"></i> 5. DevOps Basics
+                            </h2>
+
+                            <h3 class="subsection-title">DevOps คืออะไร</h3>
+                            <div class="devops-card">
+                                <h4><strong>DevOps</strong> = <strong>Dev</strong>elopment + <strong>Op</strong>eration<strong>s</strong></h4>
+                                <p class="mb-0">เป็นแนวทางการทำงานที่รวมทีมพัฒนา (Dev) และทีมดูแลระบบ (Ops) เข้าด้วยกัน เพื่อให้การส่งมอบซอฟต์แวร์เร็วขึ้น น่าเชื่อถือ และอัตโนมัติ</p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="warning-box">
+                                        <h5>ปัญหาแบบเดิม (ก่อนมี DevOps)</h5>
+                                        <ul class="cross-list mb-0">
+                                            <li>Dev เขียนโค้ดเสร็จ → ส่งให้ Ops → Ops deploy ไม่ได้ → โยนกลับ Dev</li>
+                                            <li>Deploy ใช้เวลานาน (สัปดาห์/เดือน)</li>
+                                            <li>Bug ค้นพบช้า เพราะ test ช้า</li>
+                                            <li>Manual deployment → ผิดพลาดง่าย</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="success-box">
+                                        <h5>วิธีแก้ปัญหาด้วย DevOps</h5>
+                                        <ul class="checkmark-list mb-0">
+                                            <li>ทีม Dev และ Ops ทำงานร่วมกันตั้งแต่แรก</li>
+                                            <li>Automate ทุกอย่างที่ทำซ้ำได้ (testing, deployment)</li>
+                                            <li>Deploy บ่อย ๆ (วันละหลายครั้ง)</li>
+                                            <li>Monitor ระบบตลอดเวลา แก้ไขเร็ว</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">องค์ประกอบหลักของ DevOps</h3>
+
+                            <div class="feature-card">
+                                <h5>1️⃣ Collaboration (ทำงานร่วมกัน)</h5>
+                                <ul>
+                                    <li>ทีม Dev, QA, Ops นั่งประชุมร่วมกัน</li>
+                                    <li>ใช้เครื่องมือเดียวกัน (เช่น GitHub, Slack, Jira)</li>
+                                    <li>รับผิดชอบร่วมกัน (Dev ไม่โยนความผิดให้ Ops)</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <h5>2️⃣ Automation (ระบบอัตโนมัติ)</h5>
+                                <ul>
+                                    <li><strong>Auto Testing:</strong> โค้ดทุก commit ถูก test อัตโนมัติ</li>
+                                    <li><strong>Auto Deployment:</strong> ผ่าน test แล้วก็ deploy เอง</li>
+                                    <li><strong>Auto Scaling:</strong> server เพิ่ม/ลดตาม traffic อัตโนมัติ</li>
+                                </ul>
+                                <div class="note-box">
+                                    <strong>ตัวอย่างเครื่องมือ:</strong>
+                                    <ul class="mb-0">
+                                        <li>GitHub Actions, Jenkins, CircleCI → CI/CD</li>
+                                        <li>Terraform, Ansible → Infrastructure as Code</li>
+                                        <li>Docker, Kubernetes → Container orchestration</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h5>3️⃣ Continuous Integration (CI)</h5>
+                                <p><strong>คืออะไร:</strong> นักพัฒนา push โค้ดบ่อย ๆ (วันละหลายครั้ง) และ merge รวมกันเป็นประจำ</p>
+                                <div class="flow-diagram">
+                                    <pre>Developer push code
+      ↓
+Automated Tests (unit, integration)
+      ↓
+✅ Pass → Build และเตรียม deploy
+❌ Fail → แจ้งเตือน developer ทันที</pre>
+                                </div>
+                                <div class="success-box">
+                                    <strong>ประโยชน์:</strong>
+                                    <ul class="mb-0">
+                                        <li>เจอ bug เร็ว แก้ง่าย</li>
+                                        <li>ไม่มีปัญหา "ในเครื่องผมทำงานได้นะ" (works on my machine)</li>
+                                    </ul>
+                                </div>
+                                <div class="command-box">
+                                    <pre><code>name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm test</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h5>4️⃣ Continuous Delivery (CD)</h5>
+                                <p><strong>คืออะไร:</strong> โค้ดที่ผ่าน CI แล้วพร้อม deploy ได้ตลอดเวลา แต่ต้องกดปุ่ม deploy เอง</p>
+                                <p><strong>Continuous Deployment (ต่างกันนิดเดียว):</strong> deploy อัตโนมัติเลย ไม่ต้องกดปุ่ม!</p>
+                                <div class="flow-diagram">
+                                    <pre>CI ผ่าน ✅
+    ↓
+Build Docker image
+    ↓
+Deploy to Staging (ทดสอบก่อน)
+    ↓
+🟢 กดปุ่ม → Deploy to Production</pre>
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h5>5️⃣ Monitoring & Feedback (ตลอดเวลา)</h5>
+                                <p><strong>คืออะไร:</strong> ติดตามระบบหลัง deploy ว่าทำงานปกติไหม มี error ไหม</p>
+                                <div class="note-box">
+                                    <strong>เครื่องมือ:</strong>
+                                    <ul class="mb-0">
+                                        <li><strong>Logging:</strong> เก็บ log ทุกอย่างที่เกิดขึ้น (ELK Stack, Datadog)</li>
+                                        <li><strong>Monitoring:</strong> ดูสถานะ server (CPU, RAM, Disk) (Prometheus, Grafana)</li>
+                                        <li><strong>Alerting:</strong> แจ้งเตือนเมื่อมีปัญหา (PagerDuty, Slack)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <h3 class="subsection-title">🚀 DevOps Pipeline ทั้งหมด</h3>
+                            <div class="flow-diagram">
+                                <pre>Code → Build → Test → Deploy → Monitor
+  ↓       ↓      ↓       ↓        ↓
+ Git    Docker  CI   Production  Logs
+             Jenkins/    K8s    Grafana
+             Actions</pre>
+                            </div>
+
+                            <h3 class="subsection-title">📊 เปรียบเทียบ: ก่อน vs หลัง DevOps</h3>
+                            <div class="table-responsive comparison-table">
+                                <table class="table table-bordered mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>หัวข้อ</th>
+                                            <th>ก่อน DevOps</th>
+                                            <th>หลัง DevOps</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Deploy</strong></td>
+                                            <td>เดือนละ 1 ครั้ง</td>
+                                            <td>วันละหลายครั้ง</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Testing</strong></td>
+                                            <td>Manual ก่อน release</td>
+                                            <td>Automated ทุก commit</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Bug Detection</strong></td>
+                                            <td>หลัง deploy หลายวัน</td>
+                                            <td>ทันทีที่ push code</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Deployment Time</strong></td>
+                                            <td>หลายชั่วโมง</td>
+                                            <td>ไม่กี่นาที</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rollback</strong></td>
+                                            <td>ยาก ใช้เวลานาน</td>
+                                            <td>กดปุ่มเดียว &lt; 1 นาที</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h3 class="subsection-title">🎯 สรุป DevOps ง่าย ๆ</h3>
+                            <div class="devops-card">
+                                <h4>DevOps = ทำให้การส่งมอบซอฟต์แวร์เร็ว ปลอดภัย และอัตโนมัติ</h4>
+                                <h5>3 หลักสำคัญ:</h5>
+                                <ol>
+                                    <li><strong>Automate:</strong> อะไรที่ทำซ้ำได้ → ทำให้อัตโนมัติ</li>
+                                    <li><strong>Collaborate:</strong> Dev + Ops ทำงานร่วมกันตั้งแต่แรก</li>
+                                    <li><strong>Monitor:</strong> ติดตามระบบตลอด แก้ไขเร็ว</li>
+                                </ol>
+                            </div>
+
+                            <div class="success-box">
+                                <h5>เริ่มต้นได้ทันที:</h5>
+                                <ul class="mb-0">
+                                    <li>ใช้ GitHub Actions ทำ CI</li>
+                                    <li>เขียน automated tests</li>
+                                    <li>Monitor ด้วยเครื่องมือฟรี (Uptime Robot, Better Stack)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/include-nav.js"></script>
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>

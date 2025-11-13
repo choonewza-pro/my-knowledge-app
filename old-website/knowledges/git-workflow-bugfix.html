@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Git Workflow: การทำ Bugfix แบบปกติ พร้อมตัวอย่าง Step by Step" />
+        <meta name="author" content="" />
+        <title>Git Workflow: Bugfix - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .workflow-step {
+                margin-bottom: 3rem;
+                padding: 2rem;
+                background-color: #f8f9fa;
+                border-radius: 0.5rem;
+                border-left: 5px solid #ffc107;
+            }
+            .step-number {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                background-color: #ffc107;
+                color: #212529;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 40px;
+                font-weight: bold;
+                margin-right: 1rem;
+            }
+            .step-title {
+                color: #ffc107;
+                font-weight: bold;
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            .command-box {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+            .expected-result {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .note-box {
+                background-color: #fff3cd;
+                border: 1px solid #ffc107;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .warning-box {
+                background-color: #f8d7da;
+                border: 1px solid #f5c2c7;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .best-practice {
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .comparison-table {
+                background-color: #fff;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                margin: 2rem 0;
+            }
+            .summary-box {
+                background-color: #e2e3e5;
+                border: 2px solid #6c757d;
+                border-radius: 0.5rem;
+                padding: 2rem;
+                margin: 2rem 0;
+            }
+            .scenario-box {
+                background-color: #e7f3ff;
+                border-left: 4px solid #0d6efd;
+                padding: 1.5rem;
+                margin: 1rem 0;
+                border-radius: 0.25rem;
+            }
+            pre {
+                background-color: transparent;
+                padding: 0;
+                margin: 0;
+            }
+            code {
+                color: #e83e8c;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-warning py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-dark">
+                    <h1 class="display-4 fw-bolder">Git Workflow: Bugfix</h1>
+                    <p class="lead fw-normal mb-0">การทำ Bugfix แบบปกติ Step by Step</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        
+                        <!-- Introduction -->
+                        <div class="mb-5">
+                            <h2 class="mb-4">สถานะเริ่มต้น</h2>
+                            <ul class="lead">
+                                <li><strong>Branch ปัจจุบัน:</strong> <code>main</code></li>
+                                <li><strong>ปัญหา:</strong> พบ bug ที่ต้องแก้ไข (ไม่เร่งด่วน)</li>
+                                <li><strong>เป้าหมาย:</strong> แก้ไข bug และ merge กลับเข้า main โดยไม่ต้อง release ทันที</li>
+                            </ul>
+
+                            <h3 class="mt-5 mb-3">เมื่อไหร่ควรใช้ Bugfix แบบปกติ?</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="best-practice">
+                                        <h5>✅ ใช้ Bugfix แบบปกติเมื่อ:</h5>
+                                        <ul class="mb-0">
+                                            <li>Bug ที่ไม่กระทบการใช้งานหลัก</li>
+                                            <li>Bug ที่สามารถรอ release ถัดไปได้</li>
+                                            <li>Bug ใน development environment</li>
+                                            <li>Minor bugs ที่ไม่ส่งผลกระทบต่อผู้ใช้</li>
+                                            <li>UI/UX issues ที่ไม่เร่งด่วน</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="warning-box">
+                                        <h5>🔴 ไม่ใช้ Bugfix แบบปกติเมื่อ:</h5>
+                                        <ul class="mb-0">
+                                            <li>Critical bug ใน production</li>
+                                            <li>Security vulnerability</li>
+                                            <li>Data loss หรือ system crash</li>
+                                            <li>ฟีเจอร์หลักไม่ทำงาน</li>
+                                        </ul>
+                                        <p class="mt-2 mb-0"><small><em>กรณีนี้ใช้ Bugfix Production แทน</em></small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">1</span>
+                                Pull Main Branch
+                            </h3>
+                            <p>ดึง code ล่าสุดจาก main branch</p>
+                            
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนไปที่ main branch
+git checkout main
+
+# Pull การเปลี่ยนแปลงล่าสุดจาก remote
+git pull origin main
+
+# ตรวจสอบสถานะ
+git status
+git log --oneline -5</code></pre>
+                            </div>
+
+                            <div class="expected-result">
+                                <strong>📋 ผลลัพธ์ที่คาดหวัง:</strong>
+                                <pre class="mb-0"><code>Already on 'main'
+Your branch is up to date with 'origin/main'.</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">2</span>
+                                สร้าง Bugfix Branch จาก Main
+                            </h3>
+                            <p>สร้าง bugfix branch จาก main branch</p>
+                            
+                            <div class="command-box">
+                                <pre><code># สร้าง bugfix branch จาก main (ที่เรากำลังอยู่)
+git checkout -b bugfix/fix-login-validation
+
+# ตรวจสอบว่าสร้าง branch สำเร็จ
+git branch
+# * bugfix/fix-login-validation
+#   main</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <h5>✅ รูปแบบการตั้งชื่อ Bugfix Branch:</h5>
+                                <ul class="mb-3">
+                                    <li><code>bugfix/fix-login-validation</code></li>
+                                    <li><code>bugfix/fix-cart-calculation</code></li>
+                                    <li><code>bugfix/fix-image-upload</code></li>
+                                    <li><code>bugfix/fix-form-validation</code></li>
+                                    <li><code>bugfix/fix-responsive-layout</code></li>
+                                </ul>
+                                <strong>Best Practices:</strong>
+                                <ul class="mb-0">
+                                    <li>ใช้ <code>bugfix/</code> prefix</li>
+                                    <li>ใช้ชื่อที่สื่อความหมายชัดเจน</li>
+                                    <li>ใช้ kebab-case (lowercase + dash)</li>
+                                    <li>ระบุส่วนที่แก้ไข</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">3</span>
+                                แก้ไข Bug และทดสอบ
+                            </h3>
+                            <p>แก้ไขโค้ดให้ทำงานถูกต้อง</p>
+                            
+                            <div class="command-box">
+                                <pre><code># แก้ไขไฟล์ที่มีปัญหา เช่น login.js, validation.ts
+
+# ทดสอบให้แน่ใจว่าแก้ไขถูกต้อง
+# - Run unit tests
+# - Test manually
+# - Check error logs
+
+# ตรวจสอบการเปลี่ยนแปลง
+git status
+git diff</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <strong>✅ Best Practices:</strong>
+                                <ul class="mb-0">
+                                    <li>แก้ไขเฉพาะ bug ที่เกี่ยวข้อง</li>
+                                    <li>ทำการทดสอบอย่างละเอียด</li>
+                                    <li>เขียน unit tests ถ้าเป็นไปได้</li>
+                                    <li>Document สาเหตุของ bug และวิธีแก้</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">4</span>
+                                Commit การแก้ไข
+                            </h3>
+                            
+                            <div class="command-box">
+                                <pre><code># Add ไฟล์ที่แก้ไข
+git add login.js
+git add validation.ts
+
+# หรือเพิ่มทุกไฟล์ที่เปลี่ยนแปลง
+git add .
+
+# Commit พร้อม message ที่ชัดเจน (ใช้ fix: สำหรับ bugfix)
+git commit -m "fix: แก้ไข login validation ไม่ตรวจสอบ email format
+
+- เพิ่ม regex validation สำหรับ email
+- แก้ไข error message ให้ชัดเจน
+- เพิ่ม unit tests สำหรับ validation
+
+Fixes #456"</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 Commit Message Format สำหรับ Bugfix:</strong>
+                                <pre class="mb-0"><code>fix: &lt;สรุปปัญหาที่แก้&gt;
+
+- รายละเอียดการแก้ไข 1
+- รายละเอียดการแก้ไข 2
+- รายละเอียดการแก้ไข 3
+
+Fixes #&lt;issue-number&gt;</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">5</span>
+                                Push Bugfix Branch ขึ้น Remote (Optional)
+                            </h3>
+                            <p>ถ้าต้องการให้ทีม review หรือ backup</p>
+                            
+                            <div class="command-box">
+                                <pre><code># Push bugfix branch ขึ้น remote
+git push -u origin bugfix/fix-login-validation
+
+# ตรวจสอบว่า push สำเร็จ
+git log --oneline -3</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 เมื่อไหร่ควร Push:</strong>
+                                <ul class="mb-0">
+                                    <li>ต้องการให้ทีม review code</li>
+                                    <li>ต้องการ backup งาน</li>
+                                    <li>ทำงานร่วมกับคนอื่น</li>
+                                    <li>ต้องการให้ CI/CD run tests</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">6</span>
+                                สร้าง Pull Request (Optional)
+                            </h3>
+                            <p>ถ้าทีมใช้ Pull Request workflow</p>
+                            
+                            <h5 class="mt-3">ทาง GitHub UI:</h5>
+                            <ol>
+                                <li>ไปที่ repository บน GitHub</li>
+                                <li>คลิก <strong>"Compare & pull request"</strong></li>
+                                <li>กำหนด:
+                                    <ul>
+                                        <li><strong>Base:</strong> <code>main</code></li>
+                                        <li><strong>Compare:</strong> <code>bugfix/fix-login-validation</code></li>
+                                    </ul>
+                                </li>
+                                <li>กรอกรายละเอียด PR</li>
+                                <li>Label: <code>bug</code>, <code>bugfix</code></li>
+                                <li>Reviewers: เลือกผู้ review</li>
+                                <li>คลิก <strong>"Create pull request"</strong></li>
+                            </ol>
+                        </div>
+
+                        <!-- Step 7 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">7</span>
+                                Review และแก้ไขตาม Feedback
+                            </h3>
+                            <p>ถ้ามี reviewer แนะนำให้แก้ไข</p>
+                            
+                            <div class="command-box">
+                                <pre><code># แก้ไขตาม feedback
+# ... edit files ...
+
+# Add และ commit
+git add .
+git commit -m "fix: ปรับปรุงตาม code review - เพิ่ม test cases"
+
+# Push การเปลี่ยนแปลงขึ้น remote
+git push
+
+# PR จะอัพเดทอัตโนมัติ</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 8 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">8</span>
+                                Merge Bugfix เข้า Main Branch
+                            </h3>
+                            <p>Merge bugfix กลับเข้า main</p>
+                            
+                            <h5 class="mt-3">ทาง GitHub (ถ้ามี PR):</h5>
+                            <ol>
+                                <li>คลิก <strong>"Merge pull request"</strong></li>
+                                <li>เลือกวิธี merge</li>
+                                <li>คลิก <strong>"Confirm merge"</strong></li>
+                                <li>(Optional) คลิก <strong>"Delete branch"</strong></li>
+                            </ol>
+
+                            <h5 class="mt-4">ทาง Command Line:</h5>
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนกลับไปที่ main branch
+git checkout main
+
+# Pull ล่าสุดจาก remote (ป้องกัน conflict)
+git pull origin main
+
+# Merge bugfix เข้า main
+git merge --no-ff bugfix/fix-login-validation
+
+# กรณีมี conflict ให้แก้ไข
+# 1. เปิดไฟล์ที่ conflict
+# 2. แก้ไข conflict markers (&lt;&lt;&lt;&lt;&lt;&lt;&lt;, =======, &gt;&gt;&gt;&gt;&gt;&gt;&gt;)
+# 3. git add &lt;ไฟล์ที่แก้แล้ว&gt;
+# 4. git commit -m "fix: resolve merge conflict"
+
+# Push main branch ขึ้น remote
+git push origin main</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 หมายเหตุ:</strong>
+                                <ul class="mb-0">
+                                    <li>ใช้ <code>--no-ff</code> เพื่อสร้าง merge commit เก็บประวัติ</li>
+                                    <li>Bug fix จะอยู่ใน main และรอ release ถัดไป</li>
+                                    <li>ไม่ต้อง tag version ทันที</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 9 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">9</span>
+                                ลบ Bugfix Branch
+                            </h3>
+                            <p>ลบ bugfix branch ที่ใช้งานเสร็จแล้ว</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ตรวจสอบว่าอยู่บน main แล้ว
+git branch
+# * main
+
+# ลบ local bugfix branch
+git branch -d bugfix/fix-login-validation
+
+# ถ้า branch ยังไม่ได้ merge และต้องการบังคับลบ
+# git branch -D bugfix/fix-login-validation
+
+# ลบ remote bugfix branch (ถ้า push ไว้)
+git push origin --delete bugfix/fix-login-validation
+
+# ตรวจสอบ branches ที่เหลือ
+git branch -a</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 10 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">10</span>
+                                Verify และ Test
+                            </h3>
+                            <p>ตรวจสอบว่า main branch ทำงานปกติ</p>
+                            
+                            <div class="command-box">
+                                <pre><code># Pull main ล่าสุด
+git checkout main
+git pull origin main
+
+# ตรวจสอบ log
+git log --oneline -5
+
+# Run tests
+npm test
+# or
+npm run test:unit
+
+# Test manually
+npm run dev</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="summary-box">
+                            <h2 class="mb-4">📝 สรุป Bugfix Workflow</h2>
+                            <div class="command-box">
+                                <pre><code># 1. Pull main branch
+git checkout main
+git pull origin main
+
+# 2. สร้าง bugfix branch จาก main
+git checkout -b bugfix/fix-login-validation
+
+# 3. แก้ไข bug และทดสอบ
+# ... edit files ...
+# ... test thoroughly ...
+
+# 4. Commit การแก้ไข
+git add .
+git commit -m "fix: แก้ไข login validation ไม่ตรวจสอบ email format"
+
+# 5. (Optional) Push branch ขึ้น remote
+git push -u origin bugfix/fix-login-validation
+
+# 6. (Optional) สร้าง Pull Request บน GitHub
+
+# 7. (Optional) Review และแก้ไขตาม feedback
+
+# 8. Merge bugfix เข้า main
+git checkout main
+git pull origin main
+git merge --no-ff bugfix/fix-login-validation
+git push origin main
+
+# 9. ลบ bugfix branch
+git branch -d bugfix/fix-login-validation
+git push origin --delete bugfix/fix-login-validation
+
+# 10. Verify
+git pull origin main
+npm test</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Comparison Table -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">📊 Bugfix แบบปกติ vs Bugfix Production</h2>
+                            <div class="table-responsive comparison-table">
+                                <table class="table table-bordered mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Aspect</th>
+                                            <th>Bugfix แบบปกติ</th>
+                                            <th>Bugfix Production</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Urgency</strong></td>
+                                            <td>⚠️ Normal - ไม่เร่งด่วน</td>
+                                            <td>🔴 Critical - เร่งด่วนมาก</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Branch Source</strong></td>
+                                            <td><code>main</code></td>
+                                            <td><code>production</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Target Branch</strong></td>
+                                            <td><code>main</code> only</td>
+                                            <td><code>production</code> → <code>main</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Release</strong></td>
+                                            <td>รอ release ถัดไป</td>
+                                            <td>Release ทันที</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Testing</strong></td>
+                                            <td>Full testing</td>
+                                            <td>Focus test เฉพาะส่วนที่แก้</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Review</strong></td>
+                                            <td>Standard review</td>
+                                            <td>Fast-track review</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Deploy</strong></td>
+                                            <td>ตาม schedule ปกติ</td>
+                                            <td>Deploy ทันทีหลัง merge</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Impact</strong></td>
+                                            <td>Low - ไม่กระทบ production</td>
+                                            <td>High - กระทบผู้ใช้งานจริง</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Common Scenarios -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">💼 ตัวอย่าง Bugfix Scenarios</h2>
+                            
+                            <div class="scenario-box">
+                                <h5><strong>Scenario 1:</strong> Form Validation Bug</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout main && git pull origin main
+git checkout -b bugfix/fix-form-validation
+
+# แก้ไข validation
+git add src/components/Form.tsx
+git commit -m "fix: แก้ไข form validation ไม่ตรวจสอบ required fields"
+
+git checkout main
+git merge --no-ff bugfix/fix-form-validation
+git push origin main
+git branch -d bugfix/fix-form-validation</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="scenario-box">
+                                <h5><strong>Scenario 2:</strong> Calculation Error</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout main && git pull origin main
+git checkout -b bugfix/fix-cart-total
+
+# แก้ไข calculation
+git add src/utils/cart.js
+git commit -m "fix: แก้ไข cart total คำนวณผิดเมื่อมี discount"
+
+git checkout main
+git merge --no-ff bugfix/fix-cart-total
+git push origin main
+git branch -d bugfix/fix-cart-total</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="scenario-box">
+                                <h5><strong>Scenario 3:</strong> UI Layout Bug</h5>
+                                <div class="command-box">
+                                    <pre><code>git checkout main && git pull origin main
+git checkout -b bugfix/fix-responsive-header
+
+# แก้ไข CSS/layout
+git add src/styles/header.css
+git commit -m "fix: แก้ไข header layout เพี้ยนบน mobile"
+
+git checkout main
+git merge --no-ff bugfix/fix-responsive-header
+git push origin main
+git branch -d bugfix/fix-responsive-header</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">💡 Best Practices สำหรับ Bugfix</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Pull ก่อนเสมอ</h5>
+                                        <p class="mb-0">Pull main ก่อนสร้าง branch ทุกครั้ง</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ ชื่อ Branch ที่ชัดเจน</h5>
+                                        <p class="mb-0">ใช้ <code>bugfix/</code> prefix และชื่อที่สื่อความหมาย</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Test ให้ครบ</h5>
+                                        <p class="mb-0">Run tests ก่อน merge</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Code Review</h5>
+                                        <p class="mb-0">ใช้ PR เพื่อให้ทีม review</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Merge แบบ no-ff</h5>
+                                        <p class="mb-0">เก็บประวัติการ merge</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ ลบ Branch</h5>
+                                        <p class="mb-0">ลบ branch หลัง merge เสร็จ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checklist -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">✓ Checklist สำหรับ Bugfix</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="note-box">
+                                        <h5>ก่อน Merge:</h5>
+                                        <ul class="mb-0">
+                                            <li>☐ Pull main branch ล่าสุด</li>
+                                            <li>☐ สร้าง bugfix branch จาก main</li>
+                                            <li>☐ แก้ไข bug ตรงจุด</li>
+                                            <li>☐ เขียน unit tests (ถ้าเป็นไปได้)</li>
+                                            <li>☐ Run tests ทั้งหมดให้ผ่าน</li>
+                                            <li>☐ Test manually</li>
+                                            <li>☐ Commit message ชัดเจน</li>
+                                            <li>☐ Code review (ถ้าใช้ PR)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice">
+                                        <h5>หลัง Merge:</h5>
+                                        <ul class="mb-0">
+                                            <li>☐ Verify ว่า main ทำงานปกติ</li>
+                                            <li>☐ Run tests อีกครั้ง</li>
+                                            <li>☐ ลบ local bugfix branch</li>
+                                            <li>☐ ลบ remote bugfix branch (ถ้ามี)</li>
+                                            <li>☐ Update ticket/issue</li>
+                                            <li>☐ Bug fix จะออกใน release ถัดไป</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/include-nav.js"></script>
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>

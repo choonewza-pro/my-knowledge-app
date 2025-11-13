@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="คู่มืออ้างอิงคำสั่ง Git พื้นฐานและขั้นสูง พร้อมตัวอย่างการใช้งาน" />
+        <meta name="author" content="" />
+        <title>Git Commands Reference - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .command-section {
+                margin-bottom: 3rem;
+                padding-bottom: 2rem;
+                border-bottom: 1px solid #dee2e6;
+            }
+            .command-section:last-child {
+                border-bottom: none;
+            }
+            .command-title {
+                color: #0d6efd;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+            .command-format {
+                background-color: #f8f9fa;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                border-left: 4px solid #0d6efd;
+                margin: 1rem 0;
+            }
+            .command-options {
+                background-color: #fff3cd;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                margin: 1rem 0;
+            }
+            .warning-box {
+                background-color: #f8d7da;
+                border: 1px solid #f5c2c7;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .note-box {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            pre {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+            }
+            code {
+                color: #e83e8c;
+            }
+            pre code {
+                color: #f8f8f2;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-primary py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Git Commands Reference</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">คู่มืออ้างอิงคำสั่ง Git พื้นฐานและขั้นสูง</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        
+                        <!-- Introduction -->
+                        <div class="mb-5">
+                            <p class="lead">คู่มือนี้รวบรวมคำสั่ง Git ที่ใช้บ่อย พร้อมตัวอย่างการใช้งานและคำอธิบายที่ครบถ้วน เหมาะสำหรับทั้งผู้เริ่มต้นและผู้ที่มีประสบการณ์</p>
+                        </div>
+
+                        <h2 class="mb-4">BASIC GIT COMMANDS</h2>
+
+                        <!-- git init -->
+                        <div class="command-section">
+                            <h3 class="command-title">git init</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git init [options] [directory]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> สร้าง Git repository ใหม่ในโฟลเดอร์ปัจจุบัน</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-b</code> (Branch) - กำหนดชื่อ branch หลัก (เช่น main, master)</li>
+                                    <li><code>--bare</code> - สร้าง bare repository (ไม่มี working directory)</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git init                            # สร้าง repo ในโฟลเดอร์ปัจจุบัน
+git init myproject                  # สร้าง repo ในโฟลเดอร์ myproject
+git init -b main                    # สร้าง repo โดยใช้ branch ชื่อ main</code></pre>
+                        </div>
+
+                        <!-- git clone -->
+                        <div class="command-section">
+                            <h3 class="command-title">git clone</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git clone [options] &lt;repository-url&gt; [directory]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> คัดลอก repository จาก remote มาที่เครื่อง</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-b</code> (Branch) - clone เฉพาะ branch ที่กำหนด</li>
+                                    <li><code>--depth</code> - clone เฉพาะ commit ล่าสุด (shallow clone)</li>
+                                    <li><code>--single-branch</code> - clone เฉพาะ branch เดียว</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git clone https://github.com/user/repo.git        # clone repository
+git clone https://github.com/user/repo.git mydir  # clone ไปยังโฟลเดอร์ mydir
+git clone -b develop https://github.com/user/repo.git  # clone branch develop
+git clone --depth 1 https://github.com/user/repo.git   # shallow clone</code></pre>
+                        </div>
+
+                        <!-- git status -->
+                        <div class="command-section">
+                            <h3 class="command-title">git status</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git status [options]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> แสดงสถานะของ working directory และ staging area</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-s</code> หรือ <code>--short</code> - แสดงแบบย่อ</li>
+                                    <li><code>-b</code> หรือ <code>--branch</code> - แสดงข้อมูล branch</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git status                          # แสดงสถานะแบบเต็ม
+git status -s                       # แสดงสถานะแบบย่อ
+git status -sb                      # แสดงแบบย่อพร้อม branch info</code></pre>
+                        </div>
+
+                        <!-- git add -->
+                        <div class="command-section">
+                            <h3 class="command-title">git add</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git add [options] &lt;file/directory&gt;</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> เพิ่มไฟล์เข้า staging area เพื่อเตรียม commit</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-A</code> หรือ <code>--all</code> - เพิ่มไฟล์ทั้งหมด (รวมลบ)</li>
+                                    <li><code>-u</code> หรือ <code>--update</code> - เพิ่มเฉพาะไฟล์ที่ถูกแก้ไข</li>
+                                    <li><code>-p</code> หรือ <code>--patch</code> - เลือก stage แบบ interactive</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git add file.txt                    # เพิ่มไฟล์เดียว
+git add .                           # เพิ่มไฟล์ทั้งหมดในโฟลเดอร์ปัจจุบัน
+git add -A                          # เพิ่มไฟล์ทั้งหมด (ทุกการเปลี่ยนแปลง)
+git add *.js                        # เพิ่มไฟล์ .js ทั้งหมด
+git add -p                          # เลือก stage แบบ interactive</code></pre>
+                        </div>
+
+                        <!-- git commit -->
+                        <div class="command-section">
+                            <h3 class="command-title">git commit</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git commit [options]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> บันทึกการเปลี่ยนแปลงจาก staging area ลง repository</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-m</code> (Message) - ระบุ commit message</li>
+                                    <li><code>-a</code> (All) - commit ไฟล์ที่ถูกแก้ไขทั้งหมด (ไม่รวมไฟล์ใหม่)</li>
+                                    <li><code>--amend</code> - แก้ไข commit ล่าสุด</li>
+                                    <li><code>-v</code> (Verbose) - แสดง diff ใน commit message editor</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git commit -m "Add new feature"     # commit พร้อม message
+git commit -am "Update files"       # add + commit ไฟล์ที่แก้ไข
+git commit --amend                  # แก้ไข commit ล่าสุด
+git commit --amend -m "New message" # เปลี่ยน commit message ล่าสุด</code></pre>
+                        </div>
+
+                        <!-- git push -->
+                        <div class="command-section">
+                            <h3 class="command-title">git push</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git push [options] [remote] [branch]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> ส่ง commits จาก local repository ขึ้น remote repository</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-u</code> หรือ <code>--set-upstream</code> - ตั้งค่า upstream branch</li>
+                                    <li><code>-f</code> หรือ <code>--force</code> - บังคับ push (ระวัง!)</li>
+                                    <li><code>--all</code> - push ทุก branches</li>
+                                    <li><code>--tags</code> - push tags ทั้งหมด</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git push                            # push ไปยัง upstream branch
+git push origin main                # push ไปยัง branch main บน origin
+git push -u origin feature          # push และตั้งค่า upstream
+git push --all                      # push ทุก branches
+git push --tags                     # push tags ทั้งหมด</code></pre>
+                            <div class="warning-box">
+                                <strong>⚠️ คำเตือน:</strong> <code>git push -f</code> จะเขียนทับ history บน remote ใช้ด้วยความระมัดระวัง!
+                            </div>
+                        </div>
+
+                        <!-- git pull -->
+                        <div class="command-section">
+                            <h3 class="command-title">git pull</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git pull [options] [remote] [branch]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> ดึง commits จาก remote repository มาที่ local และทำการ merge</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--rebase</code> - ใช้ rebase แทน merge</li>
+                                    <li><code>--no-rebase</code> - ใช้ merge (default)</li>
+                                    <li><code>--ff-only</code> - ยอมรับเฉพาะ fast-forward merge</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git pull                            # pull จาก upstream branch
+git pull origin main                # pull จาก branch main บน origin
+git pull --rebase                   # pull และ rebase
+git pull --ff-only                  # pull เฉพาะ fast-forward</code></pre>
+                        </div>
+
+                        <!-- git fetch -->
+                        <div class="command-section">
+                            <h3 class="command-title">git fetch</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git fetch [options] [remote]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> ดึงข้อมูลจาก remote repository โดยไม่ merge</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--all</code> - fetch จากทุก remotes</li>
+                                    <li><code>--prune</code> - ลบ remote-tracking branches ที่ถูกลบบน remote</li>
+                                    <li><code>--tags</code> - fetch tags ทั้งหมด</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git fetch                           # fetch จาก remote ปัจจุบัน
+git fetch origin                    # fetch จาก origin
+git fetch --all                     # fetch จากทุก remotes
+git fetch --prune                   # fetch และลบ branch ที่ไม่มีแล้ว</code></pre>
+                        </div>
+
+                        <!-- git branch -->
+                        <div class="command-section">
+                            <h3 class="command-title">git branch</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git branch [options] [branch-name]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> แสดง, สร้าง, หรือลบ branches</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-a</code> (All) - แสดงทุก branches (รวม remote)</li>
+                                    <li><code>-d</code> (Delete) - ลบ branch</li>
+                                    <li><code>-D</code> - บังคับลบ branch</li>
+                                    <li><code>-m</code> (Move/Rename) - เปลี่ยนชื่อ branch</li>
+                                    <li><code>-r</code> (Remote) - แสดงเฉพาะ remote branches</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git branch                          # แสดง local branches
+git branch -a                       # แสดงทุก branches
+git branch feature-x                # สร้าง branch ชื่อ feature-x
+git branch -d feature-x             # ลบ branch feature-x
+git branch -m old-name new-name     # เปลี่ยนชื่อ branch</code></pre>
+                        </div>
+
+                        <!-- git checkout -->
+                        <div class="command-section">
+                            <h3 class="command-title">git checkout</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git checkout [options] &lt;branch/commit&gt;</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> สลับ branch หรือ restore ไฟล์</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-b</code> - สร้าง branch ใหม่และสลับไปใช้</li>
+                                    <li><code>-B</code> - สร้างหรือ reset branch แล้วสลับไป</li>
+                                    <li><code>--</code> - ระบุว่าหลังจากนี้คือ filename</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git checkout main                   # สลับไปยัง branch main
+git checkout -b feature-y           # สร้างและสลับไป branch ใหม่
+git checkout -- file.txt            # restore file.txt จาก HEAD
+git checkout abc123                 # สลับไปยัง commit abc123</code></pre>
+                            <div class="note-box">
+                                <strong>💡 หมายเหตุ:</strong> Git เวอร์ชันใหม่แนะนำใช้ <code>git switch</code> และ <code>git restore</code> แทน
+                            </div>
+                        </div>
+
+                        <!-- git switch -->
+                        <div class="command-section">
+                            <h3 class="command-title">git switch</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git switch [options] &lt;branch&gt;</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> สลับ branch (ทดแทน git checkout สำหรับการสลับ branch)</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-c</code> (Create) - สร้าง branch ใหม่และสลับไปใช้</li>
+                                    <li><code>-C</code> - สร้างหรือ reset branch แล้วสลับไป</li>
+                                    <li><code>-d</code> (Detach) - สลับไปยัง detached HEAD state</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git switch main                     # สลับไปยัง branch main
+git switch -c feature-z             # สร้างและสลับไป branch ใหม่
+git switch -                        # สลับกลับไปยัง branch ก่อนหน้า</code></pre>
+                        </div>
+
+                        <!-- git merge -->
+                        <div class="command-section">
+                            <h3 class="command-title">git merge</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git merge [options] &lt;branch&gt;</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> รวม branch อื่นเข้ากับ branch ปัจจุบัน</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--no-ff</code> - สร้าง merge commit เสมอ</li>
+                                    <li><code>--ff-only</code> - ยอมรับเฉพาะ fast-forward</li>
+                                    <li><code>--squash</code> - รวม commits เป็น commit เดียว</li>
+                                    <li><code>--abort</code> - ยกเลิก merge ที่มี conflict</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git merge feature-x                 # merge branch feature-x เข้ามา
+git merge --no-ff feature-x         # merge โดยสร้าง merge commit
+git merge --squash feature-x        # merge และรวม commits
+git merge --abort                   # ยกเลิก merge ที่มี conflict</code></pre>
+                        </div>
+
+                        <!-- git log -->
+                        <div class="command-section">
+                            <h3 class="command-title">git log</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git log [options]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> แสดง commit history</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--oneline</code> - แสดงแบบบรรทัดเดียวต่อ commit</li>
+                                    <li><code>-n</code> - กำหนดจำนวน commits ที่จะแสดง</li>
+                                    <li><code>--graph</code> - แสดงเป็น graph</li>
+                                    <li><code>--all</code> - แสดงทุก branches</li>
+                                    <li><code>--author</code> - กรองตาม author</li>
+                                    <li><code>--since</code> / <code>--until</code> - กรองตามวันที่</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git log                             # แสดง commit history
+git log --oneline                   # แสดงแบบย่อ
+git log --oneline --graph --all     # แสดงทุก branches แบบ graph
+git log -5                          # แสดง 5 commits ล่าสุด
+git log --author="John"             # แสดง commits ของ John
+git log --since="2 weeks ago"       # แสดง commits 2 สัปดาห์ล่าสุด</code></pre>
+                        </div>
+
+                        <!-- git diff -->
+                        <div class="command-section">
+                            <h3 class="command-title">git diff</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git diff [options] [commit/branch]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> แสดงความแตกต่างระหว่างไฟล์, commits, หรือ branches</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--staged</code> หรือ <code>--cached</code> - แสดง diff ของ staged files</li>
+                                    <li><code>--stat</code> - แสดงสถิติการเปลี่ยนแปลง</li>
+                                    <li><code>--name-only</code> - แสดงเฉพาะชื่อไฟล์</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git diff                            # แสดง unstaged changes
+git diff --staged                   # แสดง staged changes
+git diff HEAD                       # แสดงทุกการเปลี่ยนแปลง
+git diff branch1 branch2            # เปรียบเทียบ 2 branches
+git diff commit1 commit2            # เปรียบเทียบ 2 commits
+git diff --stat                     # แสดงสถิติการเปลี่ยนแปลง</code></pre>
+                        </div>
+
+                        <!-- git reset -->
+                        <div class="command-section">
+                            <h3 class="command-title">git reset</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git reset [options] [commit]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> ย้าย HEAD ไปยัง commit ที่กำหนด และปรับ staging area หรือ working directory</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--soft</code> - เก็บการเปลี่ยนแปลงใน staging area</li>
+                                    <li><code>--mixed</code> (default) - เก็บการเปลี่ยนแปลงใน working directory</li>
+                                    <li><code>--hard</code> - ลบการเปลี่ยนแปลงทั้งหมด (ระวัง!)</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git reset file.txt                  # unstage file.txt
+git reset --soft HEAD~1             # ยกเลิก commit ล่าสุด (เก็บ staged)
+git reset --mixed HEAD~1            # ยกเลิก commit ล่าสุด (เก็บ unstaged)
+git reset --hard HEAD~1             # ยกเลิก commit ล่าสุดและลบการเปลี่ยนแปลง
+git reset --hard origin/main        # reset ให้เหมือน origin/main</code></pre>
+                            <div class="warning-box">
+                                <strong>⚠️ คำเตือน:</strong> <code>git reset --hard</code> จะลบการเปลี่ยนแปลงถาวร ใช้ด้วยความระมัดระวัง!
+                            </div>
+                        </div>
+
+                        <!-- git stash -->
+                        <div class="command-section">
+                            <h3 class="command-title">git stash</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git stash [options]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> เก็บการเปลี่ยนแปลงชั่วคราวโดยไม่ต้อง commit</p>
+                            <div class="command-options">
+                                <strong>คำสั่งย่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>save</code> - เก็บการเปลี่ยนแปลง (ไม่จำเป็นใน Git เวอร์ชันใหม่)</li>
+                                    <li><code>list</code> - แสดง stash ทั้งหมด</li>
+                                    <li><code>pop</code> - นำ stash ล่าสุดกลับมาและลบ stash</li>
+                                    <li><code>apply</code> - นำ stash ล่าสุดกลับมาแต่ไม่ลบ stash</li>
+                                    <li><code>drop</code> - ลบ stash</li>
+                                    <li><code>clear</code> - ลบ stash ทั้งหมด</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git stash                           # เก็บการเปลี่ยนแปลง
+git stash save "work in progress"   # เก็บพร้อม message
+git stash list                      # แสดง stash ทั้งหมด
+git stash pop                       # นำ stash ล่าสุดกลับมาและลบ
+git stash apply                     # นำ stash ล่าสุดกลับมา
+git stash drop stash@{0}            # ลบ stash ที่ระบุ
+git stash clear                     # ลบ stash ทั้งหมด</code></pre>
+                        </div>
+
+                        <!-- git remote -->
+                        <div class="command-section">
+                            <h3 class="command-title">git remote</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git remote [options]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> จัดการ remote repositories</p>
+                            <div class="command-options">
+                                <strong>คำสั่งย่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>add</code> - เพิ่ม remote</li>
+                                    <li><code>remove</code> หรือ <code>rm</code> - ลบ remote</li>
+                                    <li><code>rename</code> - เปลี่ยนชื่อ remote</li>
+                                    <li><code>-v</code> (Verbose) - แสดง URL ของ remotes</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git remote                          # แสดง remotes
+git remote -v                       # แสดง remotes พร้อม URLs
+git remote add origin &lt;url&gt;         # เพิ่ม remote ชื่อ origin
+git remote remove origin            # ลบ remote origin
+git remote rename origin upstream   # เปลี่ยนชื่อ remote
+git remote get-url origin           # แสดง URL ของ origin
+git remote set-url origin &lt;new-url&gt; # เปลี่ยน URL ของ origin</code></pre>
+                        </div>
+
+                        <!-- git restore -->
+                        <div class="command-section">
+                            <h3 class="command-title">git restore</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git restore [options] &lt;file&gt;</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> restore ไฟล์กลับไปสู่สถานะเดิม (ทดแทน git checkout สำหรับ restore)</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>--staged</code> - unstage ไฟล์</li>
+                                    <li><code>--source</code> - กำหนด source ที่จะ restore จาก</li>
+                                    <li><code>--worktree</code> - restore ใน working tree (default)</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git restore file.txt                # restore file.txt จาก HEAD
+git restore --staged file.txt       # unstage file.txt
+git restore --source=HEAD~1 file.txt # restore จาก commit ก่อนหน้า
+git restore .                       # restore ทุกไฟล์</code></pre>
+                        </div>
+
+                        <!-- git tag -->
+                        <div class="command-section">
+                            <h3 class="command-title">git tag</h3>
+                            <div class="command-format">
+                                <strong>รูปแบบการใช้งาน:</strong>
+                                <pre><code>git tag [options] [tag-name]</code></pre>
+                            </div>
+                            <p><strong>การใช้งาน:</strong> สร้าง, แสดง, หรือลบ tags</p>
+                            <div class="command-options">
+                                <strong>Options ที่ใช้บ่อย:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-a</code> (Annotated) - สร้าง annotated tag</li>
+                                    <li><code>-m</code> (Message) - ระบุ tag message</li>
+                                    <li><code>-d</code> (Delete) - ลบ tag</li>
+                                    <li><code>-l</code> (List) - แสดง tags ตามรูปแบบ</li>
+                                </ul>
+                            </div>
+                            <strong>ตัวอย่างการใช้งาน:</strong>
+                            <pre><code>git tag                             # แสดง tags ทั้งหมด
+git tag v1.0.0                      # สร้าง lightweight tag
+git tag -a v1.0.0 -m "Version 1.0"  # สร้าง annotated tag
+git tag -d v1.0.0                   # ลบ tag v1.0.0
+git push origin v1.0.0              # push tag ไปยัง remote
+git push origin --tags              # push tags ทั้งหมด</code></pre>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/include-nav.js"></script>
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>

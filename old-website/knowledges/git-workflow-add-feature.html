@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Git Workflow: การเพิ่ม Feature ใหม่ แบบ Step by Step พร้อมตัวอย่างคำสั่ง" />
+        <meta name="author" content="" />
+        <title>Git Workflow: Add Feature - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .workflow-step {
+                margin-bottom: 3rem;
+                padding: 2rem;
+                background-color: #f8f9fa;
+                border-radius: 0.5rem;
+                border-left: 5px solid #0d6efd;
+            }
+            .step-number {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                background-color: #0d6efd;
+                color: white;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 40px;
+                font-weight: bold;
+                margin-right: 1rem;
+            }
+            .step-title {
+                color: #0d6efd;
+                font-weight: bold;
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            .command-box {
+                background-color: #2d2d2d;
+                color: #f8f8f2;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+            .expected-result {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .note-box {
+                background-color: #fff3cd;
+                border: 1px solid #ffc107;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .best-practice {
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+                border-radius: 0.25rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            .summary-box {
+                background-color: #e2e3e5;
+                border: 2px solid #6c757d;
+                border-radius: 0.5rem;
+                padding: 2rem;
+                margin: 2rem 0;
+            }
+            pre {
+                background-color: transparent;
+                padding: 0;
+                margin: 0;
+            }
+            code {
+                color: #e83e8c;
+            }
+            .command-box code {
+                color: #f8f8f2;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Header-->
+        <header class="bg-success py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Git Workflow: Add Feature</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">การเพิ่ม Feature ใหม่แบบ Step by Step</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        
+                        <!-- Introduction -->
+                        <div class="mb-5">
+                            <h2 class="mb-4">สถานะเริ่มต้น</h2>
+                            <ul class="lead">
+                                <li><strong>Branch ปัจจุบัน:</strong> <code>main</code></li>
+                                <li><strong>Production Release:</strong> <code>v1.0.0</code></li>
+                                <li><strong>เป้าหมาย:</strong> เพิ่ม feature ใหม่เข้าไปในโปรเจค</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 1 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">1</span>
+                                ตรวจสอบสถานะปัจจุบัน
+                            </h3>
+                            <p>ก่อนเริ่มทำงาน ควรตรวจสอบว่าคุณอยู่ที่ branch ไหนและมีการเปลี่ยนแปลงค้างอยู่หรือไม่</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ตรวจสอบ branch ปัจจุบันและสถานะของไฟล์
+git status
+
+# ตรวจสอบว่าอยู่ที่ branch main หรือไม่
+git branch
+
+# ดูประวัติ commit ล่าสุด
+git log --oneline -5</code></pre>
+                            </div>
+
+                            <div class="expected-result">
+                                <strong>📋 ผลลัพธ์ที่คาดหวัง:</strong>
+                                <ul class="mb-0">
+                                    <li>อยู่บน branch <code>main</code></li>
+                                    <li>ไม่มีไฟล์ที่ยังไม่ได้ commit (working directory clean)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">2</span>
+                                Pull การเปลี่ยนแปลงล่าสุดจาก Remote
+                            </h3>
+                            <p>ดึงโค้ดล่าสุดจาก GitHub เพื่อให้แน่ใจว่าเรามีโค้ดเวอร์ชันล่าสุด</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ดึงการเปลี่ยนแปลงล่าสุดจาก origin/main
+git pull origin main
+
+# หรือใช้คำสั่งนี้ถ้าตั้งค่า upstream แล้ว
+git pull</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 หมายเหตุ:</strong> หากมี conflict ให้แก้ไขก่อนดำเนินการต่อ
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">3</span>
+                                สร้าง Branch ใหม่สำหรับ Feature
+                            </h3>
+                            <p>สร้าง branch แยกออกมาจาก <code>main</code> เพื่อพัฒนา feature ใหม่</p>
+                            
+                            <div class="command-box">
+                                <pre><code># สร้าง branch ใหม่และเปลี่ยนไปใช้งานทันที
+git checkout -b feature/add-new-feature
+
+# หรือใช้คำสั่งแยกเป็น 2 ขั้นตอน
+git branch feature/add-new-feature
+git checkout feature/add-new-feature</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <strong>✅ ตัวอย่างชื่อ branch ที่ดี:</strong>
+                                <ul class="mb-0">
+                                    <li><code>feature/add-login-page</code></li>
+                                    <li><code>feature/add-payment-gateway</code></li>
+                                    <li><code>feature/improve-search-function</code></li>
+                                </ul>
+                            </div>
+
+                            <p><strong>ตรวจสอบว่าอยู่บน branch ใหม่แล้ว:</strong></p>
+                            <div class="command-box">
+                                <pre><code>git branch
+# ผลลัพธ์จะแสดง * ที่หน้า feature/add-new-feature</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">4</span>
+                                พัฒนา Feature และ Commit การเปลี่ยนแปลง
+                            </h3>
+                            <p>เริ่มเขียนโค้ดและ commit งานเป็นระยะ ๆ</p>
+                            
+                            <div class="command-box">
+                                <pre><code># แก้ไขไฟล์ต่าง ๆ ด้วย editor
+# เช่น เพิ่มไฟล์ product.html, แก้ไข styles.css เป็นต้น
+
+# ตรวจสอบไฟล์ที่มีการเปลี่ยนแปลง
+git status
+
+# เพิ่มไฟล์เข้า Staging Area (เลือกไฟล์ที่ต้องการ)
+git add product.html
+git add css/styles.css
+
+# หรือเพิ่มทุกไฟล์ที่เปลี่ยนแปลง
+git add .
+
+# Commit การเปลี่ยนแปลงพร้อมข้อความที่ชัดเจน
+git commit -m "feat: เพิ่มหน้า product list และ navbar item"
+
+# ถ้ามีการแก้ไขเพิ่มเติม ทำซ้ำ
+git add about.html
+git commit -m "feat: เพิ่มหน้า about us พร้อม team section"</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <strong>✅ Best Practices สำหรับ Commit Message:</strong>
+                                <ul class="mb-0">
+                                    <li><code>feat:</code> เพิ่ม feature ใหม่</li>
+                                    <li><code>fix:</code> แก้ไข bug</li>
+                                    <li><code>docs:</code> อัพเดท documentation</li>
+                                    <li><code>style:</code> แก้ไข formatting, จัด code</li>
+                                    <li><code>refactor:</code> ปรับปรุงโค้ดโดยไม่เปลี่ยนการทำงาน</li>
+                                    <li><code>test:</code> เพิ่มหรือแก้ไข tests</li>
+                                    <li><code>chore:</code> งานอื่น ๆ เช่น update dependencies</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">5</span>
+                                ดู Log และตรวจสอบการเปลี่ยนแปลง
+                            </h3>
+                            <p>ตรวจสอบว่า commit ทั้งหมดถูกต้อง</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ดู commit history
+git log --oneline
+
+# ดู commit แบบละเอียด
+git log
+
+# ดูความแตกต่างระหว่าง branch ปัจจุบันกับ main
+git diff main
+
+# ดูไฟล์ที่เปลี่ยนแปลงไปจาก main
+git diff --name-only main</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">6</span>
+                                Push Branch ขึ้น Remote Repository (GitHub)
+                            </h3>
+                            <p>อัพโหลด branch ของคุณขึ้น GitHub</p>
+                            
+                            <div class="command-box">
+                                <pre><code># Push branch ใหม่ขึ้น GitHub (ครั้งแรก)
+git push -u origin feature/add-new-feature
+
+# ครั้งถัดไปสามารถใช้คำสั่งสั้น ๆ ได้
+git push</code></pre>
+                            </div>
+
+                            <div class="note-box">
+                                <strong>📌 หมายเหตุ:</strong>
+                                <ul class="mb-0">
+                                    <li><code>-u</code> หรือ <code>--set-upstream</code> จะทำให้ Git จำ remote branch ไว้</li>
+                                    <li>หลังจากนี้ใช้แค่ <code>git push</code> ก็เพียงพอ</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 7 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">7</span>
+                                สร้าง Pull Request (PR) บน GitHub
+                            </h3>
+                            <ol>
+                                <li>เปิด browser ไปที่ repository บน GitHub</li>
+                                <li>GitHub จะแสดงข้อความแจ้งเตือน branch ใหม่ ให้คลิก <strong>"Compare & pull request"</strong></li>
+                                <li>กรอกรายละเอียด Pull Request:
+                                    <ul>
+                                        <li><strong>Title:</strong> ชื่อที่สื่อความหมายชัดเจน เช่น "เพิ่ม Product List Feature"</li>
+                                        <li><strong>Description:</strong> อธิบายว่าทำอะไรบ้าง, ทำไมถึงทำ, ผลลัพธ์ที่คาดหวัง</li>
+                                        <li><strong>Reviewers:</strong> (ถ้ามี) เลือกคนที่จะ review โค้ด</li>
+                                        <li><strong>Labels:</strong> กำหนด label เช่น <code>feature</code>, <code>enhancement</code></li>
+                                    </ul>
+                                </li>
+                                <li>คลิก <strong>"Create pull request"</strong></li>
+                            </ol>
+                        </div>
+
+                        <!-- Step 8 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">8</span>
+                                Code Review และแก้ไขตาม Feedback
+                            </h3>
+                            <p>หากมี reviewer แนะนำให้แก้ไข</p>
+                            
+                            <div class="command-box">
+                                <pre><code># แก้ไขไฟล์ตาม feedback
+# เช่น แก้ไข product.html
+
+# Add และ commit การเปลี่ยนแปลง
+git add product.html
+git commit -m "fix: แก้ไขตาม code review - ปรับ responsive layout"
+
+# Push การเปลี่ยนแปลงขึ้น GitHub
+git push
+
+# Pull Request จะอัพเดทอัตโนมัติ</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 9 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">9</span>
+                                Merge Pull Request เข้า Main Branch
+                            </h3>
+                            <p>เมื่อ PR ได้รับการอนุมัติแล้ว</p>
+                            
+                            <h5 class="mt-3">ทาง GitHub UI:</h5>
+                            <ol>
+                                <li>ไปที่หน้า Pull Request</li>
+                                <li>คลิก <strong>"Merge pull request"</strong></li>
+                                <li>เลือกประเภทการ merge:
+                                    <ul>
+                                        <li><strong>Create a merge commit</strong> (default): เก็บประวัติ commit ทั้งหมด</li>
+                                        <li><strong>Squash and merge</strong>: รวม commit ทั้งหมดเป็น 1 commit</li>
+                                        <li><strong>Rebase and merge</strong>: เรียง commit ตามลำดับเวลา</li>
+                                    </ul>
+                                </li>
+                                <li>คลิก <strong>"Confirm merge"</strong></li>
+                                <li>(Optional) คลิก <strong>"Delete branch"</strong> เพื่อลบ branch ที่ merge แล้ว</li>
+                            </ol>
+
+                            <h5 class="mt-4">ทาง Command Line (ถ้าต้องการ):</h5>
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนกลับไปที่ main branch
+git checkout main
+
+# Pull การเปลี่ยนแปลงล่าสุด (รวม merge ที่เกิดขึ้นบน GitHub)
+git pull origin main
+
+# Merge feature branch เข้า main (ถ้าทำเองโดยไม่ผ่าน GitHub)
+git merge feature/add-new-feature
+
+# Push ขึ้น GitHub
+git push origin main</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 10 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">10</span>
+                                ลบ Branch ที่ไม่ใช้แล้ว (Clean up)
+                            </h3>
+                            <p>หลังจาก merge เสร็จแล้ว ควรลบ branch ที่ไม่ใช้งานแล้ว</p>
+                            
+                            <div class="command-box">
+                                <pre><code># เปลี่ยนไปที่ main branch ก่อน
+git checkout main
+
+# ลบ branch local
+git branch -d feature/add-new-feature
+
+# ถ้า branch ยังไม่ได้ merge และต้องการบังคับลบ
+git branch -D feature/add-new-feature
+
+# ลบ branch บน remote (GitHub)
+git push origin --delete feature/add-new-feature
+
+# ดู branch ที่เหลืออยู่
+git branch -a</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 11 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">11</span>
+                                Tag Release Version ใหม่ (Optional)
+                            </h3>
+                            <p>ถ้า feature ใหม่พร้อมสำหรับ production release</p>
+                            
+                            <div class="command-box">
+                                <pre><code># ตรวจสอบว่าอยู่บน main และมีโค้ดล่าสุด
+git checkout main
+git pull origin main
+
+# สร้าง tag สำหรับ version ใหม่
+git tag -a v1.1.0 -m "Release version 1.1.0 - เพิ่ม Product List Feature"
+
+# Push tag ขึ้น GitHub
+git push origin v1.1.0
+
+# หรือ push tag ทั้งหมดพร้อมกัน
+git push --tags
+
+# ดู tag ทั้งหมด
+git tag -l</code></pre>
+                            </div>
+
+                            <div class="best-practice">
+                                <strong>✅ Semantic Versioning:</strong>
+                                <ul class="mb-0">
+                                    <li><code>v1.0.0</code> → <code>v1.1.0</code> (Minor update: เพิ่ม feature ใหม่)</li>
+                                    <li><code>v1.1.0</code> → <code>v1.1.1</code> (Patch: แก้ไข bug)</li>
+                                    <li><code>v1.1.0</code> → <code>v2.0.0</code> (Major: มีการเปลี่ยนแปลงใหญ่ที่ไม่ compatible กับเวอร์ชันเก่า)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 12 -->
+                        <div class="workflow-step">
+                            <h3 class="step-title">
+                                <span class="step-number">12</span>
+                                Sync Local Repository
+                            </h3>
+                            <p>ให้แน่ใจว่า local repository ของคุณเป็นเวอร์ชันล่าสุด</p>
+                            
+                            <div class="command-box">
+                                <pre><code># Pull การเปลี่ยนแปลงทั้งหมดจาก main
+git checkout main
+git pull origin main
+
+# ดึงข้อมูล remote branches และ tags ล่าสุด
+git fetch --all --prune --tags
+
+# ตรวจสอบ branches ทั้งหมด (รวม remote)
+git branch -a
+
+# ตรวจสอบ tags
+git tag -l</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="summary-box">
+                            <h2 class="mb-4">📝 สรุป Git Workflow ทั้งหมด</h2>
+                            <div class="command-box">
+                                <pre><code># 1. ตรวจสอบสถานะ
+git status
+git branch
+
+# 2. Pull โค้ดล่าสุด
+git pull origin main
+
+# 3. สร้าง feature branch
+git checkout -b feature/add-new-feature
+
+# 4. พัฒนาและ commit
+git add .
+git commit -m "feat: เพิ่ม feature ใหม่"
+
+# 5. Push ขึ้น GitHub
+git push -u origin feature/add-new-feature
+
+# 6. สร้าง Pull Request บน GitHub
+
+# 7. Review และแก้ไข (ถ้ามี)
+git add .
+git commit -m "fix: แก้ไขตาม feedback"
+git push
+
+# 8. Merge PR บน GitHub
+
+# 9. Clean up local
+git checkout main
+git pull origin main
+git branch -d feature/add-new-feature
+
+# 10. Tag version (optional)
+git tag -a v1.1.0 -m "Release v1.1.0"
+git push origin v1.1.0</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices -->
+                        <div class="mt-5">
+                            <h2 class="mb-4">💡 Best Practices</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Commit บ่อย ๆ</h5>
+                                        <p class="mb-0">แบ่ง commit เป็นชิ้นเล็ก ๆ ที่มีความหมายชัดเจน</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ ใช้ชื่อ branch ที่สื่อความหมาย</h5>
+                                        <p class="mb-0"><code>feature/</code>, <code>bugfix/</code>, <code>hotfix/</code></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Pull ก่อนเริ่มงานทุกครั้ง</h5>
+                                        <p class="mb-0">ป้องกัน conflict</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ ใช้ Pull Request</h5>
+                                        <p class="mb-0">ให้ทีมได้ review โค้ดก่อน merge</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ Test ก่อน commit</h5>
+                                        <p class="mb-0">ตรวจสอบว่าโค้ดทำงานได้</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="best-practice mb-3">
+                                        <h5>✅ ลบ branch ที่ไม่ใช้</h5>
+                                        <p class="mb-0">เก็บ repository ให้สะอาด</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Git Workshop 2025</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/include-nav.js"></script>
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>

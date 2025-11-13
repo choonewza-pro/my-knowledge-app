@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="เกี่ยวกับ Git Workshop - เรียนรู้พันธกิจ ทีมงาน และเป้าหมายของโปรเจค" />
+        <meta name="author" content="" />
+        <title>เกี่ยวกับเรา - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            /* Modern gradient background */
+            .hero-gradient {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                position: relative;
+                overflow: hidden;
+            }
+            .hero-gradient::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                opacity: 0.3;
+            }
+            
+            /* Modern card styles */
+            .info-card {
+                border: none;
+                border-radius: 16px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+                overflow: hidden;
+                background: #fff;
+                height: 100%;
+            }
+            .info-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            }
+            
+            /* Value cards */
+            .value-card {
+                padding: 2rem;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+                border: 2px solid #e9ecef;
+                transition: all 0.3s ease;
+                height: 100%;
+            }
+            .value-card:hover {
+                border-color: #667eea;
+                background: #fff;
+                transform: translateY(-4px);
+                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+            }
+            .value-card .icon-circle {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1.5rem;
+                font-size: 2rem;
+                color: white;
+            }
+            
+            /* Team member cards */
+            .team-card {
+                border: none;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: #fff;
+            }
+            .team-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+            }
+            .team-card .team-img {
+                width: 100%;
+                height: 280px;
+                object-fit: cover;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 6rem;
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .team-card .card-body {
+                padding: 2rem;
+            }
+            .team-card .role-badge {
+                display: inline-block;
+                padding: 0.4rem 1rem;
+                border-radius: 50px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-size: 0.875rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+            }
+            
+            /* Section styling */
+            .section-title {
+                position: relative;
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+            }
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                border-radius: 2px;
+            }
+            
+            /* Project info card */
+            .project-info-card {
+                border: none;
+                border-radius: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 2.5rem;
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            }
+            .project-info-card .info-item {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                backdrop-filter: blur(10px);
+            }
+            .project-info-card .info-item:last-child {
+                margin-bottom: 0;
+            }
+            .project-info-card .info-label {
+                font-size: 0.875rem;
+                opacity: 0.9;
+                margin-bottom: 0.25rem;
+            }
+            .project-info-card .info-value {
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Hero Header -->
+        <header class="hero-gradient py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white position-relative">
+                    <h1 class="display-3 fw-bolder mb-3">เกี่ยวกับเรา</h1>
+                    <p class="lead mb-0" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto;">
+                        เรียนรู้เกี่ยวกับพันธกิจ ทีมงาน และสิ่งที่ขับเคลื่อนโปรเจค Workshop นี้
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mission Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-5 align-items-center mb-5">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h2 class="fw-bold mb-4">
+                            <i class="bi bi-bullseye text-primary me-2"></i>พันธกิจของเรา
+                        </h2>
+                        <p class="lead text-muted mb-4">
+                            เราสร้างทรัพยากรการเรียนรู้ที่เข้าถึงได้ง่ายและเป็นประโยชน์ เพื่อช่วยให้นักพัฒนาทำงานได้เร็วขึ้นและมีประสิทธิภาพมากขึ้น
+                        </p>
+                        <p class="text-muted mb-4">
+                            โปรเจคนี้เริ่มต้นจาก Workshop แบบ hands-on เพื่อสอนเกี่ยวกับ Git, GitHub Actions และแนวทาง DevOps พื้นฐานที่ทุกคนสามารถนำไปปรับใช้ได้จริง
+                        </p>
+
+                        <div class="mt-5">
+                            <h3 class="fw-bold mb-3 h4">
+                                <i class="bi bi-gear-fill text-primary me-2"></i>สิ่งที่เราทำ
+                            </h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <strong>ตัวอย่างที่ชัดเจน:</strong> มีตัวอย่างและแบบฝึกหัดที่เข้าใจง่ายสำหรับ version control
+                                </li>
+                                <li class="mb-3">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <strong>Template ที่ใช้งานได้จริง:</strong> Web templates ที่สามารถนำไปใช้ซ้ำได้ สร้างด้วย Bootstrap
+                                </li>
+                                <li class="mb-3">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <strong>CI/CD Workflows:</strong> สาธิตการทำงานของ CI/CD ด้วย GitHub Actions อย่างเข้าใจง่าย
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="project-info-card">
+                            <h5 class="fw-bold mb-4">
+                                <i class="bi bi-info-circle me-2"></i>ข้อมูลโปรเจค
+                            </h5>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="bi bi-folder2 me-1"></i> Repository
+                                </div>
+                                <div class="info-value">git-workshop-app</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="bi bi-git me-1"></i> Current Branch
+                                </div>
+                                <div class="info-value">main</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="bi bi-person-circle me-1"></i> Owner
+                                </div>
+                                <div class="info-value">choonewza-pro</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="bi bi-calendar-event me-1"></i> Started
+                                </div>
+                                <div class="info-value">November 2025</div>
+                            </div>
+                            <div class="mt-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.2);">
+                                <p class="mb-0" style="font-size: 0.9rem; opacity: 0.9;">
+                                    <i class="bi bi-bootstrap me-2"></i>
+                                    สร้างด้วย Bootstrap 5 และ GitHub Actions สำหรับการ deployment อัตโนมัติ
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder section-title d-inline-block">หลักการของเรา</h2>
+                    <p class="lead text-muted mt-3">ค่านิยมที่ขับเคลื่อนการทำงานของเรา</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="value-card">
+                            <div class="icon-circle">
+                                <i class="bi bi-lightbulb-fill"></i>
+                            </div>
+                            <h4 class="fw-bold text-center mb-3">ความชัดเจน</h4>
+                            <p class="text-muted text-center mb-0">
+                                เราเชื่อในการสื่อสารที่ชัดเจน ทั้งในโค้ด เอกสาร และการสอน เพื่อให้ทุกคนเข้าใจได้ง่าย
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="value-card">
+                            <div class="icon-circle">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </div>
+                            <h4 class="fw-bold text-center mb-3">การทำซ้ำได้</h4>
+                            <p class="text-muted text-center mb-0">
+                                ทุกขั้นตอนสามารถทำซ้ำได้ และมีผลลัพธ์ที่คาดเดาได้ เหมาะสำหรับการนำไปปรับใช้จริง
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="value-card">
+                            <div class="icon-circle">
+                                <i class="bi bi-hand-index-thumb"></i>
+                            </div>
+                            <h4 class="fw-bold text-center mb-3">เรียนรู้จากการทำ</h4>
+                            <p class="text-muted text-center mb-0">
+                                เราเน้นการปฏิบัติจริง ด้วยการทำ testable changes เล็กๆ และเอกสารที่ช่วยให้ได้ผลลัพธ์เร็ว
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder section-title d-inline-block">พบกับทีมของเรา</h2>
+                    <p class="lead text-muted mt-3">กลุ่มผู้มีส่วนร่วมที่มุ่งมั่นในการสอนและพัฒนาเครื่องมือ</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="team-card">
+                            <div class="team-img">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="fw-bold mb-2">Choonewza</h5>
+                                <div class="role-badge">
+                                    <i class="bi bi-mortarboard-fill me-1"></i>Instructor / Maintainer
+                                </div>
+                                <p class="text-muted mb-0">
+                                    นำ Workshops เกี่ยวกับ Git, GitHub Actions และ DevOps ที่เป็นประโยชน์สำหรับนักพัฒนา
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="team-card">
+                            <div class="team-img">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="fw-bold mb-2">Napat</h5>
+                                <div class="role-badge">
+                                    <i class="bi bi-code-slash me-1"></i>Developer
+                                </div>
+                                <p class="text-muted mb-0">
+                                    มุ่งเน้นการสร้างตัวอย่าง แบบฝึกหัด และ CI pipelines สำหรับ hands-on labs
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="team-card">
+                            <div class="team-img">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="fw-bold mb-2">Siri</h5>
+                                <div class="role-badge">
+                                    <i class="bi bi-palette-fill me-1"></i>Designer
+                                </div>
+                                <p class="text-muted mb-0">
+                                    ออกแบบ UI และเอกสารที่เรียบง่ายและเข้าถึงได้ เพื่อให้ผู้เรียนโฟกัสที่เนื้อหา
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5 hero-gradient">
+            <div class="container text-center">
+                <div class="text-white position-relative">
+                    <h2 class="fw-bold mb-3">พร้อมที่จะเริ่มต้นแล้วหรือยัง?</h2>
+                    <p class="lead mb-4">มาเรียนรู้การจัดการ Source Code อย่างมืออาชีพด้วยกัน</p>
+                    <a href="index.html" class="btn btn-light btn-lg me-3" style="border-radius: 50px;">
+                        <i class="bi bi-house me-2"></i>กลับหน้าแรก
+                    </a>
+                    <a href="contact.html" class="btn btn-outline-light btn-lg" style="border-radius: 50px;">
+                        <i class="bi bi-envelope me-2"></i>ติดต่อเรา
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <h5 class="text-white mb-3">Git Workshop</h5>
+                        <p class="text-white-50">Workshop สำหรับการเรียนรู้การจัดการ Source Code ด้วย Git และ GitHub Actions อย่างมืออาชีพ</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Quick Links</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="index.html" class="text-white-50 text-decoration-none">หน้าแรก</a></li>
+                            <li><a href="about.html" class="text-white-50 text-decoration-none">เกี่ยวกับ</a></li>
+                            <li><a href="contact.html" class="text-white-50 text-decoration-none">ติดต่อ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Resources</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="knowledges/git-commands-reference.html" class="text-white-50 text-decoration-none">Git Commands</a></li>
+                            <li><a href="knowledges/github-guide.html" class="text-white-50 text-decoration-none">GitHub Guide</a></li>
+                            <li><a href="knowledges/github-actions-guide.html" class="text-white-50 text-decoration-none">GitHub Actions</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                <p class="m-0 text-center text-white-50">Copyright &copy; Git Workshop 2025 | Created with <i class="bi bi-heart-fill text-danger"></i></p>
+            </div>
+        </footer>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/include-nav.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

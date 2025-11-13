@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="แผนที่และสถานที่ตั้ง - Git Workshop พร้อมข้อมูลการเดินทางและช่องทางติดต่อ" />
+        <meta name="author" content="" />
+        <title>แผนที่และสถานที่ - Git Workshop</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            /* Modern gradient background */
+            .hero-gradient {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                position: relative;
+                overflow: hidden;
+            }
+            .hero-gradient::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                opacity: 0.3;
+            }
+            
+            /* Map container */
+            .map-wrapper {
+                position: relative;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+                margin: 2rem 0;
+            }
+            .map-wrapper iframe {
+                width: 100%;
+                height: 600px;
+                border: 0;
+                display: block;
+            }
+            
+            /* Location info cards */
+            .location-card {
+                background: white;
+                border-radius: 20px;
+                padding: 2rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+                height: 100%;
+            }
+            .location-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            }
+            .location-card .icon-box {
+                width: 70px;
+                height: 70px;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                color: white;
+                margin-bottom: 1.5rem;
+            }
+            
+            /* Transportation options */
+            .transport-card {
+                background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+                border: 2px solid #e9ecef;
+                border-radius: 16px;
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+                transition: all 0.3s ease;
+            }
+            .transport-card:hover {
+                border-color: #667eea;
+                background: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            }
+            .transport-icon {
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin-right: 1rem;
+            }
+            
+            /* Quick action buttons */
+            .quick-action-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+                margin-bottom: 1rem;
+            }
+            .quick-action-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+                color: white;
+            }
+            .quick-action-btn i {
+                font-size: 1.5rem;
+                margin-right: 0.75rem;
+            }
+            
+            /* Landmark list */
+            .landmark-item {
+                display: flex;
+                align-items: start;
+                padding: 1rem;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .landmark-item:last-child {
+                border-bottom: none;
+            }
+            .landmark-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #155724;
+                font-size: 1.25rem;
+                margin-right: 1rem;
+                flex-shrink: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation (loaded from partial) -->
+        <div id="site-nav"></div>
+        
+        <!-- Hero Header -->
+        <header class="hero-gradient py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white position-relative">
+                    <h1 class="display-3 fw-bolder mb-3">
+                        <i class="bi bi-geo-alt me-3"></i>แผนที่และสถานที่
+                    </h1>
+                    <p class="lead mb-0" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto;">
+                        ค้นหาเราได้ง่าย พร้อมข้อมูลการเดินทางและสถานที่สำคัญใกล้เคียง
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Map Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <!-- Main Map -->
+                <div class="map-wrapper">
+                    <iframe 
+                        src="https://www.google.com/maps?q=Bangkok,Thailand&output=embed" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+                <!-- Location Information -->
+                <div class="row g-4 mt-4">
+                    <!-- Address Card -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="location-card">
+                            <div class="icon-box">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">ที่อยู่</h4>
+                            <p class="text-muted mb-3">
+                                <strong>Git Workshop Training Center</strong><br />
+                                123 ถนนตัวอย่าง แขวงสีลม<br />
+                                เขตบางรัก กรุงเทพมหานคร<br />
+                                10500 ประเทศไทย
+                            </p>
+                            <a href="https://maps.google.com/?q=Bangkok" target="_blank" class="quick-action-btn">
+                                <i class="bi bi-map"></i>
+                                <span>เปิดใน Google Maps</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Card -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="location-card">
+                            <div class="icon-box">
+                                <i class="bi bi-telephone"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">ติดต่อ</h4>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-telephone-fill text-primary me-2"></i>
+                                    <a href="tel:+66012345678" class="text-decoration-none">+66 (0) 1234-5678</a>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-envelope-fill text-primary me-2"></i>
+                                    <a href="mailto:workshop@gitworkshop.com" class="text-decoration-none">workshop@gitworkshop.com</a>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-clock-fill text-primary me-2"></i>
+                                    <span>จันทร์-ศุกร์ 09:00-18:00 น.</span>
+                                </div>
+                            </div>
+                            <a href="contact.html" class="quick-action-btn">
+                                <i class="bi bi-chat-dots"></i>
+                                <span>ส่งข้อความถึงเรา</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Hours Card -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="location-card">
+                            <div class="icon-box">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">เวลาทำการ</h4>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2 pb-2" style="border-bottom: 1px solid #f0f0f0;">
+                                    <span><strong>จันทร์ - ศุกร์</strong></span>
+                                    <span class="text-success">09:00 - 18:00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 pb-2" style="border-bottom: 1px solid #f0f0f0;">
+                                    <span><strong>เสาร์</strong></span>
+                                    <span class="text-warning">10:00 - 16:00</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span><strong>อาทิตย์</strong></span>
+                                    <span class="text-danger">ปิดทำการ</span>
+                                </div>
+                            </div>
+                            <div class="alert alert-info mb-0" style="border-radius: 12px;">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <small>สามารถนัดหมายนอกเวลาทำการได้</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transportation Section -->
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-3">
+                        <i class="bi bi-signpost-2 me-2"></i>วิธีการเดินทาง
+                    </h2>
+                    <p class="lead text-muted">เลือกเส้นทางที่สะดวกสำหรับคุณ</p>
+                </div>
+
+                <div class="row g-4">
+                    <!-- BTS/MRT -->
+                    <div class="col-lg-6">
+                        <div class="transport-card">
+                            <div class="d-flex align-items-start">
+                                <div class="transport-icon">
+                                    <i class="bi bi-train-front"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">รถไฟฟ้า BTS/MRT</h5>
+                                    <p class="mb-2 text-muted">
+                                        <strong>BTS สีลม:</strong> ลงสถานี ศาลาแดง ทางออก 2<br />
+                                        เดินประมาณ 5 นาที
+                                    </p>
+                                    <p class="mb-0 text-muted">
+                                        <strong>MRT สายสีน้ำเงิน:</strong> ลงสถานี สีลม ทางออก 3<br />
+                                        เดินประมาณ 8 นาที
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bus -->
+                    <div class="col-lg-6">
+                        <div class="transport-card">
+                            <div class="d-flex align-items-start">
+                                <div class="transport-icon">
+                                    <i class="bi bi-bus-front"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">รถประจำทาง</h5>
+                                    <p class="mb-2 text-muted">
+                                        สายที่ผ่าน: <strong>15, 76, 77, 115, 504, 547</strong>
+                                    </p>
+                                    <p class="mb-0 text-muted">
+                                        ลงป้าย: <strong>ถนนสีลม</strong> หรือ <strong>ซอยสีลม 8</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Car -->
+                    <div class="col-lg-6">
+                        <div class="transport-card">
+                            <div class="d-flex align-items-start">
+                                <div class="transport-icon">
+                                    <i class="bi bi-car-front"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">รถยนต์ส่วนตัว</h5>
+                                    <p class="mb-2 text-muted">
+                                        มีที่จอดรถในอาคาร (ชั้น B1-B2)<br />
+                                        ฟรี 2 ชั่วโมงแรกสำหรับผู้เข้าร่วม Workshop
+                                    </p>
+                                    <p class="mb-0 text-muted">
+                                        <i class="bi bi-p-circle-fill text-primary me-1"></i>
+                                        <strong>ที่จอดรถ:</strong> 100+ ที่นั่ง
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Taxi/Grab -->
+                    <div class="col-lg-6">
+                        <div class="transport-card">
+                            <div class="d-flex align-items-start">
+                                <div class="transport-icon">
+                                    <i class="bi bi-taxi-front"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">แท็กซี่ / Grab</h5>
+                                    <p class="mb-2 text-muted">
+                                        สามารถจอดได้ที่หน้าอาคาร<br />
+                                        มีจุดรับ-ส่งแท็กซี่และ Grab โดยเฉพาะ
+                                    </p>
+                                    <p class="mb-0 text-muted">
+                                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                        <strong>Pin Location:</strong> Git Workshop Training Center
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nearby Landmarks -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-3">
+                        <i class="bi bi-pin-map me-2"></i>สถานที่สำคัญใกล้เคียง
+                    </h2>
+                    <p class="lead text-muted">จุดสังเกตและสถานที่ท่องเที่ยวรอบๆ</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="location-card">
+                            <h5 class="fw-bold mb-4">ร้านอาหารและคาเฟ่</h5>
+                            <div class="landmark-item">
+                                <div class="landmark-icon">
+                                    <i class="bi bi-cup-hot"></i>
+                                </div>
+                                <div>
+                                    <strong>Starbucks สีลม</strong>
+                                    <p class="text-muted mb-0 small">ระยะทาง: 200 เมตร (2 นาที)</p>
+                                </div>
+                            </div>
+                            <div class="landmark-item">
+                                <div class="landmark-icon">
+                                    <i class="bi bi-egg-fried"></i>
+                                </div>
+                                <div>
+                                    <strong>Food Court ตลาดเซี่ยงกง</strong>
+                                    <p class="text-muted mb-0 small">ระยะทาง: 300 เมตร (3 นาที)</p>
+                                </div>
+                            </div>
+                            <div class="landmark-item">
+                                <div class="landmark-icon">
+                                    <i class="bi bi-shop"></i>
+                                </div>
+                                <div>
+                                    <strong>7-Eleven</strong>
+                                    <p class="text-muted mb-0 small">ระยะทาง: 50 เมตร (1 นาที)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="location-card">
+                            <h5 class="fw-bold mb-4">สถานที่สำคัญ</h5>
+                            <div class="landmark-item">
+                                <div class="landmark-icon">
+                                    <i class="bi bi-hospital"></i>
+                                </div>
+                                <div>
+                                    <strong>โรงพยาบาลบีเอ็นเอช</strong>
+                                    <p class="text-muted mb-0 small">ระยะทาง: 500 เมตร (5 นาที)</p>
+                                </div>
+                            </div>
+                            <div class="landmark-item">
+                                <div class="landmark-icon">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                                <div>
+                                    <strong>ตลาดพาหุรัด</strong>
+                                    <p class="text-muted mb-0 small">ระยะทาง: 800 เมตร (8 นาที)</p>
+                                </div>
+                            </div>
+                            <div class="landmark-item">
+                                <div class="landmark-icon">
+                                    <i class="bi bi-bank"></i>
+                                </div>
+                                <div>
+                                    <strong>ธนาคารต่างๆ</strong>
+                                    <p class="text-muted mb-0 small">ระยะทาง: 100 เมตร (1 นาที)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5 hero-gradient">
+            <div class="container text-center">
+                <div class="text-white position-relative">
+                    <h2 class="fw-bold mb-3">พร้อมมาเยี่ยมชมเราแล้วหรือยัง?</h2>
+                    <p class="lead mb-4">ติดต่อเราเพื่อนัดหมายหรือสอบถามข้อมูลเพิ่มเติม</p>
+                    <a href="contact.html" class="btn btn-light btn-lg me-3" style="border-radius: 50px;">
+                        <i class="bi bi-envelope me-2"></i>ติดต่อเรา
+                    </a>
+                    <a href="https://maps.google.com/?q=Bangkok" target="_blank" class="btn btn-outline-light btn-lg" style="border-radius: 50px;">
+                        <i class="bi bi-map me-2"></i>เปิดแผนที่
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <h5 class="text-white mb-3">Git Workshop</h5>
+                        <p class="text-white-50">Workshop สำหรับการเรียนรู้การจัดการ Source Code ด้วย Git และ GitHub Actions อย่างมืออาชีพ</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Quick Links</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="index.html" class="text-white-50 text-decoration-none">หน้าแรก</a></li>
+                            <li><a href="about.html" class="text-white-50 text-decoration-none">เกี่ยวกับ</a></li>
+                            <li><a href="contact.html" class="text-white-50 text-decoration-none">ติดต่อ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <h6 class="text-white mb-3">Resources</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="knowledges/git-commands-reference.html" class="text-white-50 text-decoration-none">Git Commands</a></li>
+                            <li><a href="knowledges/github-guide.html" class="text-white-50 text-decoration-none">GitHub Guide</a></li>
+                            <li><a href="knowledges/github-actions-guide.html" class="text-white-50 text-decoration-none">GitHub Actions</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                <p class="m-0 text-center text-white-50">Copyright &copy; Git Workshop 2025 | Created with <i class="bi bi-heart-fill text-danger"></i></p>
+            </div>
+        </footer>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/include-nav.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
