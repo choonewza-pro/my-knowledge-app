@@ -4,37 +4,39 @@ on:
   push:
     branches:
       - "feature/**"
+      - "hotfix/**"
+      - "fix/**"
       - "bugfix/**"
-      - "chare/**"
-      - "doc/**"
-      - main
-
-env:
-  SERVER_IP: '127.0.0.1'
-  SERVER_PORT: '8080'
-  REPO_NAME: ${{ github.repository }}
+      - "chore/**"
+      - "docs/**"
+      - "refactor/**"
+      - "style/**"
+      - "test/**"
+      - "perf/**"
+      - "build/**"
+      - "ci/**"
+      - "revert/**"
+      - main # อย่าลืมลบออก กรณีใช้งานจริง
 
 jobs:
-  job-1:
+  lint-job:
     runs-on: ubuntu-latest
-    env:
-      COMPANY_NAME: 'NTPLC'
-    environment: development
     steps:
-      - run: echo "Hello ${{ github.actor }} from ${{ env.REPO_NAME }}"
-      - run: echo "This is Job 1 ${{ github.job }} running on ${{ runner.os }}"
-      - run: echo "Server IP is ${{ env.SERVER_IP }} and Port is ${{ env.SERVER_PORT }}"
-      - run: echo "Hello GitHub Actions from ${{ env.COMPANY_NAME }}"
-      - run: echo "${{ vars.APP_NAME }} is now deployed!"
-      - run: echo "${{ secrets.API_KEY }} is used for authentication."
-  
-  job-2:
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - run: echo "${{ vars.APP_NAME }} is now deployed!"
-      - run: echo "${{ secrets.API_KEY }} is used for authentication."
-      - name: Build Production
-        run: echo "Building for production..."
-      - name: Run Tests
-        run: echo "Running tests..."
+      - run: echo "Hello ${{ github.actor }}"
+
+      - uses: actions/checkout@v5
+
+      - name: Set Node.js version to 24.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check lint
+        run: npm run lint
+      
+      # - name: Run build
+      #   run: npm run build
