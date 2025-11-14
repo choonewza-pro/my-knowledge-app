@@ -2,6 +2,8 @@ name: Build and Deploy Docker Image to Docker Hub (CD)
 
 on:
   push:
+    branches:
+      - "main"
     tags:
       - "*"
 
@@ -31,7 +33,7 @@ jobs:
       CONTAINER_NAME: ${{ github.actor}}
       CONTAINER_PORT: 7354
       DOCKER_IMAGE_URL: "ghcr.io/${{ github.actor }}/${{ github.repository.name }}:${{ github.ref_name }}"
-      # ของจริงต้องเก็บใน GitHub Secrets นะครับ
+      # ใช้จริงต้องเก็บใน GitHub Secrets นะครับ
     steps:
       - run: echo "Hello, ${{ github.actor }} from auto deploy docker job"
       - name: Auto Deploy Docker Container
