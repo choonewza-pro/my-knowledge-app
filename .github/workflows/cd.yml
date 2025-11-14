@@ -49,9 +49,3 @@ jobs:
           publish_branch: gh-pages
           publish_dir: ./dist       # โฟลเดอร์ output ของโปรเจกต์คุณ
           force_orphan: true        # (แนะนำ) ทำ branch ใหม่ให้สะอาด
-      # - name: Publish to GitHub Pages
-      #   uses: SerhiiKa/VuePagesAction@1.0.4
-      #   with:
-      #     username: ${{ github.actor }}
-      #     reponame: ${{ github.event.repository.name }}
-      #     token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,21 @@
+name: Build and Deploy Docker Image to Docker Hub (CD)
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello, ${{ github.actor }} from build and push docker image job"
+      - uses: actions/checkout@v5
+      - name: Build Docker image and push to GitHub Registry (GitHub Packages)
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ github.event.repository.name }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ github.ref_name }}
