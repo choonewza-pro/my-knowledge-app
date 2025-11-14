@@ -17,6 +17,9 @@ on:
       - "ci/**"
       - "revert/**"
       - main # อย่าลืมลบออก กรณีใช้งานจริง
+  # pull_request:
+  #   branches:
+  #     - main
 
 jobs:
   lint-job:
