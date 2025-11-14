@@ -36,7 +36,7 @@ jobs:
     steps:
       - run: echo "Hello, ${{ github.actor }} from deploy job"  
       - name: Download dist folder artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist-production
           path: ./dist
