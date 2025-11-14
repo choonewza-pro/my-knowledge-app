@@ -354,7 +354,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
               >
                 {ctaText}
                 {/* small rocket SVG */}
-                <FaRocket className="ml-3 -mr-1 w-5 h-5 animate-rocket-thrust" />
+                <FaRocket className="ml-3 -mr-1 w-5 h-5 text-orange-200 animate-rocket-thrust" />
               </Link>
 
               <a href="#knowledge" className="text-sm md:text-base text-white/90 underline-offset-2 hover:underline">ดูหัวข้อทั้งหมด</a>
