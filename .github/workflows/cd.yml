@@ -7,6 +7,9 @@ on:
     tags:
       - '*.*.*'  # ติดตั้ง workflow นี้ให้ทำงานเมื่อมีการ push tag ที่มีรูปแบบ x.y.z ตอน Release ใหม่
 
+permissions:
+  contents: write  # เพื่อให้สามารถ deploy ไปที่ GitHub Pages ได้
+
 jobs:
   build-prod-job:
     runs-on: ubuntu-latest
