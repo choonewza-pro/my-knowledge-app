@@ -1,4 +1,4 @@
-name: Git Workshop Demo CI
+name: Check and Build Application (CI)
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
       - "ci/**"
       - "revert/**"
       - main # อย่าลืมลบออก กรณีใช้งานจริง
-  # pull_request:
+  # pull_request: # ใช้เพื่อกรณี pull request แล้ว error ก็จะได้ไม่ต้อง merge เข้าสาขาหลัก (main)
   #   branches:
   #     - main
 

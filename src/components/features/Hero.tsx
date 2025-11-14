@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import useParallax from '../../hooks/useParallax';
 import useWander from '../../hooks/useWander';
+import { FaRocket } from 'react-icons/fa';
+
+// Orbit radii factors (relative to viewport half-width/half-height)
+// increase factors so orbits span more of the horizontal viewport
+const ORBIT_FACTORS: number[] = [0.08, 0.18, 0.30, 0.42, 0.56, 0.70, 0.84, 0.96];
 
 interface HeroProps {
   title: string;
@@ -13,12 +18,17 @@ interface HeroProps {
 export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
   const containerRef = useRef<HTMLElement | null>(null);
   useParallax(containerRef);
-  // Prepare refs for 8 planets
-  const refs = Array.from({ length: 8 }, () => useRef<HTMLDivElement | null>(null));
+  // Prepare individual refs for 8 planets (explicit refs avoid reading refs during render)
+  const ref0 = useRef<HTMLDivElement | null>(null);
+  const ref1 = useRef<HTMLDivElement | null>(null);
+  const ref2 = useRef<HTMLDivElement | null>(null);
+  const ref3 = useRef<HTMLDivElement | null>(null);
+  const ref4 = useRef<HTMLDivElement | null>(null);
+  const ref5 = useRef<HTMLDivElement | null>(null);
+  const ref6 = useRef<HTMLDivElement | null>(null);
+  const ref7 = useRef<HTMLDivElement | null>(null);
 
-  // Orbit radii factors (relative to viewport half-width/half-height)
-  // increase factors so orbits span more of the horizontal viewport
-  const orbitFactors = [0.08, 0.18, 0.30, 0.42, 0.56, 0.70, 0.84, 0.96];
+  // Orbit radii are defined at module scope (see top of file)
   // store radii as pairs {rx, ry} so horizontal spread can be larger than vertical
   const [orbitRadii, setOrbitRadii] = useState<{ rx: number; ry: number }[]>([]);
 
@@ -26,7 +36,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
     function compute() {
       const halfW = window.innerWidth / 2;
       const halfH = window.innerHeight / 2;
-      const radii = orbitFactors.map((f) => ({ rx: Math.round(halfW * f), ry: Math.round(halfH * f) }));
+      const radii = ORBIT_FACTORS.map((f) => ({ rx: Math.round(halfW * f), ry: Math.round(halfH * f) }));
       setOrbitRadii(radii);
     }
     compute();
@@ -34,42 +44,44 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
     return () => window.removeEventListener('resize', compute);
   }, []);
 
-  // Seed initial positions across each ring so planets don't all start at center
-  useEffect(() => {
-    if (!orbitRadii || orbitRadii.length === 0) return;
-    refs.forEach((rRef, i) => {
-      const el = rRef.current;
-      if (!el) return;
+  // Derive initial positions from `orbitRadii` with useMemo to avoid synchronous setState in effects
+  const initialPositions = useMemo(() => {
+    if (!orbitRadii || orbitRadii.length === 0) return [] as { left: string; top: string }[];
+    const positions: { left: string; top: string }[] = [];
+    // Use a deterministic pseudo-random function (pure) so lint rules allow it during render
+    const fract = (v: number) => v - Math.floor(v);
+    const prng = (seed: number) => fract(Math.sin(seed) * 43758.5453123);
+    for (let i = 0; i < ORBIT_FACTORS.length; i++) {
       const rxy = orbitRadii[i] || { rx: 120, ry: 86 };
       const rx = rxy.rx;
       const ry = rxy.ry;
-      // random angle and larger jitter to spread horizontally
-      const angle = Math.random() * Math.PI * 2;
-      const jitterX = (Math.random() - 0.5) * (rx * 0.36);
-      const jitterY = (Math.random() - 0.5) * (ry * 0.22);
+      const baseSeed = rx * 73856093 ^ ry * 19349663 ^ (i * 83492791);
+      const angle = prng(baseSeed + 1) * Math.PI * 2;
+      const jitterX = (prng(baseSeed + 2) - 0.5) * (rx * 0.36);
+      const jitterY = (prng(baseSeed + 3) - 0.5) * (ry * 0.22);
       const x = Math.cos(angle) * rx + jitterX;
       const y = Math.sin(angle) * ry + jitterY;
-      try {
-        const s = el.style;
-        s.left = `calc(50% + ${x.toFixed(1)}px)`;
-        s.top = `calc(50% + ${y.toFixed(1)}px)`;
-      } catch (e) {
-        // ignore
-      }
-    });
+      positions.push({ left: `calc(50% + ${x.toFixed(1)}px)`, top: `calc(50% + ${y.toFixed(1)}px)` });
+    }
+    return positions;
   }, [orbitRadii]);
 
   // Wire wander for each planet using viewport radius scaled by orbit factor
   // speeds vary so motion feels organic.
   const speeds = [1.0, 1.6, 1.2, 0.9, 1.4, 0.7, 1.8, 1.1];
-  refs.forEach((r, i) => {
-    // call hook inside render body is fine because refs array is stable for this render
-    useWander(r, { radius: 'viewport', speed: speeds[i], scale: orbitFactors[i] });
-  });
+  // Call `useWander` explicitly for each planet so hook order is stable and ESLint-safe
+  useWander(ref0, { radius: 'viewport', speed: speeds[0], scale: ORBIT_FACTORS[0] });
+  useWander(ref1, { radius: 'viewport', speed: speeds[1], scale: ORBIT_FACTORS[1] });
+  useWander(ref2, { radius: 'viewport', speed: speeds[2], scale: ORBIT_FACTORS[2] });
+  useWander(ref3, { radius: 'viewport', speed: speeds[3], scale: ORBIT_FACTORS[3] });
+  useWander(ref4, { radius: 'viewport', speed: speeds[4], scale: ORBIT_FACTORS[4] });
+  useWander(ref5, { radius: 'viewport', speed: speeds[5], scale: ORBIT_FACTORS[5] });
+  useWander(ref6, { radius: 'viewport', speed: speeds[6], scale: ORBIT_FACTORS[6] });
+  useWander(ref7, { radius: 'viewport', speed: speeds[7], scale: ORBIT_FACTORS[7] });
 
   // Small occasional wiggle for Planet 1 (Mercury-like)
   useEffect(() => {
-    const elContainer = refs[0]?.current;
+    const elContainer = ref0.current;
     if (!elContainer) return;
     let cancelled = false;
     let timer: number | undefined;
@@ -90,7 +102,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
 
     schedule();
     return () => { cancelled = true; if (timer) clearTimeout(timer); };
-  }, [refs[0]]);
+  }, [ref0]);
 
   return (
     <section ref={containerRef} className="relative min-h-screen flex items-center justify-center bg-[linear-gradient(180deg,#071229_0%,#071229_40%,rgba(11,21,35,0.75)_80%)] text-white overflow-hidden">
@@ -197,7 +209,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
 
         {/* Planets (SVGs) — planets will be moved by useWander refs */}
         {/* Planet 1 (Mercury-like) */}
-        <div className="planet-wander" ref={refs[0]}>
+        <div className="planet-wander" ref={ref0} style={initialPositions[0] ? { left: initialPositions[0].left, top: initialPositions[0].top } : undefined}>
           <svg className="w-16 h-16 transform-gpu rotate-6 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p1" x1="0" x2="1">
@@ -210,7 +222,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 2 (Venus-like) */}
-        <div className="planet-wander" ref={refs[1]}>
+        <div className="planet-wander" ref={ref1} style={initialPositions[1] ? { left: initialPositions[1].left, top: initialPositions[1].top } : undefined}>
           <svg className="w-20 h-20 transform-gpu rotate-10 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p2" x1="0" x2="1">
@@ -223,7 +235,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 3 (Earth-like) */}
-        <div className="planet-wander" ref={refs[2]}>
+        <div className="planet-wander" ref={ref2} style={initialPositions[2] ? { left: initialPositions[2].left, top: initialPositions[2].top } : undefined}>
           <svg className="w-20 h-20 transform-gpu rotate-3 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p3" x1="0" x2="1">
@@ -236,7 +248,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 4 (Mars-like) */}
-        <div className="planet-wander" ref={refs[3]}>
+        <div className="planet-wander" ref={ref3} style={initialPositions[3] ? { left: initialPositions[3].left, top: initialPositions[3].top } : undefined}>
           <svg className="w-18 h-18 transform-gpu rotate-12 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p4" x1="0" x2="1">
@@ -249,7 +261,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 5 (Jupiter-like) */}
-        <div className="planet-wander" ref={refs[4]}>
+        <div className="planet-wander" ref={ref4} style={initialPositions[4] ? { left: initialPositions[4].left, top: initialPositions[4].top } : undefined}>
           <svg className="w-28 h-28 transform-gpu rotate-6 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p5" x1="0" x2="1">
@@ -262,7 +274,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 6 (Saturn-like) with pronounced rings */}
-        <div className="planet-wander" ref={refs[5]}>
+        <div className="planet-wander" ref={ref5} style={initialPositions[5] ? { left: initialPositions[5].left, top: initialPositions[5].top } : undefined}>
           <svg className="w-36 h-36 transform-gpu rotate-3 opacity-100 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden overflow="visible" style={{overflow: 'visible'}}>
             <defs>
               <linearGradient id="p6" x1="0" x2="1">
@@ -300,7 +312,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 7 (Uranus-like) */}
-        <div className="planet-wander" ref={refs[6]}>
+        <div className="planet-wander" ref={ref6} style={initialPositions[6] ? { left: initialPositions[6].left, top: initialPositions[6].top } : undefined}>
           <svg className="w-24 h-24 transform-gpu rotate-9 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p7" x1="0" x2="1">
@@ -313,7 +325,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
         </div>
 
         {/* Planet 8 (Neptune-like) */}
-        <div className="planet-wander" ref={refs[7]}>
+        <div className="planet-wander" ref={ref7} style={initialPositions[7] ? { left: initialPositions[7].left, top: initialPositions[7].top } : undefined}>
           <svg className="w-26 h-26 transform-gpu rotate-4 opacity-95 svg-transform" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <defs>
               <linearGradient id="p8" x1="0" x2="1">
@@ -342,10 +354,7 @@ export function Hero({ title, subtitle, ctaText, ctaLink }: HeroProps) {
               >
                 {ctaText}
                 {/* small rocket SVG */}
-                <svg className="ml-3 w-5 h-5 transform transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-110" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                  <path d="M2 19l2-1 4 4-1 2-5-5z" fill="#fff" opacity="0.9" />
-                  <path d="M14.5 3c1.5.5 2.9 1.9 3.4 3.4l1.6 5.6-9.6 9.6-5.6-1.6C3.9 18.4 2.5 17 3 15.5L9 9l5.5-5.5z" fill="#fff" opacity="0.95" />
-                </svg>
+                <FaRocket className="ml-3 -mr-1 w-5 h-5 animate-rocket-thrust" />
               </Link>
 
               <a href="#knowledge" className="text-sm md:text-base text-white/90 underline-offset-2 hover:underline">ดูหัวข้อทั้งหมด</a>

@@ -108,7 +108,7 @@ export default function useWander(targetRef: RefObject<HTMLElement | SVGElement 
             break; // handled this rect
           }
         }
-      } catch (e) {
+      } catch {
         // ignore avoidance errors
       }
 
@@ -116,7 +116,7 @@ export default function useWander(targetRef: RefObject<HTMLElement | SVGElement 
       try {
         const elStyle = (el as HTMLElement).style;
         elStyle.transform = `translate(-50%,-50%) translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
-      } catch (e) {
+      } catch {
         // ignore
       }
 
@@ -133,7 +133,7 @@ export default function useWander(targetRef: RefObject<HTMLElement | SVGElement 
         s.transform = '';
         s.left = '';
         s.top = '';
-      } catch (e) {}
+      } catch { /* ignore cleanup errors */ }
     };
-  }, [targetRef, options?.radius, options?.speed]);
+  }, [targetRef, options]);
 }
