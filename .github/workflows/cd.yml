@@ -7,8 +7,6 @@ on:
     tags:
       - "*.*.*" # ติดตั้ง workflow นี้ให้ทำงานเมื่อมีการ push tag ที่มีรูปแบบ x.y.z ตอน Release ใหม่
 
-permissions:
-  contents: write # เพื่อให้สามารถ deploy ไปที่ GitHub Pages ได้
 
 jobs:
   build-prod-job:
@@ -36,6 +34,10 @@ jobs:
   auto-deploy-job:
     runs-on: ubuntu-latest
     needs: build-prod-job
+    permissions:
+      contents: write # เพื่อให้สามารถ deploy ไปที่ GitHub Pages ได้
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - run: echo "Hello, ${{ github.actor }} from deploy job"
       - name: Download dist folder artifact
@@ -45,14 +47,14 @@ jobs:
           path: ./dist
       - run: ls -la ./dist # ตรวจสอบไฟล์ในโฟลเดอร์ dist ที่ดาวน์โหลดมา
       - uses: actions/checkout@v5
-      # - name: Deploy to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v4
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./dist
       - name: Deploy to GitHub Pages
-        uses: SerhiiKa/VuePagesAction@1.0.4
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          username: ${{ github.actor }}
-          reponame: ${{ github.event.repository.name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+      # - name: Publish to GitHub Pages
+      #   uses: SerhiiKa/VuePagesAction@1.0.4
+      #   with:
+      #     username: ${{ github.actor }}
+      #     reponame: ${{ github.event.repository.name }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}

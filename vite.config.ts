@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/my-knowledge-app/",
+  // Use repository subpath only for production builds. Keeps local dev/preview working at '/'.
+  base: process.env.NODE_ENV === 'production' ? '/' : '/',
   plugins: [tailwindcss(), react()],
 });
