@@ -17,6 +17,11 @@ const GitHubGuidePage = lazy(() => import('../pages/knowledge/GitHubGuidePage'))
 const ComponentShowcase = lazy(() => import('../pages/ComponentShowcase'));
 import { MainLayout } from '../layouts/MainLayout';
 
+// Resolve basename from Vite env. Prefer `VITE_BASE` (from .env files),
+// then `BASE_URL` provided by Vite, then fallback to '/'.
+const _rawBase = (import.meta.env.VITE_BASE as string) || (import.meta.env.BASE_URL as string) || '/';
+const basename = _rawBase === '/' ? '/' : _rawBase.replace(/\/$/, '');
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -80,6 +85,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+], { basename });
 
 export default router;
